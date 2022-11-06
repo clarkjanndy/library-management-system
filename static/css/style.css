@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+
+* {
+    font-family: 'Poppins', 'Arial';
+    box-sizing: border-box;
+}
+
+a{
+    text-decoration: none !important;
+}
+
+.align-icon {
+    vertical-align: middle;
+}
+
+/*Navbar CSS*/
+.dropdown-menu.show {
+    left: -200px;
+}
+
+
+.dropdown-panel:hover{
+    background-color: inherit !important;
+}
+
+.dropdown-toggle::after {
+    display: none !important;
+}
+
+/* Bootstrap Custom CSS*/
+.btn {
+    border-radius: 0 !important;
+}
+
+.form-control {
+    border-radius: 0 !important;
+}
+
+.bg-unseen{
+    background-color: #f1f1f1;
+}
+
+
+/*BX Icons*/
+.bx-1{
+    font-size: 1rem;
+}
+
+.bx-2{
+    font-size: 2rem;
+}
+
+.bx-3{
+    font-size: 3rem;
+}
+
+.bx-4{
+    font-size: 4rem;
+}
+
+.bx-5{
+    font-size: 5rem;
+}
