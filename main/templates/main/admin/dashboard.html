@@ -1,0 +1,145 @@
+{% extends 'app.html'%}
+
+{% load static %}
+
+{% block content%}
+{% include 'sidebar.html' %}
+
+<!-- Start Page Content -->
+<div class="col d-flex flex-column h-sm-100"">
+    <main class=" row overflow-auto p-3">
+    <h3 class="text-theme">Dashboard</h3>
+    
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Dashboard</li>
+        </ol>
+    </nav>
+
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="row">
+                <div class="col-lg-4 p-1">
+                    <div class="border-primary bg-white text-theme p-3 shadow">
+                        <div>
+                            <h4>Students</h4>
+                            <h4>
+                                <span class="bx bx-face"></span>
+                                <span>12</span>
+                                </h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 p-1">
+                    <div class="border-primary bg-white text-theme p-3 shadow">
+                        <div>
+                            <h4>Teachers</h4>
+                            <h4>
+                                <span class="bx bx-user"></span>
+                                <span>12</span>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 p-1">
+                    <div class="border-primary bg-white text-theme p-3 shadow">
+                        <div>
+                            <h4>Books</h4>
+                            <h4>
+                                <span class="bx bx-book"></span>
+                                <span>12</span>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col p-1">
+                    <div class="card">
+                        <div class="card-header text-theme">
+                            Library Visits
+                        </div>
+                        <div class="card-body">
+                            <div id="visits"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-4 p-1">
+            <div class="card">
+                <div class="card-header text-theme">
+                    Recent Activities
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">An item</li>
+                        <li class="list-group-item">A second item</li>
+                        <li class="list-group-item">A third item</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </main>
+</div>
+<!-- End Page Content -->
+
+<script>
+    async function render_histogram() {
+        // const response = await fetch('/api/v1/consumption-histogram/{{consumer.id}}');
+        // const data = await response.json(); // Extracting data as a JSON Object from the response
+
+        // var date_format = { year: 'numeric', month: 'short' };
+        // var formatted_date = new Array()
+
+        // for (const date of data['x_label']) {
+        //     formatted_date.push(new Date(date).toLocaleDateString("en-US", date_format))
+        // }
+
+        var options = {
+            chart: {
+                height: 400,
+                type: "area",
+                toolbar: {
+                    show: false
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            series: [
+                {
+                    name: "Consumption",
+                    data: [1, 2]
+                }
+            ],
+            fill: {
+                type: "gradient",
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.7,
+                    opacityTo: 0.9,
+                    stops: [0, 90, 100],
+                }
+            },
+            xaxis: {
+                categories: ['Jan', 'Feb']
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#visits"), options);
+        chart.render();
+    }
+
+    render_histogram();
+</script>
+
+{%endblock content%}

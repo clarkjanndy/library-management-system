@@ -1,0 +1,203 @@
+{% extends 'app.html'%}
+
+{% load static %}
+
+{% block content%}
+{% include 'sidebar.html' %}
+
+<!-- Start Page Content -->
+<div class="col d-flex flex-column h-sm-100"">
+    <main class=" row overflow-auto p-3">
+    <h3 class="text-theme">Add Student</h3>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/students" class="text-theme">Students</a></li>
+            <li class="breadcrumb-item">Add Student</li>
+        </ol>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header bg-theme text-white">
+                Add Student Form
+            </div>
+
+            <div class="card-body">
+                <form class="" id="add-student" method="POST">
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 form-group mb-3">
+                            <label>ID No</label>
+                            <input type="text" id="id_no" name="id_no" class="form-control" placeholder="ID No.">
+                            <div class="is-invalid"></div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 form-group mb-3">
+                            <label>First Name</label>
+                            <input type="text" id="first_name" name="first_name" class="form-control"
+                                placeholder="First Name">
+                            <div class="is-invalid"></div>
+                        </div>
+
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 form-group mb-3">
+                            <label>Middle Name ( optional)</label>
+                            <input type="text" id="middle_name" name="middle_name" class="form-control"
+                                placeholder="Middle Name">
+                            <div class="is-invalid"></div>
+                        </div>
+
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 form-group mb-3">
+                            <label>Last Name</label>
+                            <input type="text" id="last_name" name="last_name" class="form-control"
+                                placeholder="Last Name">
+                            <div class="is-invalid"></div>
+                        </div>
+
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 form-group mb-3">
+                            <label>Name Extension (optional)</label>
+                            <input type="text" id="ext_name" name="ext_name" class="form-control"
+                                placeholder="Name Extension">
+                            <div class="is-invalid"></div>
+                        </div>
+
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 form-group mb-3">
+                            <label>Gender</label>
+                            <select id="gender" name="gender" class="form-select">
+                                <option value="">--select--</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                            <div class="is-invalid"></div>
+                        </div>
+
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 form-group mb-3">
+                            <label>Civil Status</label>
+                            <select id="civil_status" name="civil_status" class="form-select">
+                                <option value="">--select--</option>
+                                <option value="single">Single</option>
+                                <option value="married">Married</option>
+                                <option value="widowed">Widowed</option>
+                            </select>
+                            <div class="is-invalid"></div>
+                        </div>
+
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 form-group mb-3">
+                            <label>Address</label>
+                            <input type="text" id="address" name="address" class="form-control" placeholder="Address">
+                            <div class="is-invalid"></div>
+                        </div>
+
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 form-group mb-3">
+                            <label>Contact No.</label>
+                            <input type="text" id="contact_no" name="contact_no" class="form-control"
+                                placeholder="Contact No.">
+                            <div class="is-invalid"></div>
+                        </div>
+
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 form-group mb-3">
+                            <label>Course</label>
+                            <input type="text" id="course" name="course" class="form-control" placeholder="Course">
+                            <div class="is-invalid"></div>
+                        </div>
+
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 form-group mb-3">
+                            <label>Year</label>
+                            <select id="year" name="year" class="form-select">
+                                <option value="">--select--</option>
+                                <option value="1">I</option>
+                                <option value="2">II</option>
+                                <option value="3">III</option>
+                                <option value="4">IV</option>
+                            </select>
+                            <div class="is-invalid"></div>
+                        </div>
+
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 form-group mb-3">
+                            <label>Section</label>
+                            <input type="text" id="section" name="section" class="form-control" placeholder="Section">
+                            <div class="is-invalid"></div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <div>
+                            <a class="btn btn-danger" onclick="history.back()">Cancel</a>
+                            <button type="submit" class="btn btn-theme">Done</button>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+    </main>
+</div>
+<!-- End Page Content -->
+
+<script>
+    const validation = new window.JustValidate('#add-student', {
+        errorFieldCssClass: 'is-invalid',
+    });
+
+    validation
+        .addField('#id_no', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#first_name', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#last_name', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#gender', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#civil_status', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#address', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#contact_no', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        }, {
+            rule: 'minLength',
+            value: 11,
+        }, {
+            rule: 'maxLength',
+            value: 11,
+        }])
+        .addField('#course', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#year', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#section', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .onSuccess((event) => {
+            document.getElementById("dd-student").submit();
+        });
+
+</script>
+
+{%endblock content%}

@@ -2,36 +2,55 @@
 
 {% load static %}
 
+{% include 'sidebar.html' %}
+
 {% block content%}
-<div class="container-fluid">
+<div class="container-fluid" style="background-color: #D7E2EF;">
 
     <div class="row">
         <div class="vh-100 d-flex justify-content-center align-items-center">
-            <div class="col-lg-5 col-sm-12 col-md-8 border p-2">
+            <div class="col-lg-4 col-xl-4 col-sm-12 col-md-8 p-2">
                 <center class="mb-3">
-                    <img src="{% static 'images/bcc-logo.jpg'%}" width="150">
+                    <img src="{% static 'images/bcc-logo.png'%}" width="150">
                     <h4>Library Monitoring and Books Inventory</h4>
                 </center>
-                <form id="form">
+                <form id="form" class="bg-light p-5" method="POST">
+                    <center class="mb-3">
+                        <h4 class="text-theme">Login to Your Account</h4>
+                        <p>Enter your ID No. and password</p>
+                    </center>
+
+                    {% csrf_token %}
+
                     <div class="form-group mb-3">
-                        <input type="text" name="username" id="username" placeholder="Username"
-                            class="form-control form-control-lg">
+                        <label>ID No.</label>
+                        <input type="text" name="id_no" id="id_no" placeholder="ID No."
+                            class="form-control form-control" value="{{id_no}}">
                         <div class="is-invalid"></div>
                     </div>
 
                     <div class="form-group mb-3">
+                        <label>Password</label>
                         <input type="password" name="password" id="password" placeholder="Password"
-                            class="form-control form-control-lg">
+                            class="form-control form-control" value="{{password}}">
                         <div class="is-invalid"></div>
                     </div>
+
+                    <span class="text-danger">{{message}}</span>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
+                        <label class="form-check-label" for="form2Example31"> Remember me </label>
+                    </div>
+
+                    <div class="form-group d-flex justify-content-center mb-3">
+                        <button type="submit" class="btn btn-theme w-100">Login</button>
+                    </div>
+
 
                     <div class="form-group">
-                        <p class="lead text-muted">Forgotten Password?</p>
-                        <p class="lead text-muted">Contact admin or librarian for password reset request.</p>
-                    </div>
-
-                    <div class="form-group d-flex justify-content-center">
-                        <button type="submit" class="btn btn-lg btn-outline-primary">Login</button>
+                        <p class="text-muted">Forgotten Password?</p>
+                        <p class="text-muted">Contact admin or librarian for password reset request.</p>
                     </div>
                 </form>
             </div>
@@ -44,7 +63,7 @@
         });
 
         validation
-            .addField('#username', [{
+            .addField('#id_no', [{
                 rule: 'required',
                 errorMessage: 'This field is required',
             },])
@@ -57,6 +76,4 @@
             });
 
     </script>
-
-
     {%endblock content%}

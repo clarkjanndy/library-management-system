@@ -1,0 +1,113 @@
+{% load static %}
+<!-- Start Sidebar -->
+<div class="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2 px-sm-2 px-0 bg-sidebar d-flex sticky-top">
+    <div
+        class="d-flex flex-sm-column flex-row flex-grow-1 align-items-center align-items-sm-start px-3 pt-2 text-white">
+        <a href="/" class="d-flex align-items-center pb-sm-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <span class="fs-5">
+                <div class="d-flex justify-content-center">
+                    <img src="{% static 'images/bcc-logo.png'%}" width="100" class="d-none d-sm-block">
+                </div>
+                <div class="d-flex text-center">
+                    <span class="d-none d-sm-inline">Library Monitoring and Books Inventory</span>
+                </div>
+            </span>
+        </a>
+
+        <ul class="nav nav-pills flex-sm-column flex-row flex-nowrap flex-shrink-1 flex-sm-grow-0 flex-grow-1 mb-sm-auto mb-0 justify-content-center align-items-center align-items-sm-start
+        " id="menu">
+            <small class="d-none d-sm-inline">Admin</small>
+            <li class= "nav-item d-flex justify-content-center p-1 {% if page == 'dashboard' %}current-page{% endif %}">
+                <a href="/dashboard" class="nav-link px-sm-0 px-2 text-white">
+                    <i class="bx bx-grid"></i>
+                    <span class="ms-1 d-none d-sm-inline">Dashboard</span>
+                </a>
+            </li>
+
+            <small class="mt-2 d-none d-sm-inline">Users</small>
+            <li class="nav-item d-flex justify-content-center p-1 {% if page == 'students' %}current-page{% endif %}">
+                <a href="/students" class="nav-link px-sm-0 px-2 text-white">
+                    <i class="bx bx-face"></i>
+                    <span class="ms-1 d-none d-sm-inline">Students</span>
+                </a>
+            </li>
+
+            <li class="nav-item d-flex justify-content-center p-1 {% if page == 'teachers' %}current-page{% endif %}">
+                <a href="/teachers" class="nav-link px-sm-0 px-2 text-white">
+                    <i class="bx bx-user"></i>
+                    <span class="ms-1 d-none d-sm-inline">Teachers</span>
+                </a>
+            </li>
+
+            <small class="mt-2 d-none d-sm-inline">Books</small>
+            <li class="nav-item d-flex justify-content-center p-1">
+                <a href="#" class="nav-link px-sm-0 px-2 text-white">
+                    <i class="bx bx-book-open"></i>
+                    <span class="d-none d-sm-inline">Borrow Book</span></a>
+                </a>
+            </li>
+
+            <li class="nav-item d-flex justify-content-center p-1">
+                <a href="#" class="nav-link px-sm-0 px-2 text-white">
+                    <i class="bx bx-book-add"></i>
+                    <span class="d-none d-sm-inline">Add Book</span></a>
+                </a>
+            </li>
+
+            <li class="nav-item d-flex justify-content-center p-1">
+                <a href="#" class="nav-link px-sm-0 px-2 text-white">
+                    <i class="bx bx-book-alt"></i>
+                    <span class="d-none d-sm-inline">Book List</span></a>
+                </a>
+            </li>
+
+            <small class="mt-2 d-none d-sm-inline">Monitoring and Inventory</small>
+            <li class="nav-item d-flex justify-content-center p-1">
+                <a href="#" class="nav-link px-sm-0 px-2 text-white">
+                    <i class="bx bx-rocket"></i>
+                    <span class="d-none d-sm-inline">Log Window</span></a>
+                </a>
+            </li>
+
+            <li class="nav-item d-flex justify-content-center p-1">
+                <a href="#" class="nav-link px-sm-0 px-2 text-white">
+                    <i class="bx bx-history"></i>
+                    <span class="d-none d-sm-inline">Log History</span></a>
+                </a>
+            </li>
+
+            <li class="nav-item d-flex justify-content-center p-1">
+                <a href="#" class="nav-link px-sm-0 px-2 text-white">
+                    <i class="bx bx-stats"></i>
+                    <span class="ms-1 d-none d-sm-inline">Inventory</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://github.com/mdo.png" alt="hugenerd" width="28" height="28" class="rounded-circle">
+                <span class="d-none d-sm-inline mx-1 text-truncate">Juan</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-light text-small shadow" aria-labelledby="dropdownUser1">
+                <li><a class="dropdown-item" href="#">
+                        <i class="bx bx-user"></i>
+                        <span>Profile</span></a>
+                </li>
+                <li><a class="dropdown-item" href="#">
+                        <i class="bx bx-key"></i>
+                        <span>Change Password</span></a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="/logout">
+                        <i class="bx bx-log-out"></i>
+                        <span>Logout</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- End Sidebar -->

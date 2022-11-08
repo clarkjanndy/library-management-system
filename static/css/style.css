@@ -1,11 +1,12 @@
-@import url('https://fonts.googleapis.com/css?family=Poppins');
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
 
 * {
-    font-family: 'Poppins', 'Arial';
+    font-family: 'Montserrat', 'Arial';
     box-sizing: border-box;
+    
 }
 
-a{
+a {
     text-decoration: none !important;
 }
 
@@ -14,18 +15,14 @@ a{
 }
 
 /*Navbar CSS*/
-.dropdown-menu.show {
-    left: -200px;
+.current-page {
+    border-left: 3px solid white;
 }
 
-
-.dropdown-panel:hover{
-    background-color: inherit !important;
+.nav-item:hover {
+    border-left: 3px solid white;
 }
 
-.dropdown-toggle::after {
-    display: none !important;
-}
 
 /* Bootstrap Custom CSS*/
 .btn {
@@ -36,28 +33,61 @@ a{
     border-radius: 0 !important;
 }
 
-.bg-unseen{
+.bg-unseen {
     background-color: #f1f1f1;
+}
+
+.bg-sidebar {
+    background-color: #4267B2;
+}
+
+.bg-theme {
+    background-color: #4267B2;
+}
+
+.text-theme {
+   color: #4267B2;
+}
+
+.btn-theme {
+    background-color: #4267B2;
+    color: white;
+}
+
+
+.btn-theme:hover {
+    background-color: white !important;
+    border:  1px solid #4267B2 !important;
+    color: #4267B2 !important;
+}
+
+
+
+/* this is needed to make the content scrollable on larger screens */
+@media (min-width: 576px) {
+    .h-sm-100 {
+        height: 100%;
+    }
 }
 
 
 /*BX Icons*/
-.bx-1{
+.bx-1 {
     font-size: 1rem;
 }
 
-.bx-2{
+.bx-2 {
     font-size: 2rem;
 }
 
-.bx-3{
+.bx-3 {
     font-size: 3rem;
 }
 
-.bx-4{
+.bx-4 {
     font-size: 4rem;
 }
 
-.bx-5{
+.bx-5 {
     font-size: 5rem;
 }

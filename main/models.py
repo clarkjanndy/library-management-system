@@ -12,7 +12,8 @@ class MyUser(AbstractUser):
     gender = models.CharField(null = False, blank = False, max_length = 32)
     civil_status = models.CharField(null = False, blank = False, max_length = 32)
     address = models.CharField(blank = True, null = True, max_length=90)
-    contact_no = models.CharField(max_length=50, blank = True, default = '09')    
+    contact_no = models.CharField(max_length=50, blank = True, default = '09')  
+    username = None  
     
     USERNAME_FIELD = 'id_no'
     REQUIRED_FIELDS = []

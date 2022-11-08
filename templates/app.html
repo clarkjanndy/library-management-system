@@ -6,7 +6,7 @@
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>
-        Library Monitoring and Books Inventory</title>
+        Waterworks Billing And Collection System</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/datatable.css' %}" />
@@ -23,9 +23,13 @@
     <script src="{% static 'js/datatable-bootstrap.js' %}"></script>
     <script src="{% static 'js/apexcharts.js' %}"></script>
 
-    {% block content%}
+    <div class="container-fluid overflow-hidden" style="background-color: #D7E2EF;">
+        <div class="row vh-100 overflow-auto">
+            {% block content%}
 
-    {% endblock %}
+            {% endblock %}
+        </div>
+    </div>
 
 </body>
 

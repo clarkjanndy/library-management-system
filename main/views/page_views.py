@@ -1,16 +1,40 @@
-from django.shortcuts import render, redirect
+from datetime import date
+from django.contrib import messages
+from django.shortcuts import render
+from django.shortcuts import redirect
+
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
 
 # Create your views here.
-
-def landing(request):
-    if request.user.is_authenticated:
-        pass
-    
+def landing(request):    
     return redirect('/login')
 
 def login(request):
     if request.user.is_authenticated:
-        pass
+        return redirect('/dashboard')
     
-    return render(request, 'login.html')
+    message = ''
+    id_no = ''
+    password = ''
+
+    if request.method == 'POST':
+        id_no = request.POST['id_no']
+        password = request.POST['password']
+
+        user = authenticate(id_no=id_no, password=password)
+        if user is not None:
+            auth_login(request, user)
+
+            if user.is_superuser:
+                return redirect("/dashboard")
+        else:
+            message = "Invalid username and/or password."
+
+    return render(request, 'login.html', {'message': message, 'id_no': id_no, 'password': password})
+
+def logout(request):
+    auth_logout(request)
+    return redirect('/login')
 
