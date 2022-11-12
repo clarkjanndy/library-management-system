@@ -1,0 +1,230 @@
+{% load static %}
+
+<form enctype="multipart/form-data" id="edit-student" method="POST" action="/students/{{student.user.id_no}}/edit">
+    {% csrf_token %}
+
+    <div class="row mb-2 form-group text-theme">
+        <div class="col-xl-3 col-lg-3 col-md-5">
+            <label>Profile Picture</label>
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-7">
+            <img width="100" class="mb-2" id="preview" src="{% get_media_prefix %}{{student.user.photo}}">
+
+            <div>
+                <input type="file" id="photo" name="photo" accept="image/*" hidden>
+                <label for="photo" class="btn btn-theme"><span class="bx bx-upload"></span></label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2 form-group text-theme">
+        <div class="col-xl-3 col-lg-3 col-md-5">
+            <label>First Name</label>
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-7">
+            <input type="text" id="first_name" name="first_name" class="form-control" placeholder="First Name"
+                value="{{student.user.first_name}}">
+        </div>
+        <div class="is-invalid"></div>
+    </div>
+
+    <div class="row mb-2 form-group text-theme">
+        <div class="col-xl-3 col-lg-3 col-md-5">
+            <label>Middle Name</label>
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-7">
+            <input type="text" id="middle_name" name="middle_name" class="form-control" placeholder="Middle Name"
+                value="{{student.user.middle_name}}">
+        </div>
+        <div class="is-invalid"></div>
+    </div>
+
+    <div class="row mb-2 form-group text-theme">
+        <div class="col-xl-3 col-lg-3 col-md-5">
+            <label>Last Name</label>
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-7">
+            <input type="text" id="last_name" name="last_name" class="form-control" placeholder="Last Name"
+                value="{{student.user.last_name}}">
+        </div>
+        <div class="is-invalid"></div>
+    </div>
+
+    <div class="row mb-2 form-group text-theme">
+        <div class="col-xl-3 col-lg-3 col-md-5">
+            <label>Ext. Name</label>
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-7">
+            <input type="text" id="ext_name" name="ext_name" class="form-control" placeholder="Extension Name"
+                value="{{student.user.ext_name}}">
+        </div>
+        <div class="is-invalid"></div>
+    </div>
+
+    <div class="row mb-2 form-group text-theme">
+        <div class="col-xl-3 col-lg-3 col-md-5">
+            <label>Gender</label>
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-7">
+            <select id="gender" name="gender" class="form-select">
+                <option value="">--select--</option>
+                <option value="male" {%if student.user.gender == 'male' %}selected{% endif %}>Male</option>
+                <option value="female" {%if student.user.gender == 'female' %}selected{% endif %}>Female</option>
+            </select>
+        </div>
+        <div class="is-invalid"></div>
+    </div>
+
+    <div class="row mb-2 form-group text-theme">
+        <div class="col-xl-3 col-lg-3 col-md-5">
+            <label>Civil Status</label>
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-7">
+            <select id="civil_status" name="civil_status" class="form-select">
+                <option value="">--select--</option>
+                <option value="single" {%if student.user.civil_status == 'single' %}selected{% endif %}>Single</option>
+                <option value="married" {%if student.user.civil_status == 'married' %}selected{% endif %}>Married</option>
+                <option value="widowed" {%if student.user.civil_status == 'widowed' %}selected{% endif %}>Widowed</option>
+            </select>
+        </div>
+        <div class="is-invalid"></div>
+    </div>
+
+    <div class="row mb-2 form-group text-theme">
+        <div class="col-xl-3 col-lg-3 col-md-5">
+            <label>Address</label>
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-7">
+            <input type="text" id="address" name="address" class="form-control" placeholder="Address"
+                value="{{student.user.address}}">
+        </div>
+        <div class="is-invalid"></div>
+    </div>
+
+    <div class="row mb-2 form-group text-theme">
+        <div class="col-xl-3 col-lg-3 col-md-5">
+            <label>Contact No.</label>
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-7">
+            <input type="text" id="contact_no" name="contact_no" class="form-control" placeholder="Contact No."
+                value="{{student.user.contact_no}}">
+        </div>
+        <div class="is-invalid"></div>
+    </div>
+
+    <div class="row mb-2 form-group text-theme">
+        <div class="col-xl-3 col-lg-3 col-md-5">
+            <label>Course</label>
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-7">
+            <input type="text" id="course" name="course" class="form-control" placeholder="Course"
+                value="{{student.course}}">
+        </div>
+        <div class="is-invalid"></div>
+    </div>
+
+    <div class="row mb-2 form-group text-theme">
+        <div class="col-xl-3 col-lg-3 col-md-5">
+            <label>Year</label>
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-7">
+            <select id="year" name="year" class="form-select">
+                <option value="">--select--</option>
+                <option value="1" {%if student.year == '1' %}selected{% endif %}>I</option>
+                <option value="2" {%if student.year == '2' %}selected{% endif %}>II</option>
+                <option value="3" {%if student.year == '3' %}selected{% endif %}>III</option>
+                <option value="4" {%if student.year == '4' %}selected{% endif %}>IV</option>
+            </select>
+        </div>
+        <div class="is-invalid"></div>
+    </div>
+
+    <div class="row mb-2 form-group text-theme">
+        <div class="col-xl-3 col-lg-3 col-md-5">
+            <label>Section</label>
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-7">
+            <input type="text" id="section" name="section" class="form-control" placeholder="Section"
+                value="{{student.section}}">
+        </div>
+        <div class="is-invalid"></div>
+    </div>
+
+    <div class="d-flex justify-content-end">
+        <button type="submit" class="btn btn-theme">Save Changes</button>
+    </div>
+
+</form>
+
+<script>
+    photo.onchange = evt => {
+        const [file] = photo.files
+        if (file) {
+            preview.src = URL.createObjectURL(file)
+        }
+    }
+</script>
+
+
+<script>
+    const validation = new window.JustValidate('#edit-student', {
+        errorFieldCssClass: 'is-invalid',
+    });
+
+    validation
+        .addField('#photo', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#first_name', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#last_name', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#gender', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#civil_status', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#address', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#contact_no', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        }, {
+            rule: 'minLength',
+            value: 11,
+            errorMessage: 'Minimum length og 11 numbers',
+        }, {
+            rule: 'maxLength',
+            value: 11,
+            errorMessage: 'Maximum length og 11 numbers only',
+        }, {
+            rule: 'number',
+            errorMessage: 'Input a valid contact number',
+        }])
+        .addField('#course', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#year', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#section', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .onSuccess((event) => {
+            document.getElementById("edit-student").submit();
+        });
+
+</script>

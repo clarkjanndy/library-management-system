@@ -9,8 +9,8 @@ def dashboard(request):
     if not request.user.is_authenticated:
         return redirect('/')
     
-    if not request.user.is_superuser:
-        return redirect('/')
+    # if not request.user.is_superuser:
+    #     return redirect('/')
     
     data={
         'page' : 'dashboard'

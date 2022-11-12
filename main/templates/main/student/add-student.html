@@ -178,9 +178,14 @@
         }, {
             rule: 'minLength',
             value: 11,
+            errorMessage: 'Minimum length og 11 numbers',
         }, {
             rule: 'maxLength',
             value: 11,
+            errorMessage: 'Maximum length og 11 numbers only',
+        }, {
+            rule: 'number',
+            errorMessage: 'Input a valid contact number',
         }])
         .addField('#course', [{
             rule: 'required',
@@ -195,7 +200,7 @@
             errorMessage: 'This field is required',
         },])
         .onSuccess((event) => {
-            document.getElementById("dd-student").submit();
+            document.getElementById("add-student").submit();
         });
 
 </script>

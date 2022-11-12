@@ -6,7 +6,7 @@
 {% include 'sidebar.html' %}
 
 <!-- Start Page Content -->
-<div class="col d-flex flex-column h-sm-100"">
+<div class="col-12 col-sm-9 col-md-9 col-lg-10 col-xl-10 d-flex flex-column h-sm-100"">
     <main class=" row overflow-auto p-3">
     <h3 class="text-theme">Students</h3>
 
@@ -15,7 +15,6 @@
             <li class="breadcrumb-item">Students</li>
         </ol>
     </nav>
-
 
     <div class="row">
 
@@ -31,27 +30,25 @@
                         <th scope="col">Name</th>
                         <th scope="col">Contact #</th>
                         <th scope="col">Address</th>
-                        <th scope="col">Meter No.</th>
+                        <th scope="col">Course</th>
                         <th scope="col">- - -</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for consumer in consumers %}
+                    {% for student in students %}
                     <tr>
-                        <th scope="row">{{consumer.id}}</th>
-                        <td>{{consumer.first_name}} {{consumer.middle_name}} {{consumer.last_name}}
-                            {{consumer.ext_name}}
+                        <th scope="row">{{student.user.id_no}}</th>
+                        <td>{{student.user.first_name}} {{student.user.middle_name}} {{student.user.last_name}}
+                            {{student.myuser.ext_name}}
                         </td>
-                        <td>{{consumer.contact_no}}</td>
-                        <td>{{consumer.address.name}}</td>
-                        <td>{{consumer.meter_no}}</td>
-                        <td class="w-25">
-                            <a class="btn btn-sm btn-success" href="consumers/{{consumer.id}}"><span
+                        <td>{{student.user.contact_no}}</td>
+                        <td>{{student.user.address}}</td>
+                        <td>{{student.course}}</td>
+                        <td>
+                            <a class="btn btn-sm btn-success" href="students/{{student.user.id_no}}"><span
                                     class="bx bx-user"></span> View Profile</a>
-                            <a class="btn btn-sm btn-primary" href="readings/add?user_id={{consumer.id}}"><span
-                                    class="bx bx-layer-plus"></span> Add Reading</a>
-
                         </td>
+                        
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -65,9 +62,17 @@
 <!-- End Page Content -->
 
 <script>
-	$('#students').dataTable( {
-		"ordering": false
-	} );
+    $('#students').dataTable({
+        "ordering": false,
+        "columns": [
+            { "width": "10%" },
+            null,
+            null,
+            null,
+            null,
+            { "width": "10%" }
+        ]
+    });
 </script>
 
 {%endblock content%}

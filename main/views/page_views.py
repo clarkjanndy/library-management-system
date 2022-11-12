@@ -7,6 +7,14 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 
+from main.models import MyUser
+
+# admin = MyUser()
+# admin.is_superuser = 1
+# admin.id_no = 'LIB-123'
+# admin.set_password('admin')
+# admin.save()
+
 # Create your views here.
 def landing(request):    
     return redirect('/login')
@@ -29,6 +37,7 @@ def login(request):
 
             if user.is_superuser:
                 return redirect("/dashboard")
+        
         else:
             message = "Invalid username and/or password."
 
