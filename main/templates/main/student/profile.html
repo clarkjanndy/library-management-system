@@ -1,0 +1,144 @@
+{% extends 'app.html'%}
+
+{% load static %}
+{% load static %}
+
+{% block content%}
+{% include 'sidebar.html' %}
+
+<style>
+    body {
+        font-family: Arial;
+    }
+
+    /* Style the tab */
+    .tab {
+        overflow: hidden;
+        border-bottom: 1px solid #ccc;
+    }
+
+    /* Style the buttons inside the tab */
+    .tab button {
+        background-color: white;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        font-size: 17px;
+    }
+
+    /* Change background color of buttons on hover */
+    .tab button:hover {
+        border-bottom: 5px solid #4267B2;
+    }
+
+    /* Create an active/current tablink class */
+    .tab button.active {
+        border-bottom: 5px solid #4267B2;
+    }
+
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+</style>
+
+<!-- Start Page Content -->
+<div class="col d-flex flex-column h-sm-100"">
+    <main class=" row overflow-auto p-3">
+    <h3 class="text-theme">Student Profile</h3>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/students" class="text-theme">Students</a></li>
+            <li class="breadcrumb-item">Student Profile</li>
+        </ol>
+    </nav>
+
+    <div class="container">
+        {% if messages %}
+        {% for message in messages %}
+        {% include 'alert.html' %}
+        {% endfor %}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 ">
+                <div class="bg-white p-3">
+
+                    <div class="text-center text-wrap">
+                        <img src="{% get_media_prefix %}{{student.user.photo}}" width="150 " class="mb-3 img-fluid">
+                        <h4>{{student.user.first_name}} {{student.user.middle_name}} {{student.user.last_name}}
+                            {{student.myuser.ext_name}}</h4>
+                        <svg id="id_no" class="img-fluid"></svg>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12">
+
+                <div class="bg-white">
+                    <div class="tab">
+                        <button class="tablinks" onclick="openCity(event, 'tab_0')" id="defaultOpen">Profile</button>
+                        <button class="tablinks" onclick="openCity(event, 'tab_1')">Edit Profile</button>
+                        <button class="tablinks" onclick="openCity(event, 'tab_2')">Borrowed Books</button>
+                    </div>
+
+                    <div id="tab_0" class="tabcontent p-3">
+                        {% include './tab-parts/profile.html' %}
+                    </div>
+
+                    <div id="tab_1" class="tabcontent p-3">
+                        {% include './tab-parts/edit-profile.html' %}
+                    </div>
+
+                    <div id="tab_2" class="tabcontent">
+                        <h3>Tokyo</h3>
+                        <p>Tokyo is the capital of Japan.</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    </main>
+</div>
+<!-- End Page Content -->
+
+<script>
+    JsBarcode("#id_no", "{{student.user.id_no}}", {
+        height: 50,
+        margin: 0,
+        font: 'Montserrat',
+        fontSize: 15
+    });
+</script>
+
+<script>
+    function openCity(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+</script>
+
+{%endblock content%}

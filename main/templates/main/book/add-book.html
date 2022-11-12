@@ -1,0 +1,169 @@
+{% extends 'app.html'%}
+
+{% load static %}
+
+{% block content%}
+{% include 'sidebar.html' %}
+
+<!-- Start Page Content -->
+<div class="col d-flex flex-column h-sm-100"">
+    <main class=" row overflow-auto p-3">
+    <h3 class="text-theme">Add Book</h3>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/books" class="text-theme">Books</a></li>
+            <li class="breadcrumb-item">Add Book</li>
+        </ol>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header bg-theme text-white">
+                Add Book Form
+            </div>
+
+            <div class="card-body">
+                <form class="" id="add-book" method="POST">
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 form-group mb-3">
+                            <label>Barcode</label>
+                            <input type="text" id="barcode" name="barcode" class="form-control" placeholder="Barcode">
+                            <div class="is-invalid"></div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 form-group mb-3">
+                            <label>Category</label>
+                            <select id="category_id" name="category_id" class="form-select">
+                                <option value="">--select--</option>
+                                {%for cat in categories%}
+                                <option value="{{cat.id}}">{{cat.name}}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="is-invalid"></div>
+                        </div>
+
+                        <div class="col-xl-6 col-lg-6 form-group mb-3">
+                            <label>Title</label>
+                            <input type="text" id="title" name="title" class="form-control" placeholder="Title">
+                            <div class="is-invalid"></div>
+                        </div>
+
+                        <div class="col-xl-6 col-lg-6 form-group mb-3">
+                            <label>Authors (separate name by comma)</label>
+                            <input type="text" id="authors" name="authors" class="form-control"
+                                placeholder="Authors">
+                            <div class="is-invalid"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 form-group mb-3">
+                            <label>Quantity of books in old condition</label>
+                            <input type="text" id="old_quan" name="old_quan" class="form-control"
+                                placeholder="Quantity" oninput="get_total_quan()" >
+                            <div class="is-invalid"></div>
+                        </div>
+
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 form-group mb-3">
+                            <label>Quantity of books in new condition</label>
+                            <input type="text" id="new_quan" name="new_quan" class="form-control"
+                                placeholder="Quantity" oninput="get_total_quan()">
+                            <div class="is-invalid"></div>
+                        </div>
+
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 form-group mb-3">
+                            <label>Total Quantity</label>
+                            <input type="text" id="available_quan" name="available_quan" class="form-control"
+                                placeholder="Total Quantity" readonly>
+                            <div class="is-invalid"></div>
+                        </div>
+
+
+                        <div class="col-12 form-group mb-3">
+                            <label>Preface</label>
+                            <textarea type="text" id="preface" name="preface" class="form-control" placeholder="Preface"
+                                rows="8"></textarea>
+                            <div class="is-invalid"></div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <div>
+                            <a class="btn btn-danger" onclick="history.back()">Cancel</a>
+                            <button type="submit" class="btn btn-theme">Done</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+    </main>
+</div>
+<!-- End Page Content -->
+
+<script>
+    const validation = new window.JustValidate('#add-book', {
+        errorFieldCssClass: 'is-invalid',
+    });
+
+    validation
+        .addField('#barcode', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#category_id', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#title', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#authors', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#old_quan', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },{
+            rule: 'number',
+            errorMessage: 'Input a valid number',
+        }])
+        .addField('#new_quan', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },  {
+            rule: 'number',
+            errorMessage: 'Input a valid number',
+        }])
+        .addField('#available_quan', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        }, ])
+        .onSuccess((event) => {
+            document.getElementById("add-book").submit();
+        });
+</script>
+
+<script>
+    var total_quan = document.getElementById('available_quan');
+    var old_quan = document.getElementById('old_quan');
+    var new_quan = document.getElementById('new_quan');
+
+    function get_total_quan(){
+        total_quan.value = parseInt(old_quan.value) + parseInt(new_quan.value);
+    }
+</script>
+
+{%endblock content%}

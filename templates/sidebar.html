@@ -1,6 +1,6 @@
 {% load static %}
 <!-- Start Sidebar -->
-<div class="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2 px-sm-2 px-0 bg-sidebar d-flex sticky-top">
+<div class="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2 px-sm-2 px-5 bg-sidebar d-flex sticky-top">
     <div
         class="d-flex flex-sm-column flex-row flex-grow-1 align-items-center align-items-sm-start px-3 pt-2 text-white">
         <a href="/" class="d-flex align-items-center pb-sm-3 mb-md-0 me-md-auto text-white text-decoration-none">
@@ -40,22 +40,22 @@
             </li>
 
             <small class="mt-2 d-none d-sm-inline">Books</small>
-            <li class="nav-item d-flex justify-content-center p-1">
+            <li class="nav-item d-flex justify-content-center p-1 ">
                 <a href="#" class="nav-link px-sm-0 px-2 text-white">
                     <i class="bx bx-book-open"></i>
                     <span class="d-none d-sm-inline">Borrow Book</span></a>
                 </a>
             </li>
 
-            <li class="nav-item d-flex justify-content-center p-1">
-                <a href="#" class="nav-link px-sm-0 px-2 text-white">
+            <li class="nav-item d-flex justify-content-center p-1 {% if page == 'add-book' %}current-page{% endif %}">
+                <a href="/books/add" class="nav-link px-sm-0 px-2 text-white">
                     <i class="bx bx-book-add"></i>
                     <span class="d-none d-sm-inline">Add Book</span></a>
                 </a>
             </li>
 
-            <li class="nav-item d-flex justify-content-center p-1">
-                <a href="#" class="nav-link px-sm-0 px-2 text-white">
+            <li class="nav-item d-flex justify-content-center p-1 {% if page == 'books' %}current-page{% endif %}">
+                <a href="/books" class="nav-link px-sm-0 px-2 text-white">
                     <i class="bx bx-book-alt"></i>
                     <span class="d-none d-sm-inline">Book List</span></a>
                 </a>
@@ -63,14 +63,14 @@
 
             <small class="mt-2 d-none d-sm-inline">Monitoring and Inventory</small>
             <li class="nav-item d-flex justify-content-center p-1">
-                <a href="#" class="nav-link px-sm-0 px-2 text-white">
+                <a href="/log-window" target="_blank" class="nav-link px-sm-0 px-2 text-white">
                     <i class="bx bx-rocket"></i>
                     <span class="d-none d-sm-inline">Log Window</span></a>
                 </a>
             </li>
 
-            <li class="nav-item d-flex justify-content-center p-1">
-                <a href="#" class="nav-link px-sm-0 px-2 text-white">
+            <li class="nav-item d-flex justify-content-center p-1 {% if page == 'logs' %}current-page{% endif %}">
+                <a href="/logs" class="nav-link px-sm-0 px-2 text-white">
                     <i class="bx bx-history"></i>
                     <span class="d-none d-sm-inline">Log History</span></a>
                 </a>

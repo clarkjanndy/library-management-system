@@ -1,0 +1,97 @@
+{% extends 'app.html'%}
+
+{% load static %}
+
+{% include 'sidebar.html' %}
+
+{% block content%}
+<div class="container-fluid" style="background-color: #D7E2EF;">
+
+    <div class="row">
+        <div class="vh-100 d-flex justify-content-center align-items-center">
+            <div class="col-lg-4 col-xl-4 col-sm-12 col-md-8 p-2">
+                <center class="mb-3">
+                    <img src="{% static 'images/bcc-logo.png'%}" width="150">
+                    <h4>Library Monitoring and Books Inventory</h4>
+                </center>
+                <form id="form" class="bg-light p-5" method="POST">
+                    <center class="mb-3">
+                        <h4 class="text-theme">Logging Window</h4>
+                        <p>Please Enter your ID No.</p>
+                    </center>
+
+                    <center class="mb-3">
+                        <h1 id="clock"></h1>
+                        <p id="today">March 9, 200</p>
+                    </center>
+
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>ID No.</label>
+                        <input type="text" name="id_no" id="id_no" placeholder="ID No."
+                            class="form-control form-control" value="{{id_no}}">
+                        <div class="is-invalid"></div>
+                    </div>
+
+                    <center class="m-3" id="user">
+                        {% if user and action %}
+                        <img src="{% get_media_prefix %}{{user.photo}}" width="100" class="mb-3 img-fluid">
+                        <h4>{{user.first_name}} {{user.middle_name}} {{user.last_name}} {{user.ext_name}}</h4>
+                        <h6
+                            class="{% if action == 'has login' %}text-success{% endif %}{% if action == 'has logout' %}text-danger{% endif %}">
+                            {{action|title}}
+                        </h6>
+                        {% endif %}
+                    </center>
+
+
+                    <div class="form-group d-flex justify-content-center my-3">
+                        <button type="submit" class="btn btn-theme w-100">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const validation = new window.JustValidate('#form', {
+            errorFieldCssClass: 'is-invalid',
+        });
+
+        validation
+            .addField('#id_no', [{
+                rule: 'required',
+                errorMessage: 'This field is required',
+            },])
+            .onSuccess((event) => {
+                document.getElementById("form").submit();
+            });
+
+    </script>
+
+    <script>
+        window.onload = displayClock();
+        function displayClock() {
+            var display = new Date().toLocaleTimeString();
+            document.getElementById('clock').innerText = display;
+            setTimeout(displayClock, 1000);
+        }
+
+        function set_dates() {
+            var options = { year: 'numeric', month: 'long', day: 'numeric' };
+            var today = new Date();
+
+            document.getElementById('today').innerText = today.toLocaleDateString("en-US", options);
+        }
+        set_dates();
+
+        setTimeout(() => {
+            const box = document.getElementById('user');
+            box.style.display = 'none';
+        }, 5000);
+
+    </script>
+
+
+
+    {%endblock content%}

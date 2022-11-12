@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'library_management_system.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "library management",
+        "NAME": "lib-123",
         "USER": "root",
         "PASSWORD": "",
         "HOST": "localhost",
@@ -119,18 +119,18 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "/static/"
-MEDIA_URL = "/images/"
-
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
-MEDIA_ROOT = BASE_DIR / "static/images"
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 CORS_ALLOW_ALL_ORIGINS = True
 

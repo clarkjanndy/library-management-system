@@ -6,7 +6,7 @@
 {% include 'sidebar.html' %}
 
 <!-- Start Page Content -->
-<div class="col d-flex flex-column h-sm-100"">
+<div class="col col-xl-10 d-flex flex-column h-sm-100"">
     <main class=" row overflow-auto p-3">
     <h3 class="text-theme">Add Teacher</h3>
 
@@ -24,7 +24,7 @@
             </div>
 
             <div class="card-body">
-                <form class="" id="add-student" method="POST">
+                <form class="" id="add-teacher" method="POST">
                     {% csrf_token %}
 
                     <div class="row">
@@ -137,7 +137,7 @@
 <!-- End Page Content -->
 
 <script>
-    const validation = new window.JustValidate('#add-student', {
+    const validation = new window.JustValidate('#add-teacher', {
         errorFieldCssClass: 'is-invalid',
     });
 
@@ -175,6 +175,9 @@
         }, {
             rule: 'maxLength',
             value: 11,
+        },{
+            rule: 'number',
+            errorMessage: 'Input a valid contact number',
         }])
         .addField('#designation', [{
             rule: 'required',
@@ -183,13 +186,12 @@
         .addField('#year_of_exp', [{
             rule: 'required',
             errorMessage: 'This field is required',
-        },])
-        .addField('#advisory', [{
-            rule: 'required',
-            errorMessage: 'This field is required',
-        },])
+        },{
+            rule: 'number',
+            errorMessage: 'Input a valid number',
+        }])
         .onSuccess((event) => {
-            document.getElementById("dd-student").submit();
+            document.getElementById("add-teacher").submit();
         });
 
 </script>
