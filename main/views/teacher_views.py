@@ -3,6 +3,8 @@ from django.contrib import messages
 from django.shortcuts import render
 from django.shortcuts import redirect
 
+from main.utils.upload_photo import rename_and_upload
+
 from main.models import MyUser, Teacher
 # Create your views here.
 def teachers(request):
@@ -20,6 +22,23 @@ def teachers(request):
     }
     
     return render(request, "./main/teacher/teachers.html", data)
+
+def profile(request, id_no):
+    if not request.user.is_authenticated:
+        return redirect('/')
+
+    if not request.user.is_superuser and not request.user.id_no == id_no:
+        return redirect('/')
+
+    teacher = Teacher.objects.get(user__id_no=id_no)
+
+    data = {
+        'page': 'teachers',
+        'teacher': teacher
+    }
+
+    return render(request, "./main/teacher/profile.html", data)
+
  
 def add(request):
     if not request.user.is_authenticated:
@@ -56,6 +75,8 @@ def add(request):
         )
         #save teacher instance
         teacher.save()
+        messages.info(request, 'Teacher added successfully')
+        return redirect('/teachers/{id}'.format(id=user.id_no))
     
     data={
         'page' : 'teachers'
@@ -64,3 +85,33 @@ def add(request):
     return render(request, "./main/teacher/add-teacher.html", data)
 
 
+def edit(request, id_no):
+    if not request.user.is_authenticated:
+        return redirect('/')
+
+    if not request.user.is_superuser and not request.user.id_no == id_no:
+        return redirect('/')
+
+    teacher = Teacher.objects.get(user__id_no=id_no)
+    if request.method == 'POST':
+        teacher.user.first_name = request.POST['first_name']
+        teacher.user.middle_name = request.POST['middle_name']
+        teacher.user.last_name = request.POST['last_name']
+        teacher.user.ext_name = request.POST['ext_name']
+        teacher.user.gender = request.POST['gender']
+        teacher.user.civil_status = request.POST['civil_status']
+        teacher.user.address = request.POST['address']
+        teacher.user.contact_no = request.POST['contact_no']
+        teacher.designation = request.POST['designation']
+        teacher.year_of_exp = request.POST['year_of_exp']
+        teacher.advisory = request.POST['advisory']
+
+        if 'photo' in request.FILES:
+            photo = request.FILES['photo']
+            teacher.user.photo = rename_and_upload(photo, teacher.user.id_no)
+
+        teacher.user.save()
+        teacher.save()
+
+        messages.info(request, 'Profile updated successfully')
+    return redirect('/teachers/{id}'.format(id=teacher.user.id_no))

@@ -19,6 +19,8 @@ urlpatterns = [
     #teachers
     path('teachers', teacher_views.teachers, name="teachers"),
     path('teachers/add', teacher_views.add, name="add_teachers"),
+    path('teachers/<str:id_no>', teacher_views.profile, name="teacher_profile"),
+    path('teachers/<str:id_no>/edit', teacher_views.edit, name="edit_teacher"),
     
     #books
     path('books', book_views.books, name="teachers"),
@@ -28,7 +30,8 @@ urlpatterns = [
     
     #monitoring
     path('log-window', monitoring_views.log_window, name="log_window"),
-    path('logs', monitoring_views.logs, name="logs"),     
+    path('logs', monitoring_views.logs, name="logs"),
+    path('logs/<str:day>', monitoring_views.view_logs, name="view_logs"),       
     
     path('logout', page_views.logout, name="logout"),
 ]

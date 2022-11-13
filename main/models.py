@@ -6,7 +6,7 @@ from datetime import datetime
 # Create your models here.
 class MyUser(AbstractUser):
     id_no = models.CharField(max_length=50, blank = False, null = False, unique=True)
-    photo = models.CharField(max_length=200, blank = False, null = False, default='photos/default-profile.webp')
+    photo = models.CharField(max_length=200, blank = False, null = False, default='default-profile.webp')
     middle_name = models.CharField(max_length=50, blank = True)
     ext_name = models.CharField(max_length=50, blank = True)
     gender = models.CharField(null = False, blank = False, max_length = 32)

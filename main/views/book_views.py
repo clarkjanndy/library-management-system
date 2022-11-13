@@ -5,6 +5,8 @@ from django.shortcuts import redirect
 
 from main.models import MyUser, Book, BookCategory
 
+from main.utils import dummy
+
 # Create your views here.
 def books(request):
     if not request.user.is_authenticated:
@@ -52,8 +54,13 @@ def add(request):
             new_quan = request.POST['new_quan'],
             available_quan = request.POST['available_quan']
         )
+        if  request.POST['preface'] == '':
+            book.preface = dummy.DUMMY_TEXT
         #save book instance
         book.save()
+        
+        messages.info(request, 'Book added successfully')
+        return redirect('/books')
         
     data={
         'page' : 'add-book',

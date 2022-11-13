@@ -64,7 +64,7 @@ def add(request):
             address=request.POST['address'],
             contact_no=request.POST['contact_no']
         )
-        user.set_password('P@ssw0rd')
+        user.set_password('password123')
         # save user instance
         user.save()
 
@@ -77,19 +77,15 @@ def add(request):
         )
         # save student instance
         student.save()
+        
+        messages.info(request, 'Student added successfully')
+        return redirect('/students/{id}'.format(id=user.id_no))
 
     data = {
         'page': 'students'
     }
 
     return render(request, "./main/student/add-student.html", data)
-
-
-def handle_uploaded_file(f):
-    with open('myapp/static/upload/'+f.name, 'wb+') as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
-
 
 def edit(request, id_no):
     if not request.user.is_authenticated:

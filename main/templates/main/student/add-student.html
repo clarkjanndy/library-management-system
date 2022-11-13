@@ -151,7 +151,18 @@
         .addField('#id_no', [{
             rule: 'required',
             errorMessage: 'This field is required',
-        },])
+        }, {
+            validator: () => {
+                var func = async function validate() {
+                    const response = await fetch('/api/v1/validate-id-no?id_no=' + document.getElementById('id_no').value);
+                    const data = await response.json(); // Extracting data as a JSON Object from the response
+
+                    return data['valid']
+                }
+                return func;
+            },
+            errorMessage: 'ID. Number already in use.',
+        }])
         .addField('#first_name', [{
             rule: 'required',
             errorMessage: 'This field is required',

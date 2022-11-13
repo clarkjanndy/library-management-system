@@ -37,7 +37,7 @@
                 </thead>
                 <tbody>
                     {% for teacher in teachers %}
-                    <tr>
+                    <tr class="">
                         <th scope="row">{{teacher.user.id_no}}</th>
                         <td>{{teacher.user.first_name}} {{teacher.user.middle_name}} {{teacher.user.last_name}}
                             {{teacher.user.ext_name}}
@@ -46,7 +46,7 @@
                         <td>{{teacher.user.address}}</td>
                         <td>{{teacher.designation}}</td>
                         <td>
-                            <a class="btn btn-sm btn-success" href="consumers/{{consumer.id}}"><span
+                            <a class="btn btn-sm btn-success" href="teachers/{{teacher.user.id_no}}"><span
                                     class="bx bx-user"></span> View Profile</a>
                         </td>
                     </tr>
