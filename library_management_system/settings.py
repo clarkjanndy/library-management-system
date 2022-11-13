@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'library_management_system.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "lib-123",
+        "NAME": "lib-bcc",
         "USER": "root",
         "PASSWORD": "",
         "HOST": "localhost",

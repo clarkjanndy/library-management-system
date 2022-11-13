@@ -1,0 +1,64 @@
+{% extends 'app.html'%}
+
+{% load static %}
+
+{% block content%}
+{% include 'sidebar.html' %}
+
+<!-- Start Page Content -->
+<div class="col-12 col-sm-9 col-md-9 col-lg-10 col-xl-10 d-flex flex-column h-sm-100"">
+    <main class=" row overflow-auto p-3">
+    <h3 class="text-theme">Log History</h3>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/logs">Log History</a></li>
+            <li class="breadcrumb-item">{{day}}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+
+
+        <div class="table-responsive">
+            <table class="table table-striped   nowrap" id="logs">
+                <thead class="bg-theme text-white">
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Time</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                    <tr>
+                        <td>{{day}}</td>
+                        <td>{{log.date|date:"P" }}</td>
+                        <td>{{log.user.first_name}} {{log.user.middle_name}} {{log.user.last_name}} {{log.user.ext_name}}</td>
+                        <td>{{log.action}}</td>                        
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    </main>
+</div>
+<!-- End Page Content -->
+
+<script>
+    $('#logs').dataTable({
+        "ordering": false,
+        "columns": [
+            { "width": "30%" },
+            { "width": "20%" },
+            null,
+            { "width": "10%" },
+        ]
+    });
+</script>
+
+{%endblock content%}

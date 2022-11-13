@@ -39,6 +39,12 @@
             {% endfor %}
         </div>
 
+        {% if messages %}
+        {% for message in messages %}
+        {% include 'alert.html' %}
+        {% endfor %}
+        {% endif %}
+
         <div class="row">
             {% for book in books %}
             <div class="col-lg-4 p-1">

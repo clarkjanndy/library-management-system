@@ -32,7 +32,7 @@ def log_window(request):
             user=user,
             date=datetime.now(),
             action=action,
-            search_field = str(datetime.now().strftime('%B %d, %Y - %A'))
+            search_field=str(datetime.now().strftime('%B %d, %Y - %A'))
         )
         log.save()
 
@@ -61,7 +61,7 @@ def logs(request):
                 .annotate(day=TruncDay('date'))
                 .values('day')
                 .annotate(count=Count('id', distinct=+ True))
-                .filter(search_field__icontains = request.GET['key'])
+                .filter(search_field__icontains=request.GET['key'])
                 .order_by('-date__day'))
         data['key'] = request.GET['key']
 
@@ -69,3 +69,19 @@ def logs(request):
     data['page'] = 'logs'
 
     return render(request, "./main/monitoring/logs.html", data)
+
+
+def view_logs(request, day):
+    if not request.user.is_authenticated:
+        return redirect('/')
+
+    if not request.user.is_superuser:
+        return redirect('/')
+
+    logs = Logs.objects.filter(search_field = day).order_by('-date__day')
+
+    data = {'logs': logs,
+            'page': 'logs',
+            'day': day}
+
+    return render(request, "./main/monitoring/view-logs.html", data)
