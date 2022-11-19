@@ -26,7 +26,7 @@
                             <h4>Students</h4>
                             <h3>
                                 <span class="bx bx-face"></span>
-                                <span>12</span>
+                                <span id="students">0</span>
                             </h3>
                         </div>
                     </div>
@@ -38,7 +38,7 @@
                             <h4>Teachers</h4>
                             <h3>
                                 <span class="bx bx-user"></span>
-                                <span>12</span>
+                                <span id="teachers">0</span>
                             </h3>
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                             <h4>Books</h4>
                             <h3>
                                 <span class="bx bx-book"></span>
-                                <span>12</span>
+                                <span id="books">0</span>
                             </h3>
                         </div>
                     </div>
@@ -75,13 +75,18 @@
         <div class="col-lg-4 p-1">
             <div class="card">
                 <div class="card-header text-theme">
-                    Recent Activities
+                    Recent Logs
                 </div>
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">An item</li>
-                        <li class="list-group-item">A second item</li>
-                        <li class="list-group-item">A third item</li>
+                        {% if recent_logs %}
+                        {% for log in recent_logs %}
+                        <li class="list-group-item">{{log.user.first_name}} {{log.user.middle_name}} {{log.user.last_name}} {{log.user.ext_name}} 
+                        <span class="{% if log.action == 'has login' %}text-success{% else %}text-danger{% endif %}">{{log.action}}</span>.</li>
+                        {% endfor %}
+                        {% else %}
+                        <li class="list-group-item">No Recent Logs</li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -94,20 +99,20 @@
 
 <script>
     async function render_histogram() {
-        // const response = await fetch('/api/v1/consumption-histogram/{{consumer.id}}');
-        // const data = await response.json(); // Extracting data as a JSON Object from the response
+        const response = await fetch('/api/v1/visit-histogram');
+        const data = await response.json(); // Extracting data as a JSON Object from the response
 
-        // var date_format = { year: 'numeric', month: 'short' };
-        // var formatted_date = new Array()
+        var date_format = { year: 'numeric', month: 'short' };
+        var formatted_date = new Array()
 
-        // for (const date of data['x_label']) {
-        //     formatted_date.push(new Date(date).toLocaleDateString("en-US", date_format))
-        // }
+        for (const date of data['x_label']) {
+            formatted_date.push(new Date(date).toLocaleDateString("en-US", date_format))
+        }
 
         var options = {
             chart: {
                 height: 400,
-                type: "area",
+                type: "bar",
                 toolbar: {
                     show: false
                 }
@@ -117,29 +122,50 @@
             },
             series: [
                 {
-                    name: "Consumption",
-                    data: [1, 2]
+                    name: "Visits",
+                    data: data['series']
                 }
             ],
             fill: {
-                type: "gradient",
-                gradient: {
-                    shadeIntensity: 1,
-                    opacityFrom: 0.7,
-                    opacityTo: 0.9,
-                    stops: [0, 90, 100],
-                }
+                type: "solid",
             },
             xaxis: {
-                categories: ['Jan', 'Feb']
+                categories: formatted_date
             }
         };
+
+        
 
         var chart = new ApexCharts(document.querySelector("#visits"), options);
         chart.render();
     }
-
     render_histogram();
+</script>
+
+<script>
+    async function get_student_count(){
+        const response = await fetch('/api/v1/get-student-count');
+        const data = await response.json(); // Extracting data as a JSON Object from the response
+
+        document.getElementById('students').innerText = data['count']
+    }
+    get_student_count()
+
+    async function get_teacher_count(){
+        const response = await fetch('/api/v1/get-teacher-count');
+        const data = await response.json(); // Extracting data as a JSON Object from the response
+
+        document.getElementById('teachers').innerText = data['count']
+    }
+    get_teacher_count()
+
+    async function get_book_count(){
+        const response = await fetch('/api/v1/get-book-count');
+        const data = await response.json(); // Extracting data as a JSON Object from the response
+
+        document.getElementById('books').innerText = data['count']
+    }
+    get_book_count()
 </script>
 
 {%endblock content%}
