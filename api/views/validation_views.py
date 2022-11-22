@@ -8,7 +8,6 @@ from main.models import MyUser, Student, Teacher, Book
 # Create your views here.
 
 def validate_id_no(request):
-     
     user = MyUser.objects.all().filter(id_no = request.GET['id_no'])
     print(user)
     if not user.exists():
@@ -17,4 +16,9 @@ def validate_id_no(request):
     return JsonResponse({'valid': False})
 
 def validate_barcode(request):
-   pass
+   book = Book.objects.all().filter(barcode = request.GET['barcode'])
+   print(book)
+   if not book.exists():
+       return JsonResponse({'valid': True})
+    
+   return JsonResponse({'valid': False})

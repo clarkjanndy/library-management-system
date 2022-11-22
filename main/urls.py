@@ -9,6 +9,7 @@ urlpatterns = [
     path('login', page_views.login, name="login"),
 
     path('dashboard', admin_views.dashboard, name="dashboard"),
+    path('my-profile', admin_views.my_profile, name="my-profile"),
 
     #students
     path('students', student_views.students, name="students"),
@@ -26,6 +27,10 @@ urlpatterns = [
     path('books', book_views.books, name="teachers"),
     path('books/add', book_views.add, name="add_book"),
     path('books/<str:barcode>', book_views.view, name="view_book"),
+    
+    path('borrow-book', book_views.borrow_book, name="borrow_book"),
+    path('borrow-book/checkout/<str:id_no>', book_views.checkout, name="checkout"),
+    path('print-slip/<str:id_no>', book_views.print_borrower_slip, name="print_borrower_slip"),
     
     
     #monitoring

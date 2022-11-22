@@ -37,6 +37,8 @@ def login(request):
 
             if user.is_superuser:
                 return redirect("/dashboard")
+            else:
+                return redirect("/books")
         
         else:
             message = "Invalid username and/or password."

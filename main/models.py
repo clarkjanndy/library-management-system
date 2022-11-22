@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # Create your models here.
 class MyUser(AbstractUser):
@@ -29,6 +29,7 @@ class Student(models.Model):
     
     def __str__(self):
         return self.user
+    
 
 class Teacher(models.Model):
     user = models.OneToOneField(MyUser, on_delete = models.DO_NOTHING, null = False)
@@ -57,28 +58,38 @@ class BookCategory(models.Model):
         return self.name
 
 class Book(models.Model):
-    barcode = models.CharField(blank = False, null = False, max_length=90, unique=True)
+    barcode = models.CharField(blank = False, null = False, max_length=90)
     title = models.CharField(blank = False, null = False, max_length=90)
     authors = models.TextField(blank = False, null = False)
     preface = models.TextField(blank = False, null = False, default = 'No Preface')
     category = models.ForeignKey(BookCategory, on_delete = models.DO_NOTHING, null = False)
-    old_quan = models.IntegerField(blank = False, null = False)
-    new_quan = models.IntegerField(blank = False, null = False)
+    condition = models.CharField(blank = False, null = False, max_length=90)
     available_quan = models.IntegerField(blank = False, null = False)
     
     def __str__(self):
         return self.barcode
 
 class BorrowedBook(models.Model):
-    user = models.OneToOneField(MyUser, on_delete = models.DO_NOTHING, null = False)
-    book = models.ForeignKey(BookCategory, on_delete = models.DO_NOTHING, null = False)
+    user = models.ForeignKey(MyUser, on_delete = models.DO_NOTHING, null = False)
+    book = models.ForeignKey(Book, on_delete = models.DO_NOTHING, null = False)
     status = models.CharField(blank = False, null = False, max_length=300)
     date_borrowed = models.DateTimeField(null=False, blank=False, default=datetime.now)
     expected_return_date = models.DateTimeField(null=False, blank=False)
-    date_returned = models.DateTimeField(null=False, blank=False)
+    date_returned = models.DateTimeField(null=True, blank=True)
     
     def __str__(self):
-        return self.status
+        return self.book.title
+    
+    def save(self, *args, **kwargs):
+        self.expected_return_date = datetime.now() + timedelta(hours=self.book.category.limit)
+        super(BorrowedBook, self).save(*args, **kwargs)
+
+    def get_fine(self):
+        multiplier = datetime.now() - self.expected_return_date
+        fine = 0 
+        if multiplier.days > 0:
+            fine = self.book.category.rate * (multiplier.days * 24)
+        return int(fine)
 
 class Fine(models.Model):
     borrowedbook = models.OneToOneField(BorrowedBook, on_delete = models.DO_NOTHING, null = False)
