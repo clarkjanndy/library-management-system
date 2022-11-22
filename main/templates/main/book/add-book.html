@@ -59,30 +59,23 @@
                                 placeholder="Authors">
                             <div class="is-invalid"></div>
                         </div>
-                    </div>
-                    <div class="row">
 
-                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 form-group mb-3">
-                            <label>Quantity of books in old condition</label>
-                            <input type="text" id="old_quan" name="old_quan" class="form-control"
-                                placeholder="Quantity" oninput="get_total_quan()" >
+                        <div class="col-xl-6 col-lg-6 form-group mb-3">
+                            <label>Condition</label>
+                            <select id="condition" name="condition" class="form-select">
+                                <option value="">--select--</option>
+                                <option value="old">Old</option>
+                                <option value="old">New</option>
+                            </select>
                             <div class="is-invalid"></div>
                         </div>
 
-                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 form-group mb-3">
-                            <label>Quantity of books in new condition</label>
-                            <input type="text" id="new_quan" name="new_quan" class="form-control"
-                                placeholder="Quantity" oninput="get_total_quan()">
-                            <div class="is-invalid"></div>
-                        </div>
-
-                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 form-group mb-3">
+                        <div class="col-xl-6 col-lg-6 form-group mb-3">
                             <label>Total Quantity</label>
                             <input type="text" id="available_quan" name="available_quan" class="form-control"
-                                placeholder="Total Quantity" readonly>
+                                placeholder="Total Quantity">
                             <div class="is-invalid"></div>
                         </div>
-
 
                         <div class="col-12 form-group mb-3">
                             <label>Preface</label>
@@ -90,7 +83,6 @@
                                 rows="8"></textarea>
                             <div class="is-invalid"></div>
                         </div>
-
 
                     </div>
 
@@ -133,30 +125,23 @@
             rule: 'required',
             errorMessage: 'This field is required',
         },])
-        .addField('#old_quan', [{
+        .addField('#condition', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#available_quan', [{
             rule: 'required',
             errorMessage: 'This field is required',
         },{
             rule: 'number',
             errorMessage: 'Input a valid number',
-        }])
-        .addField('#new_quan', [{
-            rule: 'required',
-            errorMessage: 'This field is required',
-        },  {
-            rule: 'number',
-            errorMessage: 'Input a valid number',
-        }])
-        .addField('#available_quan', [{
-            rule: 'required',
-            errorMessage: 'This field is required',
-        }, ])
+        } ])
         .onSuccess((event) => {
             document.getElementById("add-book").submit();
         });
 </script>
 
-<script>
+<!-- <script>
     var total_quan = document.getElementById('available_quan');
     var old_quan = document.getElementById('old_quan');
     var new_quan = document.getElementById('new_quan');
@@ -164,6 +149,6 @@
     function get_total_quan(){
         total_quan.value = parseInt(old_quan.value) + parseInt(new_quan.value);
     }
-</script>
+</script> -->
 
 {%endblock content%}

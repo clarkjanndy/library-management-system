@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Library Monitoring and Book Inventory SYstem</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<style>
+    th, td{
+        border: 1px solid black; 
+        padding: 10px;
+    }
+</style>
+<body>
+    <div class="col-lg-6">
+
+        <table style="border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>Barcode</th>
+                    <th>Category</th>
+                    <th>Title</th>
+                    <th>Date Borrowed</th>
+                    <th>Due Date</th>
+                    <th>Fine</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bor in borrowed %}
+                <tr>
+                    <td>{{bor.book.barcode}}</td>
+                    <td>{{bor.book.category}}</td>
+                    <td>{{bor.book.title}}</td>
+                    <td>{{bor.date_borrowed}}</td>
+                    <td>{{bor.expected_return_date}}</td>
+                    <td>{{bor.get_fine}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+    window.onload = function () { window.print(); }
+</script>

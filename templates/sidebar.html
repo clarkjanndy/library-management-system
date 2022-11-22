@@ -1,6 +1,6 @@
 {% load static %}
 <!-- Start Sidebar -->
-<div class="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2 px-sm-2 px-5 bg-sidebar d-flex sticky-top">
+<div class="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2 bg-sidebar d-flex sticky-top p-2 overflow-auto mh-100">
     <div
         class="d-flex flex-sm-column flex-row flex-grow-1 align-items-center align-items-sm-start px-3 pt-2 text-white">
         <a href="/" class="d-flex align-items-center pb-sm-3 mb-md-0 me-md-auto text-white text-decoration-none">
@@ -16,8 +16,9 @@
 
         <ul class="nav nav-pills flex-sm-column flex-row flex-nowrap flex-shrink-1 flex-sm-grow-0 flex-grow-1 mb-sm-auto mb-0 justify-content-center align-items-center align-items-sm-start
         " id="menu">
+            {% if request.user.is_superuser%}
             <small class="d-none d-sm-inline">Admin</small>
-            <li class= "nav-item d-flex justify-content-center p-1 {% if page == 'dashboard' %}current-page{% endif %}">
+            <li class="nav-item d-flex justify-content-center p-1 {% if page == 'dashboard' %}current-page{% endif %}">
                 <a href="/dashboard" class="nav-link px-sm-0 px-2 text-white">
                     <i class="bx bx-grid"></i>
                     <span class="ms-1 d-none d-sm-inline">Dashboard</span>
@@ -38,12 +39,21 @@
                     <span class="ms-1 d-none d-sm-inline">Teachers</span>
                 </a>
             </li>
+            {% endif %}
 
             <small class="mt-2 d-none d-sm-inline">Books</small>
+            {% if request.user.is_superuser%}
             <li class="nav-item d-flex justify-content-center p-1 ">
-                <a href="#" class="nav-link px-sm-0 px-2 text-white">
+                <a href="/borrow-book" class="nav-link px-sm-0 px-2 text-white">
                     <i class="bx bx-book-open"></i>
                     <span class="d-none d-sm-inline">Borrow Book</span></a>
+                </a>
+            </li>
+
+            <li class="nav-item d-flex justify-content-center p-1 ">
+                <a href="#" class="nav-link px-sm-0 px-2 text-white">
+                    <i class="bx bx-book-alt"></i>
+                    <span class="d-none d-sm-inline">Return Book</span></a>
                 </a>
             </li>
 
@@ -53,14 +63,14 @@
                     <span class="d-none d-sm-inline">Add Book</span></a>
                 </a>
             </li>
-
+            {% endif %}
             <li class="nav-item d-flex justify-content-center p-1 {% if page == 'books' %}current-page{% endif %}">
                 <a href="/books" class="nav-link px-sm-0 px-2 text-white">
                     <i class="bx bx-book-alt"></i>
-                    <span class="d-none d-sm-inline">Book List</span></a>
+                    <span class="ms-1 d-none d-sm-inline">Book List</span></a>
                 </a>
             </li>
-
+            {% if request.user.is_superuser%}
             <small class="mt-2 d-none d-sm-inline">Monitoring and Inventory</small>
             <li class="nav-item d-flex justify-content-center p-1">
                 <a href="/log-window" target="_blank" class="nav-link px-sm-0 px-2 text-white">
@@ -82,18 +92,20 @@
                     <span class="ms-1 d-none d-sm-inline">Inventory</span>
                 </a>
             </li>
+            {% endif %}
         </ul>
 
         <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                 id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="{% get_media_prefix %}{{user.photo}}" alt="hugenerd" width="28" height="28" class="rounded-circle">
+                <img src="{% get_media_prefix %}{{user.photo}}" alt="hugenerd" width="28" height="28"
+                    class="rounded-circle">
                 <span class="d-none d-sm-inline mx-1 text-truncate">Juan</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-light text-small shadow" aria-labelledby="dropdownUser1">
-                <li><a class="dropdown-item" href="#">
+                <li><a class="dropdown-item active" href="/my-profile">
                         <i class="bx bx-user"></i>
-                        <span>Profile</span></a>
+                        <span>My Profile</span></a>
                 </li>
                 <li><a class="dropdown-item" href="#">
                         <i class="bx bx-key"></i>
