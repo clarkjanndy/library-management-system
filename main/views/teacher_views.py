@@ -31,14 +31,14 @@ def profile(request, id_no):
         return redirect('/')
 
     teacher = Teacher.objects.get(user__id_no=id_no)
-    books = BorrowedBook.objects.filter(user = teacher.user, status="borrowed")
+    borrowed = BorrowedBook.objects.filter(user = teacher.user, status="borrowed")
     
-    print(books)
+    print(borrowed)
 
     data = {    
         'page': 'teachers',
         'teacher': teacher,
-        'books': books
+        'borrowed': borrowed
     }
 
     return render(request, "./main/teacher/profile.html", data)
@@ -106,6 +106,7 @@ def edit(request, id_no):
         teacher.user.civil_status = request.POST['civil_status']
         teacher.user.address = request.POST['address']
         teacher.user.contact_no = request.POST['contact_no']
+        teacher.user.is_superuser = request.POST['role']
         teacher.designation = request.POST['designation']
         teacher.year_of_exp = request.POST['year_of_exp']
         teacher.advisory = request.POST['advisory']

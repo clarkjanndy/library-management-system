@@ -44,7 +44,7 @@ def inventory(request):
     elif request.GET['type'] == 'on-cart':
         data = BorrowedBook.objects.filter(status = 'on-cart').aggregate(count=Count('id')) 
     elif request.GET['type'] == 'borrowed':
-        data = BorrowedBook.objects.filter(status = 'borrowed').aggregate(count=Count('id')) 
+        data = BorrowedBook.objects.filter(status__in = ['borrowed', 'to-be-returned']).aggregate(count=Count('id')) 
     else:
         pass
     
