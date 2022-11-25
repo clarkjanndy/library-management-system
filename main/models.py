@@ -3,9 +3,11 @@ from django.contrib.auth.models import AbstractUser
 
 from datetime import datetime, timedelta
 
+from django.db.models import Count
+
 # Create your models here.
 class MyUser(AbstractUser):
-    id_no = models.CharField(max_length=50, blank = False, null = False, unique=True)
+    id_no = models.CharField(max_length=50, blank = False, null = False, unique=True, primary_key=True)
     photo = models.CharField(max_length=200, blank = False, null = False, default='default-profile.webp')
     middle_name = models.CharField(max_length=50, blank = True)
     ext_name = models.CharField(max_length=50, blank = True)
@@ -59,15 +61,23 @@ class BookCategory(models.Model):
 
 class Book(models.Model):
     barcode = models.CharField(blank = False, null = False, max_length=90)
+    category = models.ForeignKey(BookCategory, on_delete = models.DO_NOTHING, null = False)
     title = models.CharField(blank = False, null = False, max_length=90)
     authors = models.TextField(blank = False, null = False)
     preface = models.TextField(blank = False, null = False, default = 'No Preface')
-    category = models.ForeignKey(BookCategory, on_delete = models.DO_NOTHING, null = False)
     condition = models.CharField(blank = False, null = False, max_length=90)
     available_quan = models.IntegerField(blank = False, null = False)
     
     def __str__(self):
         return self.barcode
+    
+    def get_on_cart(self):
+        on_cart = BorrowedBook.objects.filter(book=self, status='on-cart').aggregate(count=Count('id'))        
+        return on_cart['count']
+
+    def get_borrowed(self):
+        on_cart = BorrowedBook.objects.filter(book=self, status='borrowed').aggregate(count=Count('id'))        
+        return on_cart['count']
 
 class BorrowedBook(models.Model):
     user = models.ForeignKey(MyUser, on_delete = models.DO_NOTHING, null = False)

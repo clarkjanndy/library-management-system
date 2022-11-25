@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.shortcuts import render
 from django.shortcuts import redirect
 
-from main.models import MyUser, Logs
+from main.models import MyUser, Logs, Book
 
 from django.db.models.functions import TruncDay, TruncMonth
 from django.db.models import Count
@@ -70,6 +70,28 @@ def logs(request):
 
     return render(request, "./main/monitoring/logs.html", data)
 
+def delete(request):
+    if not request.user.is_authenticated:
+        return redirect('/')
+
+    if not request.user.is_superuser:
+        return redirect('/')
+
+    try:
+        if request.GET['bulk'] == '1':
+            Logs.objects.filter(search_field = request.GET['params']).delete()
+            messages.success(request, 'Log(s) deleted succesfully')
+        else:
+            print('I am here...')
+            Logs.objects.filter(id = int(request.GET['params'])).delete()
+            messages.success(request, 'Log deleted succesfully')
+            return redirect('/logs/'+str(request.GET['day']))
+        
+    except KeyError:
+        messages.error(request, 'Something went wrong')
+    
+    return redirect('/logs')
+
 
 def view_logs(request, day):
     if not request.user.is_authenticated:
@@ -85,3 +107,18 @@ def view_logs(request, day):
             'day': day}
 
     return render(request, "./main/monitoring/view-logs.html", data)
+
+def inventory(request):
+    if not request.user.is_authenticated:
+        return redirect('/')
+
+    if not request.user.is_superuser:
+        return redirect('/')
+    
+    books = Book.objects.all()
+    
+    data = {'books': books,
+            'page': 'inventory'}
+    
+    return render(request, "./main/monitoring/inventory.html", data)
+    

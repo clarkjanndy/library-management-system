@@ -13,11 +13,18 @@
                 <center class="mb-3">
                     <img src="{% static 'images/bcc-logo.png'%}" width="150">
                     <h4>Library Monitoring and Books Inventory</h4>
+                    
                 </center>
                 <form id="form" class="bg-light p-5" method="POST">
                     <center class="mb-3">
                         <h4 class="text-theme">Login to Your Account</h4>
                         <p>Enter your ID No. and password</p>
+                        
+                        {% if messages %}
+                        {% for message in messages %}
+                        {% include 'alert.html' %}
+                        {% endfor %}
+                        {% endif %}
                     </center>
 
                     {% csrf_token %}

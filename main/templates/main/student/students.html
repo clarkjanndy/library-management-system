@@ -6,7 +6,7 @@
 {% include 'sidebar.html' %}
 
 <!-- Start Page Content -->
-<div class="col-12 col-sm-9 col-md-9 col-lg-10 col-xl-10 d-flex flex-column h-sm-100"">
+<div class="col-12 col-sm-9 col-md-9 col-lg-10 col-xl-10 d-flex flex-column vh-100">
     <main class=" row overflow-auto p-3">
     <h3 class="text-theme">Students</h3>
 
@@ -43,7 +43,7 @@
                 <tbody>
                     {% for student in students %}
                     <tr>
-                        <th scope="row">{{student.user.id_no}}</th>
+                        <td scope="row">{{student.user.id_no}}</td>
                         <td>{{student.user.first_name}} {{student.user.middle_name}} {{student.user.last_name}}
                             {{student.myuser.ext_name}}
                         </td>
@@ -52,7 +52,7 @@
                         <td>{{student.course}}</td>
                         <td>
                             <a class="btn btn-sm btn-success" href="students/{{student.user.id_no}}"><span
-                                    class="bx bx-user"></span> View Profile</a>
+                                    class="bx bx-face"></span> View Profile</a>
                         </td>
                         
                     </tr>
@@ -72,7 +72,7 @@
         "ordering": false,
         "columns": [
             { "width": "10%" },
-            null,
+            { "width": "30%" },
             null,
             null,
             null,

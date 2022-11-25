@@ -1,9 +1,9 @@
 from django.db.models.functions import TruncDay, TruncMonth, TruncYear
 from django.http import JsonResponse
-from django.db.models import Count
+from django.db.models import Count, Sum
 import json
 
-from main.models import Logs, Student, Teacher, Book
+from main.models import Logs, Student, Teacher, Book, BorrowedBook
 
 from datetime import datetime
 # Create your views here.
@@ -30,11 +30,23 @@ def visit_histogram(request):
     }
 
     logs = Logs.objects.values('date__month', 'date__year').annotate(**metrics).order_by('date__month')
-
-    print(logs)
    
     series = [log["visits"] for log in logs.iterator()]
     x_label = [datetime(log["date__year"], log["date__month"], 1) for log in logs.iterator()]
 
     data = {"series": series, "x_label": x_label}
     return JsonResponse(data, safe=True)
+
+def inventory(request):
+    data =None
+    if request.GET['type'] == 'on-shelf':
+        data = Book.objects.all().aggregate(count=Sum('available_quan'))       
+    elif request.GET['type'] == 'on-cart':
+        data = BorrowedBook.objects.filter(status = 'on-cart').aggregate(count=Count('id')) 
+    elif request.GET['type'] == 'borrowed':
+        data = BorrowedBook.objects.filter(status = 'borrowed').aggregate(count=Count('id')) 
+    else:
+        pass
+    
+    return JsonResponse(data, safe=True)
+       

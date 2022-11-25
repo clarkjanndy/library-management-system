@@ -219,10 +219,6 @@
             rule: 'number',
             errorMessage: 'Input a valid contact number',
         }])
-        .addField('#advisory', [{
-            rule: 'required',
-            errorMessage: 'This field is required',
-        },])
         .onSuccess((event) => {
             document.getElementById("edit-teacher").submit();
         });

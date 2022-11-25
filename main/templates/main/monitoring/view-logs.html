@@ -19,6 +19,11 @@
 
     <div class="row">
 
+        {% if messages %}
+        {% for message in messages %}
+        {% include 'alert.html' %}
+        {% endfor %}
+        {% endif %}
 
         <div class="table-responsive">
             <table class="table table-striped   nowrap" id="logs">
@@ -28,6 +33,7 @@
                         <th scope="col">Time</th>
                         <th scope="col">Name</th>
                         <th scope="col">Action</th>
+                        <th scope="col">- - -</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,8 +41,14 @@
                     <tr>
                         <td>{{day}}</td>
                         <td>{{log.date|date:"P" }}</td>
-                        <td>{{log.user.first_name}} {{log.user.middle_name}} {{log.user.last_name}} {{log.user.ext_name}}</td>
-                        <td>{{log.action}}</td>                        
+                        <td>{{log.user.first_name}} {{log.user.middle_name}} {{log.user.last_name}}
+                            {{log.user.ext_name}}</td>
+                        <td>{{log.action}}</td>
+                        <td>
+                            <a class="btn btn-danger" href='/logs/delete?bulk=0&params={{log.id}}&day={{day}}'>
+                                <span class="bx bx-trash"></span>
+                            </a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -55,6 +67,7 @@
         "columns": [
             { "width": "30%" },
             { "width": "20%" },
+            null,
             null,
             { "width": "10%" },
         ]

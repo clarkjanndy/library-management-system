@@ -1,0 +1,198 @@
+{% extends 'app.html'%}
+
+{% load static %}
+
+{% block content%}
+{% include 'sidebar.html' %}
+
+<!-- Start Page Content -->
+<div class="col d-flex flex-column vh-100">
+    <main class=" row overflow-auto p-3">
+        <h3 class="text-theme">Inventory</h3>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">Inventory</li>
+            </ol>
+        </nav>
+
+
+        <div class="row">
+            <div class="col-lg-4 p-1">
+                <div class="bg-white text-theme p-3 shadow">
+                    <div>
+                        <h4>Books On-Shelf</h4>
+                        <h3>
+                            <span class="bx bx-face"></span>
+                            <span id="on-shelf">0</span>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 p-1">
+                <div class=" bg-white text-theme p-3 shadow">
+                    <div>
+                        <h4>Books On-Cart</h4>
+                        <h3>
+                            <span class="bx bx-user"></span>
+                            <span id="on-cart">0</span>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 p-1">
+                <div class=" bg-white text-theme p-3 shadow">
+                    <div>
+                        <h4>Borrowed Books</h4>
+                        <h3>
+                            <span class="bx bx-book"></span>
+                            <span id="borrowed-books">0</span>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+     
+        <div class="row mt-3">
+            <h3>Book List</h3>
+
+            {% if messages %}
+            {% for message in messages %}
+            {% include 'alert.html' %}
+            {% endfor %}
+            {% endif %}
+
+            <div class="table-responsive">
+                <table class="table table-striped " id="books">
+                    <thead class="bg-theme text-white">
+                        <tr>
+                            <th scope="col">Barcode</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">On-Shelf</th>
+                            <th scope="col">On-Cart</th>
+                            <th scope="col">Borrowed</th>
+                            <th scope="col">- - -</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for book in books %}
+                        <tr>
+                            <td scope="row">{{book.barcode}}</td>
+                            <td>{{book.category.name}}
+                            </td>
+                            <td>{{book.title}}</td>
+                            <td>{{book.available_quan}}</td>
+                            <td>{{book.get_on_cart}}</td>
+                            <td>{{book.get_borrowed}}</td>
+                            <td>
+                                <a class="btn btn-sm btn-success" href="students/{{student.user.id_no}}"><span
+                                        class="bx bx-file-blank"></span> Details</a>
+                                <a class="btn btn-sm btn-theme" href="books/{{book.barcode}}/edit"><span
+                                        class="bx bx-edit"></span> Edit</a>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+    </main>
+</div>
+<!-- End Page Content -->
+
+<script>
+    async function render_histogram() {
+        const response = await fetch('/api/v1/visit-histogram');
+        const data = await response.json(); // Extracting data as a JSON Object from the response
+
+        var date_format = { year: 'numeric', month: 'short' };
+        var formatted_date = new Array()
+
+        for (const date of data['x_label']) {
+            formatted_date.push(new Date(date).toLocaleDateString("en-US", date_format))
+        }
+
+        var options = {
+            chart: {
+                height: 400,
+                type: "bar",
+                toolbar: {
+                    show: false
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            series: [
+                {
+                    name: "Visits",
+                    data: data['series']
+                }
+            ],
+            fill: {
+                type: "solid",
+            },
+            xaxis: {
+                categories: formatted_date
+            }
+        };
+
+
+
+        var chart = new ApexCharts(document.querySelector("#visits"), options);
+        chart.render();
+    }
+    render_histogram();
+</script>
+
+<script>
+    async function get_student_count() {
+        const response = await fetch('/api/v1/inventory?type=on-shelf');
+        const data = await response.json(); // Extracting data as a JSON Object from the response
+
+        document.getElementById('on-shelf').innerText = data['count']
+    }
+    get_student_count()
+
+    async function get_teacher_count() {
+        const response = await fetch('/api/v1/inventory?type=on-cart');
+        const data = await response.json(); // Extracting data as a JSON Object from the response
+
+        document.getElementById('on-cart').innerText = data['count']
+    }
+    get_teacher_count()
+
+    async function get_book_count() {
+        const response = await fetch('/api/v1/inventory?type=borrowed');
+        const data = await response.json(); // Extracting data as a JSON Object from the response
+
+        document.getElementById('borrowed-books').innerText = data['count']
+    }
+    get_book_count()
+</script>
+
+
+<script>
+    $('#books').dataTable({
+        "ordering": false,
+        "columns": [
+            { "width": "10%" },
+            { "width": "20%" },
+            { "width": "20%" },
+            null,
+            null,
+            null,
+            { "width": "20%" }
+        ]
+    });
+</script>
+
+{%endblock content%}

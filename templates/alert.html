@@ -1,4 +1,6 @@
-<div class="alert alert-success col-xl-4 col-lg-4" id="alert">
+<div {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}class="alert alert-success" {% endif %}
+     {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}class="alert alert-danger" {% endif %}
+     id="alert">
     {{message}}
 </div>
 

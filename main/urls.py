@@ -6,7 +6,9 @@ from . views import page_views, admin_views, student_views, teacher_views, book_
 
 urlpatterns = [
     path('', page_views.landing, name="landing"),
+    path('initialize', page_views.initialize, name="initialize"),
     path('login', page_views.login, name="login"),
+    path('change-password', page_views.change_password, name="change_password"),
 
     path('dashboard', admin_views.dashboard, name="dashboard"),
     path('my-profile', admin_views.my_profile, name="my-profile"),
@@ -27,6 +29,8 @@ urlpatterns = [
     path('books', book_views.books, name="teachers"),
     path('books/add', book_views.add, name="add_book"),
     path('books/<str:barcode>', book_views.view, name="view_book"),
+    path('books/<str:barcode>/edit', book_views.edit, name="edit_book"),
+    
     
     path('borrow-book', book_views.borrow_book, name="borrow_book"),
     path('borrow-book/checkout/<str:id_no>', book_views.checkout, name="checkout"),
@@ -36,7 +40,10 @@ urlpatterns = [
     #monitoring
     path('log-window', monitoring_views.log_window, name="log_window"),
     path('logs', monitoring_views.logs, name="logs"),
+    path('logs/delete', monitoring_views.delete, name="delete_logs"), 
     path('logs/<str:day>', monitoring_views.view_logs, name="view_logs"),       
+    
+    path('inventory', monitoring_views.inventory, name="inventory"),       
     
     path('logout', page_views.logout, name="logout"),
 ]

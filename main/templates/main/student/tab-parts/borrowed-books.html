@@ -1,0 +1,38 @@
+<div class="table-responsive mb-2">
+    <table class="table table-striped" id="borrowed">
+        <thead class="bg-theme text-white">
+            <tr>
+                <th scope="col">Category</th>
+                <th scope="col">Title</th>
+                <th scope="col">Date Borrowed</th>
+                <th scope="col">Due Date</th>
+                <th scope="col">Fine</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bor in borrowed %}
+            <tr>
+                <td scope="col">{{bor.book.category}}</td>
+                <td scope="col">{{bor.book.title}}</td>
+                <td scope="col">{{bor.date_borrowed}}</td>
+                <td scope="col">{{bor.expected_return_date}}</td>
+                <td scope="col">{{bor.get_fine}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $('#borrowed').dataTable({
+        "ordering": false,
+        "columns": [
+            { "width": "10%" },
+            null,
+            null,
+            null,
+            null,
+            null
+        ]
+    });
+</script>
