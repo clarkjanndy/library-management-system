@@ -33,9 +33,11 @@ urlpatterns = [
     
     
     path('borrow-book', book_views.borrow_book, name="borrow_book"),
-    path('borrow-book/checkout/<str:id_no>', book_views.checkout, name="checkout"),
+    path('borrow-book/checkout/<str:id_no>', book_views.borrow_checkout, name="borrow_checkout"),
     path('print-slip/<str:id_no>', book_views.print_borrower_slip, name="print_borrower_slip"),
     
+    path('return-book', book_views.return_book, name="return_book"),
+    path('return-book/checkout/<str:id_no>', book_views.return_checkout, name="return_checkout"),
     
     #monitoring
     path('log-window', monitoring_views.log_window, name="log_window"),

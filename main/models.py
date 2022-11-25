@@ -5,6 +5,8 @@ from datetime import datetime, timedelta
 
 from django.db.models import Count
 
+import math
+
 # Create your models here.
 class MyUser(AbstractUser):
     id_no = models.CharField(max_length=50, blank = False, null = False, unique=True, primary_key=True)
@@ -58,6 +60,18 @@ class BookCategory(models.Model):
     
     def __str__(self):
         return self.name
+    
+    def get_limit_str(self):
+        if self.name == 'Reserve Circulation':
+            return str(self.limit) + ' hours'
+            pass
+        return str(int(self.limit/24)) + ' days'
+    
+    def get_rate_str(self):
+        if self.name == 'Reserve Circulation':
+            return str(int(self.rate)) + ' / hour'
+        return str(int(self.rate*24)) + ' / day'
+    
 
 class Book(models.Model):
     barcode = models.CharField(blank = False, null = False, max_length=90)
@@ -97,9 +111,15 @@ class BorrowedBook(models.Model):
     def get_fine(self):
         multiplier = datetime.now() - self.expected_return_date
         fine = 0 
-        if multiplier.days > 0:
-            fine = self.book.category.rate * (multiplier.days * 24)
-        return int(fine)
+
+        if self.book.category.name != 'Reserve Circulation':
+            if multiplier.days > 0:
+                fine =  math.floor(self.book.category.rate * 24) * math.floor(multiplier.days)
+        else:   
+            if (multiplier.total_seconds() / 3600) > 0:
+                fine = int(self.book.category.rate) * math.floor(multiplier.total_seconds() / 3600)
+       
+        return fine
 
 class Fine(models.Model):
     borrowedbook = models.OneToOneField(BorrowedBook, on_delete = models.DO_NOTHING, null = False)

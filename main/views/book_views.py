@@ -1,9 +1,10 @@
-from datetime import date
+from datetime import date, datetime
 from django.contrib import messages
 from django.shortcuts import render
 from django.shortcuts import redirect
 
 from main.models import MyUser, Book, BookCategory, BorrowedBook
+from django.db.models import Q
 
 from main.utils import dummy
 
@@ -122,18 +123,18 @@ def borrow_book(request):
         return redirect('/')
     
     data = {}
-    
     #get borrower
     if 'borrower-id' in request.GET:
         try:
             borrower = MyUser.objects.get(id_no = request.GET['borrower-id']) 
             
             #check if borrower has borrowed books
-            if BorrowedBook.objects.filter(user = borrower, status = 'borrowed').exists():
+            status_to_check = ['borrowed', 'to-be-returned']
+            if BorrowedBook.objects.filter(user = borrower, status__in = status_to_check).exists():
                 messages.error(request, 'That user already have borrowed books. Please return all the books before borrowing again.') 
                 return redirect('/borrow-book') 
             
-             #get book to be borrowed
+            #get book to be borrowed
             if 'book-id' in request.GET:
                 book = Book.objects.get(id=request.GET['book-id'])
                 
@@ -170,7 +171,7 @@ def borrow_book(request):
     
     return render(request, "./main/book/borrow-book.html", data )
 
-def checkout(request, id_no):
+def borrow_checkout(request, id_no):
     if not request.user.is_authenticated:
         return redirect('/')
     
@@ -207,3 +208,71 @@ def print_borrower_slip(request, id_no):
             'borrowed':borrowed}
     
     return render(request, "./main/book/print-slip.html", data)
+
+def return_book(request):
+    if not request.user.is_authenticated:
+        return redirect('/')
+    
+    if not request.user.is_superuser:
+        return redirect('/')
+    
+    data = {}
+    #get borrower
+    if 'borrower-id' in request.GET:
+        try:
+            borrower = MyUser.objects.get(id_no = request.GET['borrower-id']) 
+            
+            #get entry to be returned
+            if 'bor-id' in request.GET and 'action' in request.GET:
+                 borrowed = BorrowedBook.objects.get(id=request.GET['bor-id'])
+                 
+                 print(borrowed)
+                 
+                 if request.GET['action'] == '1':
+                    borrowed.status = 'to-be-returned'
+                 else:
+                    borrowed.status = 'borrowed'
+                 borrowed.save()
+
+                 return redirect('/return-book?borrower-id='+str(borrower.id_no)) 
+                
+            #updated values of borrowed book and to be returned books
+            borrowed = BorrowedBook.objects.filter(user=borrower, status='borrowed').order_by('-date_borrowed')
+            tbrs = BorrowedBook.objects.filter(user=borrower, status='to-be-returned').order_by('-date_borrowed')
+            
+            data['borrower']= borrower
+            data['borrowed']= borrowed #borrowed books
+            data['tbrs']= tbrs #to-be-return books
+        except:
+            messages.error(request, 'Please Select a Borrower.')  
+        
+    data['page']= 'return-book'
+   
+    return render(request, "./main/book/return-book.html", data )
+
+def return_checkout(request, id_no):
+    if not request.user.is_authenticated:
+        return redirect('/')
+    
+    if not request.user.is_superuser:
+        return redirect('/')
+    
+    borrower = MyUser.objects.get(id_no=id_no)
+    #update all pending books to borrowed
+    tbr=BorrowedBook.objects.filter(user = borrower, status = 'to-be-returned')
+    
+    if tbr:
+        #update each entry of the book
+        for entry in tbr:
+            entry.book.available_quan =  entry.book.available_quan + 1
+            entry.book.save()
+
+        tbr.update(date_returned=datetime.now())
+        tbr.update(status='returned')
+            
+        messages.success(request, 'Books successfuly returned!')  
+    else:
+        messages.error(request, 'No Book Selected.') 
+        return redirect('/return-book?borrower-id='+str(borrower.id_no))
+    
+    return redirect('/return-book')

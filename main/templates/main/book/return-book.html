@@ -1,0 +1,176 @@
+{% extends 'app.html'%}
+
+{% load static %}
+
+{% block content%}
+{% include 'sidebar.html' %}
+
+<!-- Start Page Content -->
+<div class="col-12 col-sm-9 col-md-9 col-lg-10 col-xl-10 d-flex flex-column h-sm-100"">
+    <main class=" row overflow-auto p-3">
+    <h3 class="text-theme">Return Book</h3>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Return Book</li>
+        </ol>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-xl-12 border-bottom border-secondary mb-2">
+                <form class="mb-2" id="borrower">
+                    <div class="form-group col-lg-6 d-inline-block">
+                        <label>Borrower's ID No.</label>
+                        <input class="form-control " name="borrower-id" id="borrower-id"
+                            placeholder="Borrower's ID No." value="{{borrower.id_no}}">
+                    </div>
+                </form>
+            </div>
+            
+            {% if messages %}
+            {% for message in messages %}
+            {% include 'alert.html' %}
+            {% endfor %}
+            {% endif %}
+
+
+            <div class="col-lg-12 col-xl-12 border-bottom border-secondary">
+                <div class="row my-2">
+
+                    <div class="row mb-2">
+                        <div class="col-lg-2 text-theme">Borrower's ID No: </div>
+                        <div class="col-lg-9"><b>{{borrower.id_no}}</b> </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-lg-2 text-theme">Borrower's Name: </div>
+                        <div class="col-lg-9"><b>{{borrower.first_name}} {{borrower.middle_name}} {{borrower.last_name}}
+                                {{borrower.ext_name}}</b></div>
+                    </div>
+                </div>
+
+                <div class="table-responsive mb-2">
+                    <table class="table table-striped" id="to-be-returned">
+                        <thead class="bg-theme text-white">
+                            <tr>
+                                <th scope="col">Category</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Date Borrowed</th>
+                                <th scope="col">Due Date</th>
+                                <th scope="col">Fine</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for tbr  in tbrs %}
+                            <tr>
+                                <td scope="col">{{tbr.book.category}}</td>
+                                <td scope="col">{{tbr.book.title}}</td>
+                                <td scope="col">{{tbr.date_borrowed}}</td>
+                                <td scope="col">{{tbr.expected_return_date}}</td>
+                                <td scope="col">{{tbr.get_fine}}</td>
+                                <td scope="col"> <a class="btn btn-sm btn-danger"
+                                        href="/return-book?borrower-id={{borrower.id_no}}&bor-id={{tbr.id}}&action=0"><span
+                                            class="bx bx-x"></span> Remove</a>
+                                </td>
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                {% if borrower.id_no is not none %}
+                <div class="d-flex justify-content-end mb-2">
+                    <a class="btn btn-success" href="/return-book/checkout/{{borrower.id_no}}">Done</a>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="col-lg-12 col-xl-12 border mt-3">
+                <h4>Borrowed Books</h4>
+                <div class="table-responsive mb-2">
+                    <table class="table table-striped" id="borrowed">
+                        <thead class="bg-theme text-white">
+                            <tr>
+                                <th scope="col">Barcode</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Date Borrowed</th>
+                                <th scope="col">Due Date</th>
+                                <th scope="col">Fine</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for bor in borrowed %}
+                            <tr>
+                                <td scope="col">{{bor.book.barcode}}</td>
+                                <td scope="col">{{bor.book.category}}</td>
+                                <td scope="col">{{bor.book.title}}</td>
+                                <td scope="col">{{bor.date_borrowed}}</td>
+                                <td scope="col">{{bor.expected_return_date}}</td>
+                                <td scope="col">{{bor.get_fine}}</td>
+                                <td scope="col"> <a class="btn btn-sm btn-success"
+                                        href="/return-book?borrower-id={{borrower.id_no}}&bor-id={{bor.id}}&action=1"><span
+                                            class="bx bx-arrow-back"></span> Return</a>
+                                </td>
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    </main>
+</div>
+<!-- End Page Content -->
+<script>
+
+    $('#to-be-returned').dataTable({
+        "ordering": false,
+    });
+</script>
+
+<script>
+
+    $('#borrowed').dataTable({
+        "ordering": false,
+
+    });
+</script>
+
+<script>
+    const validation = new window.JustValidate('#borrower', {
+        errorFieldCssClass: 'is-invalid',
+    });
+
+    validation
+        .addField('#borrower-id', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        }, {
+            validator: () => {
+                var func = async function validate() {
+                    const response = await fetch('/api/v1/validate-id-no?id_no=' + document.getElementById('borrower-id').value);
+                    const data = await response.json(); // Extracting data as a JSON Object from the response
+
+                    return !data['valid']
+                }
+                return func;
+            },
+            errorMessage: 'The user with that ID. does not exist',
+        }])
+        .onSuccess((event) => {
+            document.getElementById("borrower").submit();
+        });
+
+</script>
+
+
+{%endblock content%}

@@ -18,7 +18,7 @@
 
 
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-7">
             <div class="row">
                 <div class="col-lg-4 p-1">
                     <div class="border-primary bg-white text-theme p-3 shadow">
@@ -72,8 +72,32 @@
 
         </div>
 
-        <div class="col-lg-4 p-1">
+        <div class="col-lg-5 p-1">
             <div class="card">
+                <div class="card-header text-theme">
+                    Book Fine Rate
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <div class="row text-muted">
+                            <div class="col-6">Category</div>
+                            <div class="col-3">Limit</div>
+                            <div class="col-3">Rate</div>
+                        </div>
+                        {% for rate in rates %}
+                        <div class="row text-theme">
+                            <div class="col-6">{{rate.name}}</div>
+                            <div class="col-3">{{rate.get_limit_str}}</div>
+                            <div class="col-3"><b>{{rate.get_rate_str}}</b></div>
+                        </div>
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+            </div>
+
+            <div class="card mt-2">
                 <div class="card-header text-theme">
                     Recent Logs
                 </div>
@@ -81,8 +105,11 @@
                     <ul class="list-group list-group-flush">
                         {% if recent_logs %}
                         {% for log in recent_logs %}
-                        <li class="list-group-item">{{log.user.first_name}} {{log.user.middle_name}} {{log.user.last_name}} {{log.user.ext_name}} 
-                        <span class="{% if log.action == 'has login' %}text-success{% else %}text-danger{% endif %}">{{log.action}}</span>.</li>
+                        <li class="list-group-item">{{log.user.first_name}} {{log.user.middle_name}}
+                            {{log.user.last_name}} {{log.user.ext_name}}
+                            <span
+                                class="{% if log.action == 'has login' %}text-success{% else %}text-danger{% endif %}">{{log.action}}</span>.
+                        </li>
                         {% endfor %}
                         {% else %}
                         <li class="list-group-item">No Recent Logs</li>
@@ -90,6 +117,8 @@
                     </ul>
                 </div>
             </div>
+
+
         </div>
     </div>
 
@@ -111,7 +140,7 @@
 
         var options = {
             chart: {
-                height: 400,
+                height: 380,
                 type: "bar",
                 toolbar: {
                     show: false
@@ -134,7 +163,7 @@
             }
         };
 
-        
+
 
         var chart = new ApexCharts(document.querySelector("#visits"), options);
         chart.render();
@@ -143,7 +172,7 @@
 </script>
 
 <script>
-    async function get_student_count(){
+    async function get_student_count() {
         const response = await fetch('/api/v1/get-student-count');
         const data = await response.json(); // Extracting data as a JSON Object from the response
 
@@ -151,7 +180,7 @@
     }
     get_student_count()
 
-    async function get_teacher_count(){
+    async function get_teacher_count() {
         const response = await fetch('/api/v1/get-teacher-count');
         const data = await response.json(); // Extracting data as a JSON Object from the response
 
@@ -159,7 +188,7 @@
     }
     get_teacher_count()
 
-    async function get_book_count(){
+    async function get_book_count() {
         const response = await fetch('/api/v1/get-book-count');
         const data = await response.json(); // Extracting data as a JSON Object from the response
 
