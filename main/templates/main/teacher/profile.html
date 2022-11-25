@@ -50,6 +50,16 @@
 <!-- Start Page Content -->
 <div class="col d-flex flex-column h-sm-100"">
     <main class=" row overflow-auto p-3">
+
+    {% if page == 'my-profile' %}
+    <h3 class="text-theme">My Profile</h3>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">My Profile</li>
+        </ol>
+    </nav>
+    {% else %}
     <h3 class="text-theme">Teacher Profile</h3>
 
     <nav aria-label="breadcrumb">
@@ -58,6 +68,7 @@
             <li class="breadcrumb-item">Teacher Profile</li>
         </ol>
     </nav>
+    {% endif %}
 
     <div class="container">
         {% if messages %}
@@ -98,9 +109,8 @@
                         {% include './tab-parts/edit-profile.html' %}
                     </div>
 
-                    <div id="tab_2" class="tabcontent">
-                        <h3>Tokyo</h3>
-                        <p>Tokyo is the capital of Japan.</p>
+                    <div id="tab_2" class="tabcontent p-3">
+                        {% include './tab-parts/borrowed-books.html' %}
                     </div>
 
                 </div>

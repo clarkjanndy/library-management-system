@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 
 from main.utils.upload_photo import rename_and_upload
 
-from main.models import MyUser, Teacher
+from main.models import MyUser, Teacher, BorrowedBook
 # Create your views here.
 def teachers(request):
     if not request.user.is_authenticated:
@@ -31,10 +31,14 @@ def profile(request, id_no):
         return redirect('/')
 
     teacher = Teacher.objects.get(user__id_no=id_no)
+    books = BorrowedBook.objects.filter(user = teacher.user, status="borrowed")
+    
+    print(books)
 
-    data = {
+    data = {    
         'page': 'teachers',
-        'teacher': teacher
+        'teacher': teacher,
+        'books': books
     }
 
     return render(request, "./main/teacher/profile.html", data)
@@ -75,7 +79,7 @@ def add(request):
         )
         #save teacher instance
         teacher.save()
-        messages.info(request, 'Teacher added successfully')
+        messages.success(request, 'Teacher added successfully')
         return redirect('/teachers/{id}'.format(id=user.id_no))
     
     data={
@@ -113,5 +117,5 @@ def edit(request, id_no):
         teacher.user.save()
         teacher.save()
 
-        messages.info(request, 'Profile updated successfully')
+        messages.success(request, 'Profile updated successfully')
     return redirect('/teachers/{id}'.format(id=teacher.user.id_no))

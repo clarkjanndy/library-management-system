@@ -6,7 +6,7 @@
 {% include 'sidebar.html' %}
 
 <!-- Start Page Content -->
-<div class="col-12 col-sm-9 col-md-9 col-lg-10 col-xl-10 d-flex flex-column h-sm-100"">
+<div class="col-12 col-sm-9 col-md-9 col-lg-10 col-xl-10 d-flex flex-column vh-100">
     <main class="row overflow-auto p-3">
     <h3 class="text-theme">Teachers</h3>
 
@@ -38,7 +38,7 @@
                 <tbody>
                     {% for teacher in teachers %}
                     <tr class="">
-                        <th scope="row">{{teacher.user.id_no}}</th>
+                        <td scope="row">{{teacher.user.id_no}}</td>
                         <td>{{teacher.user.first_name}} {{teacher.user.middle_name}} {{teacher.user.last_name}}
                             {{teacher.user.ext_name}}
                         </td>
@@ -67,7 +67,7 @@
         "ordering": false,
         "columns": [
             { "width": "10%" },
-            { "width": "20%" },
+            { "width": "25%" },
             null,
             null,
             null,

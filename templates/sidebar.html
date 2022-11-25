@@ -43,7 +43,7 @@
 
             <small class="mt-2 d-none d-sm-inline">Books</small>
             {% if request.user.is_superuser%}
-            <li class="nav-item d-flex justify-content-center p-1 ">
+            <li class="nav-item d-flex justify-content-center p-1 {% if page == 'borrow-book' %}current-page{% endif %}">
                 <a href="/borrow-book" class="nav-link px-sm-0 px-2 text-white">
                     <i class="bx bx-book-open"></i>
                     <span class="d-none d-sm-inline">Borrow Book</span></a>
@@ -86,16 +86,38 @@
                 </a>
             </li>
 
-            <li class="nav-item d-flex justify-content-center p-1">
-                <a href="#" class="nav-link px-sm-0 px-2 text-white">
+            <li class="nav-item d-flex justify-content-center p-1 {% if page == 'inventory' %}current-page{% endif %}">
+                <a href="/inventory" class="nav-link px-sm-0 px-2 text-white">
                     <i class="bx bx-stats"></i>
                     <span class="ms-1 d-none d-sm-inline">Inventory</span>
                 </a>
             </li>
             {% endif %}
+
+            <small class="mt-2 d-none d-sm-inline">Profile</small>
+            <li class="nav-item d-flex justify-content-center p-1 {% if page == 'my-profile' %}current-page{% endif %}">
+                <a href="/my-profile" class="nav-link px-sm-0 px-2 text-white">
+                    <i class="bx bx-user"></i>
+                    <span class="d-none d-sm-inline">My Profile</span></a>
+                </a>
+            </li>
+
+            <li class="nav-item d-flex justify-content-center p-1 {% if page == 'change-password' %}current-page{% endif %}">
+                <a href="/change-password" class="nav-link px-sm-0 px-2 text-white">
+                    <i class="bx bx-key"></i>
+                    <span class="d-none d-sm-inline">Change Password</span></a>
+                </a>
+            </li>
+
+            <li class="nav-item d-flex justify-content-center p-1">
+                <a href="/logout" class="nav-link px-sm-0 px-2 text-white">
+                    <i class="bx bx-log-out"></i>
+                    <span class="d-none d-sm-inline">Log Out</span></a>
+                </a>
+            </li>
         </ul>
 
-        <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
+        <!-- <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                 id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="{% get_media_prefix %}{{user.photo}}" alt="hugenerd" width="28" height="28"
@@ -119,7 +141,7 @@
                         <span>Logout</span></a>
                 </li>
             </ul>
-        </div>
+        </div> -->
     </div>
 </div>
 <!-- End Sidebar -->

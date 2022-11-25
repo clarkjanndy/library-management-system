@@ -55,7 +55,7 @@ def add(request):
         #save book instance
         book.save()
         
-        messages.info(request, 'Book added successfully')
+        messages.success(request, 'Book added successfully')
         return redirect('/books')
         
     data={
@@ -65,6 +65,38 @@ def add(request):
     
     return render(request, "./main/book/add-book.html", data)
 
+def edit(request, barcode):
+    if not request.user.is_authenticated:
+        return redirect('/')
+    
+    if not request.user.is_superuser:
+        return redirect('/books')
+    
+    #get all categories
+    categories = BookCategory.objects.all()
+    
+    book = Book.objects.get(barcode=barcode)
+    if request.method == 'POST':
+        book.barcode = request.POST['barcode']
+        book.title = request.POST['title']  
+        book.authors = request.POST['authors']
+        book.preface = request.POST['preface']
+        book.category_id = request.POST['category_id']
+        book.condition = request.POST['condition']
+        book.available_quan = request.POST['available_quan']
+        
+        book.save()
+        
+        messages.success(request, 'Book updated successfully')
+        return redirect('/inventory')
+        
+    data={
+        'page' : 'inventory',
+        'categories': categories,
+        'book': book
+    }
+    
+    return render(request, "./main/book/edit-book.html", data)
 
 def view(request, barcode):
     if not request.user.is_authenticated:
@@ -95,19 +127,25 @@ def borrow_book(request):
     if 'borrower-id' in request.GET:
         try:
             borrower = MyUser.objects.get(id_no = request.GET['borrower-id']) 
+            
+            #check if borrower has borrowed books
+            if BorrowedBook.objects.filter(user = borrower, status = 'borrowed').exists():
+                messages.error(request, 'That user already have borrowed books. Please return all the books before borrowing again.') 
+                return redirect('/borrow-book') 
+            
              #get book to be borrowed
             if 'book-id' in request.GET:
                 book = Book.objects.get(id=request.GET['book-id'])
                 
-                #add borrowed book to borrowers
+                #add borrowed book to borrower
                 if len(BorrowedBook.objects.filter(user=borrower).exclude(status='returned')) < 5:
                     BorrowedBook(user=borrower, book = book , status = 'on-cart').save()
+                    #update book quantity
+                    book.available_quan = book.available_quan - 1
+                    book.save()
                 else:
-                    messages.info(request, 'Maximum book reached')
-                    
-                #update book quantity
-                book.available_quan = book.available_quan - 1
-                book.save()
+                    messages.error(request, 'Maximum book reached.')
+                
                 return redirect('/borrow-book?borrower-id='+str(borrower.id_no))
             
             #get entry to be returned
@@ -124,7 +162,7 @@ def borrow_book(request):
             data['borrower']= borrower
             data['borrowed']= borrowed
         except:
-            messages.info(request, 'Please Select a Borrower')  
+            messages.error(request, 'Please Select a Borrower.')  
          
     books = Book.objects.exclude(available_quan = 0)    
     data['page']= 'borrow-book'
@@ -148,9 +186,10 @@ def checkout(request, id_no):
         on_cart.update(status='borrowed')
         messages.success(request, 'Books borrowed successfuly. Print Borrower Slip ?', extra_tags=str(borrower.id_no))  
     elif borrowed:
-         messages.info(request, 'This user already have borrowed books') 
+         messages.error(request, 'This user already have borrowed books.') 
     else:
-        messages.info(request, 'No Book Selected') 
+        messages.error(request, 'No Book Selected.') 
+        return redirect('/borrow-book?borrower-id='+str(borrower.id_no))
     
     return redirect('/borrow-book')
 

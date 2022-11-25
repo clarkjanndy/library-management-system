@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 
 
-from main.models import MyUser, Student
+from main.models import MyUser, Student, BorrowedBook
 from main.utils.upload_photo import rename_and_upload
 
 # Create your views here.
@@ -26,7 +26,6 @@ def students(request):
 
     return render(request, "./main/student/students.html", data)
 
-
 def profile(request, id_no):
     if not request.user.is_authenticated:
         return redirect('/')
@@ -35,10 +34,12 @@ def profile(request, id_no):
         return redirect('/')
 
     student = Student.objects.get(user__id_no=id_no)
+    borrowed = BorrowedBook.objects.filter(user= student.user, status="borrowed")
 
     data = {
         'page': 'students',
-        'student': student
+        'student': student,
+        'borrowed': borrowed
     }
 
     return render(request, "./main/student/profile.html", data)
@@ -78,7 +79,7 @@ def add(request):
         # save student instance
         student.save()
         
-        messages.info(request, 'Student added successfully')
+        messages.success(request, 'Student added successfully')
         return redirect('/students/{id}'.format(id=user.id_no))
 
     data = {
@@ -115,5 +116,5 @@ def edit(request, id_no):
         student.user.save()
         student.save()
 
-        messages.info(request, 'Profile updated successfully')
+        messages.success(request, 'Profile updated successfully')
     return redirect('/students/{id}'.format(id=student.user.id_no))
