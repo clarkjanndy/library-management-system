@@ -15,9 +15,10 @@ from main.models import MyUser, Teacher, BookCategory
 def initialize(request):
     if MyUser.objects.all().exists():
         return HttpResponse(status=403)
-        
+    
     admin = MyUser()
     admin.is_superuser = 1
+    admin.is_staff = 1
     admin.id_no = 'ADM-123'
     admin.set_password('admin')
     admin.save()

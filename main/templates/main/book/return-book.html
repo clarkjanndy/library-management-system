@@ -22,12 +22,12 @@
                 <form class="mb-2" id="borrower">
                     <div class="form-group col-lg-6 d-inline-block">
                         <label>Borrower's ID No.</label>
-                        <input class="form-control " name="borrower-id" id="borrower-id"
-                            placeholder="Borrower's ID No." value="{{borrower.id_no}}">
+                        <input class="form-control " name="borrower-id" id="borrower-id" placeholder="Borrower's ID No."
+                            value="{{borrower.id_no}}">
                     </div>
                 </form>
             </div>
-            
+
             {% if messages %}
             {% for message in messages %}
             {% include 'alert.html' %}
@@ -63,16 +63,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for tbr  in tbrs %}
+                            {% for tbr in tbrs %}
                             <tr>
                                 <td scope="col">{{tbr.book.category}}</td>
                                 <td scope="col">{{tbr.book.title}}</td>
                                 <td scope="col">{{tbr.date_borrowed}}</td>
                                 <td scope="col">{{tbr.expected_return_date}}</td>
                                 <td scope="col">{{tbr.get_fine}}</td>
-                                <td scope="col"> <a class="btn btn-sm btn-danger"
+                                <td scope="col">
+                                    <a class="btn btn-sm btn-danger"
                                         href="/return-book?borrower-id={{borrower.id_no}}&bor-id={{tbr.id}}&action=0"><span
                                             class="bx bx-x"></span> Remove</a>
+                                            <a class="btn btn-sm btn-danger"
+                                            href="/return-book?borrower-id={{borrower.id_no}}&bor-id={{tbr.id}}&action=0"><span
+                                                class="bx bx-x"></span> Remove</a>
                                 </td>
 
                             </tr>

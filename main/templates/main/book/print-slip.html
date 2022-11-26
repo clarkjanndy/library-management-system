@@ -7,18 +7,43 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Library Monitoring and Book Inventory SYstem</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <style>
-    th, td{
-        border: 1px solid black; 
+    th,
+    td {
+        border: 1px solid black;
         padding: 10px;
     }
 </style>
-<body>
-    <div class="col-lg-6">
 
+<body>
+
+    <div class="col-lg-6">
+        <div class="header">
+            <div class="d-inline-block">
+                <img src="{% static 'images/bcc-logo.png'%}" width="120" >
+            </div>
+            <div class="d-inline-block">
+                <div class="d-flex align-items-center" style="height: 100px;">
+                    <div>
+                        <div>Library Monitoring and Book Inventory System</div>
+                        <div><b>Buenavista Community College</b></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="title text-center">
+            <b>Borrower's Slip</b>
+        </div>
+
+        <div class="row mb-3">
+            <div>Borrower's Name: {{user.first_name}} {{user.middle_name}} {{user.last_name}} {{user.ext_name}}</div>
+            <div>Address: {{user.address}}</div>
+        </div>
         <table style="border-collapse: collapse;">
             <thead>
                 <tr>
@@ -27,6 +52,7 @@
                     <th>Title</th>
                     <th>Date Borrowed</th>
                     <th>Due Date</th>
+                    <th>Date Returned</th>
                     <th>Fine</th>
                 </tr>
             </thead>
@@ -38,6 +64,7 @@
                     <td>{{bor.book.title}}</td>
                     <td>{{bor.date_borrowed}}</td>
                     <td>{{bor.expected_return_date}}</td>
+                    <td>{% if bor.date_returned != None %}{{bor.date_returned}}{% endif %}</td>
                     <td>{{bor.get_fine}}</td>
                 </tr>
                 {% endfor %}
