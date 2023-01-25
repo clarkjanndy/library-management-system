@@ -85,7 +85,8 @@
                         <img src="{% get_media_prefix %}{{student.user.photo}}" width="150" class="mb-3 img-fluid">
                         <h4>{{student.user.first_name}} {{student.user.middle_name}} {{student.user.last_name}}
                             {{student.myuser.ext_name}}</h4>
-                        <svg id="id_no" class="img-fluid"></svg>
+                        <!-- <svg id="id_no" class="img-fluid"></svg> -->
+                        <div style="font: 30px;">{{student.user.id_no}}</div>
                     </div>
 
                 </div>

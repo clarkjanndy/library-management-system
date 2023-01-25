@@ -18,121 +18,129 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-lg-12 col-xl-12 border-bottom border-secondary mb-2">
-                <form class="mb-2" id="borrower">
-                    <div class="form-group col-lg-6 d-inline-block">
-                        <label>Borrower's ID No.</label>
-                        <input class="form-control " name="borrower-id" id="borrower-id"
-                            placeholder="Borrower's ID No." value="{{borrower.id_no}}">
-                    </div>
-                </form>
-            </div>
-            
-            {% if messages %}
-            {% for message in messages %}
-            {%if not message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-            {% include 'alert.html' %}
-            {% endif %}
-            {% endfor %}
-            {% endif %}
 
-            {% if messages %}
-            {% for message in messages %}
-            {%if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-            {% include 'success-borrow.html' %}
-            {% endif %}
-            {% endfor %}
-            {% endif %}
+            <div class="shadow bg-light p-3">
+                <small class="text-muted"><i>Input an I.D. number to select a borrower.</i></small>
 
-            <div class="col-lg-12 col-xl-12 border-bottom border-secondary">
-                <div class="row my-2">
-
-                    <div class="row mb-2">
-                        <div class="col-lg-2 text-theme">Borrower's ID No: </div>
-                        <div class="col-lg-9"><b>{{borrower.id_no}}</b> </div>
-                    </div>
-
-                    <div class="row mb-2">
-                        <div class="col-lg-2 text-theme">Borrower's Name: </div>
-                        <div class="col-lg-9"><b>{{borrower.first_name}} {{borrower.middle_name}} {{borrower.last_name}}
-                                {{borrower.ext_name}}</b></div>
-                    </div>
+                <div class="col-lg-12 col-xl-12 mb-2">
+                    <form class="mb-2" id="borrower">
+                        <div class="form-group col-lg-6 d-inline-block">
+                            <input class="form-control " name="borrower-id" id="borrower-id"
+                                placeholder="Borrower's ID No." value="{{borrower.id_no}}">
+                        </div>
+                    </form>
                 </div>
 
-                <div class="table-responsive mb-2">
-                    <table class="table table-striped" id="borrowed">
-                        <thead class="bg-theme text-white">
-                            <tr>
-                                <th scope="col">Barcode</th>
-                                <th scope="col">Category</th>
-                                <th scope="col">Title</th>
-                                <th scope="col">Date Borrowed</th>
-                                <th scope="col">Due Date</th>
-                                <th scope="col">Fine</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for bor in borrowed %}
-                            <tr>
-                                <td scope="col">{{bor.book.barcode}}</td>
-                                <td scope="col">{{bor.book.category}}</td>
-                                <td scope="col">{{bor.book.title}}</td>
-                                <td scope="col">{{bor.date_borrowed}}</td>
-                                <td scope="col">{{bor.expected_return_date}}</td>
-                                <td scope="col">{{bor.get_fine}}</td>
-                                <td scope="col"> <a class="btn btn-sm btn-danger"
-                                        href="/borrow-book?borrower-id={{borrower.id_no}}&bor-id={{bor.id}}"><span
-                                            class="bx bx-x"></span> Remove</a>
-                                </td>
-
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-
-                {% if borrower.id_no is not none %}
-                <div class="d-flex justify-content-end mb-2">
-                    <a class="btn btn-success" href="/borrow-book/checkout/{{borrower.id_no}}">Done</a>
-                </div>
+                {% if messages %}
+                {% for message in messages %}
+                {%if not message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                {% include 'alert.html' %}
                 {% endif %}
+                {% endfor %}
+                {% endif %}
+
+                {% if messages %}
+                {% for message in messages %}
+                {%if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                {% include 'success-borrow.html' %}
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+
+                <div class="col-lg-12 col-xl-12">
+                    <div class="row my-2">
+
+                        <div class="row mb-2">
+                            <div class="col-lg-2 text-theme">Borrower's ID No: </div>
+                            <div class="col-lg-9"><b>{{borrower.id_no}}</b> </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-lg-2 text-theme">Borrower's Name: </div>
+                            <div class="col-lg-9"><b>{{borrower.first_name}} {{borrower.middle_name}}
+                                    {{borrower.last_name}}
+                                    {{borrower.ext_name}}</b></div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive mb-2">
+                        <table class="table table-striped" id="borrowed">
+                            <thead class="bg-theme text-white">
+                                <tr>
+                                    <th scope="col">Barcode</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Date Borrowed</th>
+                                    <th scope="col">Due Date</th>
+                                    <th scope="col">Fine</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for bor in borrowed %}
+                                <tr>
+                                    <td scope="col">{{bor.book.barcode}}</td>
+                                    <td scope="col">{{bor.book.category}}</td>
+                                    <td scope="col">{{bor.book.title}}</td>
+                                    <td scope="col">{{bor.date_borrowed}}</td>
+                                    <td scope="col">{{bor.expected_return_date}}</td>
+                                    <td scope="col">{{bor.get_fine}}</td>
+                                    <td scope="col"> <a class="btn btn-sm btn-danger"
+                                            href="/borrow-book?borrower-id={{borrower.id_no}}&bor-id={{bor.id}}"><span
+                                                class="bx bx-x"></span> Remove</a>
+                                    </td>
+
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    {% if borrower.id_no is not none %}
+                    <div class="d-flex justify-content-end mb-2">
+                        <a class="btn btn-success" href="/borrow-book/checkout/{{borrower.id_no}}">Done</a>
+                    </div>
+                    {% endif %}
+                </div>
             </div>
 
-            <div class="col-lg-12 col-xl-12 border mt-3">
-                <h4>Available Books</h4>
-                <div class="table-responsive">
-                    <table class="table table-striped" id="books">
-                        <thead class="bg-theme text-white">
-                            <tr>
-                                <th scope="col">Barcode</th>
-                                <th scope="col">Category</th>
-                                <th scope="col">Title</th>
-                                <th scope="col">Condition</th>
-                                <th scope="col">Author</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for book in books %}
-                            <tr>
-                                <td scope="row">{{book.barcode}}</td>
-                                <td>{{book.category}}</td>
-                                <td>{{book.title}}</td>
-                                <td>{{book.condition|title}}</td>
-                                <td>{{book.authors}}</td>
-                                <td>{{book.available_quan}}</td>
-                                <td>
-                                    <a class="btn btn-sm btn-success"
-                                        href="/borrow-book?borrower-id={{borrower.id_no}}&book-id={{book.id}}"><span
-                                            class="bx bx-check"></span> Borrow</a>
-                                </td>
+            <div class="shadow bg-light p-3 mt-3">
+                <div class="col-lg-12 col-xl-12 ">
+                    <h4>Available Books</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="books">
+                            <thead class="bg-theme text-white">
+                                <tr>
+                                    <th scope="col">Barcode</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Condition</th>
+                                    <th scope="col">Author</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for book in books %}
+                                <tr>
+                                    <td scope="row">{{book.barcode}}</td>
+                                    <td>{{book.category}}</td>
+                                    <td>{{book.title}}</td>
+                                    <td>{{book.condition|title}}</td>
+                                    <td>{{book.authors}}</td>
+                                    <td>{{book.available_quan}}</td>
+                                    <td>
+                                        <a class="btn btn-sm btn-success"
+                                            href="/borrow-book?borrower-id={{borrower.id_no}}&book-id={{book.id}}"><span
+                                                class="bx bx-check"></span> Borrow</a>
+                                    </td>
 
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
