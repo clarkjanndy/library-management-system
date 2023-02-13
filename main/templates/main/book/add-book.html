@@ -61,6 +61,12 @@
                         </div>
 
                         <div class="col-xl-6 col-lg-6 form-group mb-3">
+                            <label>Date Published</label>
+                            <input type="date" id="publish_date" name="publish_date" class="form-control" placeholder="dd-mm-yyyy">
+                            <div class="is-invalid"></div>
+                        </div>
+
+                        <div class="col-xl-6 col-lg-6 form-group mb-3">
                             <label>Condition</label>
                             <select id="condition" name="condition" class="form-select">
                                 <option value="">--select--</option>
@@ -74,6 +80,15 @@
                             <label>Total Quantity</label>
                             <input type="text" id="available_quan" name="available_quan" class="form-control"
                                 placeholder="Total Quantity">
+                            <div class="is-invalid"></div>
+                        </div>
+
+                        <div class="col-xl-6 col-lg-6 form-group mb-3">
+                            <label>Do you want to archive this book?</label>
+                            <select id="is_archived" name="is_archived" class="form-select">
+                                <option value="True">Yes</option>
+                                <option value="False" selected>No</option>
+                            </select>
                             <div class="is-invalid"></div>
                         </div>
 
@@ -122,6 +137,10 @@
             errorMessage: 'This field is required',
         },])
         .addField('#authors', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#publish_date', [{
             rule: 'required',
             errorMessage: 'This field is required',
         },])

@@ -49,7 +49,9 @@ def add(request):
             preface = request.POST['preface'],
             category_id = request.POST['category_id'],
             condition = request.POST['condition'],
-            available_quan = request.POST['available_quan']
+            available_quan = request.POST['available_quan'],
+            is_archived = request.POST['is_archived'],
+            publish_date = request.POST['publish_date']
         )
         if  request.POST['preface'] == '':
             book.preface = dummy.DUMMY_TEXT
@@ -85,6 +87,8 @@ def edit(request, barcode):
         book.category_id = request.POST['category_id']
         book.condition = request.POST['condition']
         book.available_quan = request.POST['available_quan']
+        book.is_archived = request.POST['is_archived']
+        book.publish_date = request.POST['publish_date']
         
         book.save()
         
