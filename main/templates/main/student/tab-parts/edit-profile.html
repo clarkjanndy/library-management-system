@@ -117,8 +117,14 @@
             <label>Course</label>
         </div>
         <div class="col-xl-9 col-lg-9 col-md-7">
-            <input type="text" id="course" name="course" class="form-control" placeholder="Course"
-                value="{{student.course}}">
+            <select id="course" name="course" class="form-select">
+                <option value="">--select--</option>
+                <option value="Bachelor of Science in Information Technology" {%if student.course == 'Bachelor of Science in Information Technology' %}selected{% endif %}>Bachelor of Science in Information Technology</option>
+                <option value="Bachelor of Science in Hospitality Management"  {%if student.course == 'Bachelor of Science in Hospitality Management' %}selected{% endif %}>Bachelor of Science in Hospitality Management</option>
+                <option value="Bachelor of Science in Criminology"  {%if student.course == 'Bachelor of Science in Criminology' %}selected{% endif %}>Bachelor of Science in Criminology</option>
+                <option value="Bachelor of Secondary Education"  {%if student.course == 'Bachelor of Secondary Education' %}selected{% endif %}>Bachelor of Secondary Education</option>
+                <option value="Bachelor of Elementary Education"  {%if student.course == 'Bachelor of Elementary Education' %}selected{% endif %}>Bachelor of Elementary Education</option>
+            </select>
         </div>
         <div class="is-invalid"></div>
     </div>
