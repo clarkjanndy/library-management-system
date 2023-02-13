@@ -34,7 +34,6 @@
                             <th scope="col">Time</th>
                             <th scope="col">Name</th>
                             <th scope="col">Action</th>
-                            <th scope="col">- - -</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,11 +44,11 @@
                             <td>{{log.user.first_name}} {{log.user.middle_name}} {{log.user.last_name}}
                                 {{log.user.ext_name}}</td>
                             <td>{{log.action}}</td>
-                            <td>
+                            <!-- <td>
                                 <a class="btn btn-danger" href='/logs/delete?bulk=0&params={{log.id}}&day={{day}}'>
                                     <span class="bx bx-trash"></span>
                                 </a>
-                            </td>
+                            </td> -->
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -70,8 +69,7 @@
             null,
             null,
             null,
-            null,
-            null,
+            null
         ]
     });
 </script>

@@ -42,7 +42,7 @@ urlpatterns = [
     #monitoring
     path('log-window', monitoring_views.log_window, name="log_window"),
     path('logs', monitoring_views.logs, name="logs"),
-    path('logs/delete', monitoring_views.delete, name="delete_logs"), 
+    # path('logs/delete', monitoring_views.delete, name="delete_logs"), 
     path('logs/<str:day>', monitoring_views.view_logs, name="view_logs"),       
     
     path('inventory', monitoring_views.inventory, name="inventory"),       
