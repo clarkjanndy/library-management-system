@@ -105,8 +105,13 @@ def view(request, barcode):
     
     #get a book
     book = Book.objects.get(barcode=barcode)
-    more = Book.objects.filter(category = book.category).exclude(barcode = book.barcode)      
-      
+    
+    #add the user to the one that view the book
+    if not book.views.filter(id_no=request.user.id_no).exists():
+         book.views.add(request.user)
+   
+    more = Book.objects.filter(category = book.category).exclude(barcode = book.barcode) 
+         
     data={
         'page' : 'books',
         'book': book,
