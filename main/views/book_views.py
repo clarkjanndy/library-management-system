@@ -15,18 +15,24 @@ def books(request):
     
     data = {}
     categories = BookCategory.objects.all()
-    books = Book.objects.all()
+    books = Book.objects.all().filter(is_archived=False)
     
-    if 'key' in request.GET:
-         books = Book.objects.all().filter(title__icontains=request.GET['key'])
+    if 'key' in request.GET and not request.GET['key'] == '':
+         books = books.filter(title__icontains=request.GET['key'])
          data['key'] = request.GET['key']
     
-    if 'filter' in request.GET:
-         books = Book.objects.all().filter(category__name=request.GET['filter'], title__icontains=request.GET['key'])
-         data['filter'] = request.GET['filter']
+    if 'category' in request.GET and not request.GET['category'] == '':
+         books = books.filter(category__name=request.GET['category'])
+         data['category'] = request.GET['category']
+         
+    if 'publish_year' in request.GET and not request.GET['publish_year'] == '':
+         books = books.filter(publish_date__gte = f"{request.GET['publish_year']}-01-01")
+         data['publish_year'] = request.GET['publish_year']
+         
      
     data['page'] = 'books' 
     data['categories'] = categories
+    data['years'] = [ str(year['publish_date__year']) for year in Book.objects.all().values('publish_date__year').distinct()]
     data['books'] = books 
      
     return render(request, "./main/book/books.html", data)
