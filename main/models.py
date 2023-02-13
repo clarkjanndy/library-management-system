@@ -64,7 +64,6 @@ class BookCategory(models.Model):
     def get_limit_str(self):
         if self.name == 'Reserve Circulation':
             return str(self.limit) + ' hours'
-            pass
         return str(int(self.limit/24)) + ' days'
     
     def get_rate_str(self):
@@ -81,9 +80,14 @@ class Book(models.Model):
     preface = models.TextField(blank = False, null = False, default = 'No Preface')
     condition = models.CharField(blank = False, null = False, max_length=90)
     available_quan = models.IntegerField(blank = False, null = False)
+    is_archived = models.BooleanField(blank=False, default=False)
+    borrowed_count = models.IntegerField(blank=False, null=False, default=0)
+    views = models.ManyToManyField(MyUser,related_name='book_views')
+    publish_date = models.DateField(blank=False, null=True)
+    
     
     def __str__(self):
-        return self.barcode
+        return self.barcode 
     
     def get_on_cart(self):
         on_cart = BorrowedBook.objects.filter(book=self, status='on-cart').aggregate(count=Count('id'))        
