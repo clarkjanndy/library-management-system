@@ -29,7 +29,7 @@ def visit_histogram(request):
         'visits': Count('user', distinct=True),
     }
 
-    logs = Logs.objects.values('date__month', 'date__year').annotate(**metrics).order_by('date__month')
+    logs = Logs.objects.values('date__month', 'date__year').annotate(**metrics).filter(action="has login").order_by( 'date__year')
    
     series = [log["visits"] for log in logs.iterator()]
     x_label = [datetime(log["date__year"], log["date__month"], 1) for log in logs.iterator()]
