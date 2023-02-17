@@ -44,7 +44,7 @@ class Teacher(models.Model):
     def __str__(self):
         return self.user
 
-class Logs(models.Model):
+class Log(models.Model):
     user = models.ForeignKey(MyUser, on_delete = models.DO_NOTHING, null = False)
     date = models.DateTimeField(null=False, blank=False, default=datetime.now)
     action = models.CharField(blank = False, null = False, max_length=15)

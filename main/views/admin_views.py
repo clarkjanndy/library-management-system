@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.shortcuts import render
 from django.shortcuts import redirect
 
-from main.models import Logs, Teacher, Student, BookCategory
+from main.models import Log, Teacher, Student, BookCategory
 # Create your views here.
 def dashboard(request):
     if not request.user.is_authenticated:
@@ -13,7 +13,7 @@ def dashboard(request):
         return redirect('/books')
     
     rates = BookCategory.objects.all()
-    recent_logs = Logs.objects.filter(search_field = str(datetime.now().strftime('%B %d, %Y - %A'))).order_by('-date')[:10]   
+    recent_logs = Log.objects.filter(search_field = str(datetime.now().strftime('%B %d, %Y - %A'))).order_by('-date')[:10]   
     data={
         'page' : 'dashboard',
         'recent_logs': recent_logs ,

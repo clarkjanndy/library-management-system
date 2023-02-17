@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.shortcuts import render
 from django.shortcuts import redirect
 
-from main.models import MyUser, Logs, Book
+from main.models import MyUser, Log, Book
 
 from django.db.models.functions import TruncDay, TruncMonth
 from django.db.models import Count
@@ -19,7 +19,7 @@ def log_window(request):
     data = {}
     if request.method == 'POST':
         user = MyUser.objects.get(id_no=request.POST['id_no'])
-        last_log = Logs.objects.filter(user=user).last()
+        last_log = Log.objects.filter(user=user).last()
 
         action = 'has login'
         if last_log is not None:
@@ -28,7 +28,7 @@ def log_window(request):
             else:
                 action = 'has login'
 
-        log = Logs(
+        log = Log(
             user=user,
             date=datetime.now(),
             action=action,
@@ -50,14 +50,14 @@ def logs(request):
         return redirect('/')
 
     data = {}
-    logs = (Logs.objects
+    logs = (Log.objects
             .annotate(day=TruncDay('date'))
             .values('day')
             .annotate(count=Count('id', distinct=True))
             .order_by('-date__day'))
 
     if 'key' in request.GET:
-        logs = (Logs.objects
+        logs = (Log.objects
                 .annotate(day=TruncDay('date'))
                 .values('day')
                 .annotate(count=Count('id', distinct=+ True))
@@ -79,11 +79,11 @@ def delete(request):
 
     try:
         if request.GET['bulk'] == '1':
-            Logs.objects.filter(search_field = request.GET['params']).delete()
+            Log.objects.filter(search_field = request.GET['params']).delete()
             messages.success(request, 'Log(s) deleted succesfully')
         else:
             print('I am here...')
-            Logs.objects.filter(id = int(request.GET['params'])).delete()
+            Log.objects.filter(id = int(request.GET['params'])).delete()
             messages.success(request, 'Log deleted succesfully')
             return redirect('/logs/'+str(request.GET['day']))
         
@@ -100,7 +100,7 @@ def view_logs(request, day):
     if not request.user.is_superuser:
         return redirect('/')
 
-    logs = Logs.objects.filter(search_field = day).order_by('-date__day')
+    logs = Log.objects.filter(search_field = day).order_by('-date__day')
 
     data = {'logs': logs,
             'page': 'logs',
