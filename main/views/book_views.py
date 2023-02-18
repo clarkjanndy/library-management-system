@@ -186,6 +186,7 @@ def borrow_book(request):
     
     return render(request, "./main/book/borrow-book.html", data )
 
+from django.http import JsonResponse
 def borrow_checkout(request, id_no):
     if not request.user.is_authenticated:
         return redirect('/')
@@ -194,18 +195,23 @@ def borrow_checkout(request, id_no):
         return redirect('/')
     
     borrower = MyUser.objects.get(id_no=id_no)
-    #update all pending books to borrowed
+    #update all on-cart books to borrowed
     on_cart=BorrowedBook.objects.filter(user = borrower, status = 'on-cart')
     borrowed=BorrowedBook.objects.filter(user = borrower, status = 'borrowed')
     
     if BorrowedBook.objects.filter(user = borrower, status = 'on-cart'):
         on_cart.update(status='borrowed')
+        response = {'success': True,'message': 'Books borrowed successfuly. Print Borrower Slip ?'}
         messages.success(request, 'Books borrowed successfuly. Print Borrower Slip ?', extra_tags=str(borrower.id_no))  
+        return JsonResponse(response)
     elif borrowed:
+         response = {'success': False,'message': 'This user already have borrowed books.'}
          messages.error(request, 'This user already have borrowed books.') 
     else:
-        messages.error(request, 'No Book Selected.') 
-        return redirect('/borrow-book?borrower-id='+str(borrower.id_no))
+        response = {'success': False,'message': 'No Book Selected.'}
+        # messages.error(request, 'No Book Selected.') 
+        return JsonResponse(response)
+        # return redirect('/borrow-book?borrower-id='+str(borrower.id_no))
     
     return redirect('/borrow-book')
 
