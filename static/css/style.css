@@ -61,7 +61,9 @@ a {
     color: #4267B2 !important;
 }
 
-
+.link:hover{
+    text-decoration: underline !important;
+}
 
 /* this is needed to make the content scrollable on larger screens */
 @media (min-width: 576px) {

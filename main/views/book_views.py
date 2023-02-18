@@ -32,7 +32,7 @@ def books(request):
      
     data['page'] = 'books' 
     data['categories'] = categories
-    data['years'] = [ str(year['publish_date__year']) for year in Book.objects.all().values('publish_date__year').distinct()]
+    data['years'] = [ str(year['publish_date__year']) for year in Book.objects.all().values('publish_date__year').distinct().order_by('-publish_date__year')]
     data['books'] = books 
      
     return render(request, "./main/book/books.html", data)
@@ -120,7 +120,7 @@ def view(request, barcode):
     if not book.views.filter(id_no=request.user.id_no).exists():
          book.views.add(request.user)
    
-    more = Book.objects.filter(category = book.category).exclude(barcode = book.barcode) 
+    more = Book.objects.filter(category = book.category).exclude(barcode = book.barcode)[:3]
          
     data={
         'page' : 'books',
