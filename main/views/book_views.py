@@ -206,7 +206,7 @@ def borrow_checkout(request, id_no):
         return JsonResponse(response)
     elif borrowed:
          response = {'success': False,'message': 'This user already have borrowed books.'}
-         messages.error(request, 'This user already have borrowed books.') 
+        #  messages.error(request, 'This user already have borrowed books.') 
     else:
         response = {'success': False,'message': 'No Book Selected.'}
         # messages.error(request, 'No Book Selected.') 
@@ -290,10 +290,14 @@ def return_checkout(request, id_no):
 
         tbr.update(date_returned=datetime.now())
         tbr.update(status='returned')
-            
+        
+        response = {'success': True,'message': 'Books borrowed successfuly. Print Borrower Slip ?'}    
         messages.success(request, 'Books successfuly returned!')  
+        print(response)
+        return JsonResponse(response)
     else:
-        messages.error(request, 'No Book Selected.') 
-        return redirect('/return-book?borrower-id='+str(borrower.id_no))
+        response = {'success': False,'message': 'No Book Selected.'}    
+        # messages.error(request, 'No Book Selected.') 
+        return JsonResponse(response)
     
-    return redirect('/return-book')
+    # return redirect('/return-book')
