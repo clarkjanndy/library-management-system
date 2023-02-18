@@ -180,7 +180,7 @@ def borrow_book(request):
         except:
             messages.error(request, 'Please Select a Borrower.')  
          
-    books = Book.objects.exclude(available_quan = 0)    
+    books = Book.objects.exclude(available_quan = 0).filter(is_archived=False)    
     data['page']= 'borrow-book'
     data['books']= books
     
