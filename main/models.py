@@ -131,6 +131,14 @@ class BorrowedBook(models.Model):
        
         return fine
 
+class Activity(models.Model):
+    user = models.ForeignKey(MyUser, on_delete = models.DO_NOTHING, null = False)
+    date = models.DateTimeField(auto_now_add=True)
+    action = models.CharField(blank = False, null = False, max_length=15)
+    
+    def __str__(self):
+        return f'{self.user} - {self.action}'
+
 class Fine(models.Model):
     borrowedbook = models.OneToOneField(BorrowedBook, on_delete = models.DO_NOTHING, null = False)
     amount = models.ForeignKey(BookCategory, on_delete = models.DO_NOTHING, null = False)
