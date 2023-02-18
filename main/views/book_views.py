@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.shortcuts import render
 from django.shortcuts import redirect
 
-from main.models import MyUser, Book, BookCategory, BorrowedBook
+from main.models import MyUser, Book, BookCategory, BorrowedBook, Activity
 from django.db.models import Q
 
 from main.utils import dummy
@@ -202,6 +202,8 @@ def borrow_checkout(request, id_no):
     if BorrowedBook.objects.filter(user = borrower, status = 'on-cart'):
         on_cart.update(status='borrowed')
         response = {'success': True,'message': 'Books borrowed successfuly. Print Borrower Slip ?'}
+        
+        Activity.objects.create(user=borrower, action = 'has borrowed books')
         messages.success(request, 'Books borrowed successfuly. Print Borrower Slip ?', extra_tags=str(borrower.id_no))  
         return JsonResponse(response)
     elif borrowed:
@@ -291,9 +293,9 @@ def return_checkout(request, id_no):
         tbr.update(date_returned=datetime.now())
         tbr.update(status='returned')
         
-        response = {'success': True,'message': 'Books borrowed successfuly. Print Borrower Slip ?'}    
+        response = {'success': True,'message': 'Books borrowed successfuly. Print Borrower Slip ?'}  
+        Activity.objects.create(user=borrower, action = 'has returned books')  
         messages.success(request, 'Books successfuly returned!')  
-        print(response)
         return JsonResponse(response)
     else:
         response = {'success': False,'message': 'No Book Selected.'}    

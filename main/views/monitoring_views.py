@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.shortcuts import render
 from django.shortcuts import redirect
 
-from main.models import MyUser, Log, Book
+from main.models import MyUser, Log, Book, Activity
 
 from django.db.models.functions import TruncDay, TruncMonth
 from django.db.models import Count
@@ -35,6 +35,8 @@ def log_window(request):
             search_field=str(datetime.now().strftime('%B %d, %Y - %A'))
         )
         log.save()
+        
+        Activity.objects.create(user=log.user, action = log.action)
 
         data['user'] = user
         data['action'] = log.action

@@ -54,7 +54,7 @@ class Log(models.Model):
     search_field = models.CharField(blank = False, null = False, max_length=30)
     
     def __str__(self):
-        return self.user
+        return f'{self.user}'
 
 class BookCategory(models.Model):
     name = models.CharField(blank = False, null = False, max_length=90)
@@ -134,10 +134,10 @@ class BorrowedBook(models.Model):
 class Activity(models.Model):
     user = models.ForeignKey(MyUser, on_delete = models.DO_NOTHING, null = False)
     date = models.DateTimeField(auto_now_add=True)
-    action = models.CharField(blank = False, null = False, max_length=15)
+    action = models.CharField(blank = False, null = False, max_length=30)
     
     def __str__(self):
-        return f'{self.user} - {self.action}'
+        return f'{self.user} - {self.action} on {self.date}'
 
 class Fine(models.Model):
     borrowedbook = models.OneToOneField(BorrowedBook, on_delete = models.DO_NOTHING, null = False)
