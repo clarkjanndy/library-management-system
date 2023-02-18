@@ -13,6 +13,9 @@
             <div>
                 <input type="file" id="photo" name="photo" accept="image/*" hidden>
                 <label for="photo" class="btn btn-theme"><span class="bx bx-upload"></span></label>
+                <button type="button" class="btn btn-theme" data-bs-toggle="modal" data-bs-target="#photoModal" id="accesscamera">
+                    <span class="bx bx-camera"></span>
+                </button>
             </div>
         </div>
     </div>
@@ -167,6 +170,155 @@
     </div>
 
 </form>
+
+<div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Capture Photo</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div>
+              <div id="my_camera" class="d-block mx-auto rounded overflow-hidden"></div>
+          </div>
+          <div id="results" class="d-none"></div>
+          <form method="post" id="photoForm">
+              <input type="hidden" id="photoStore" name="photoStore" value="">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-theme mx-auto text-white" id="takephoto">Capture Photo</button>
+          <button type="button" class="btn btn-theme mx-auto text-white d-none" id="retakephoto">Retake</button>
+          <button type="submit" class="btn btn-theme mx-auto text-white d-none" id="uploadphoto" form="photoForm">Upload</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="{% static 'js/sweetalert.js' %}"></script>
+  <script src="{% static 'js/webcam.min.js' %}"></script>
+
+
+<script>
+    $(document).ready(function() {
+    Webcam.set({
+        width: 320,
+        height: 240,
+        image_format: 'jpeg',
+        jpeg_quality: 90
+    });
+
+    $('#accesscamera').on('click', function() {
+        Webcam.reset();
+        Webcam.on('error', function() {
+            $('#photoModal').modal('hide');
+            swal({
+                title: 'Warning',
+                text: 'Please give permission to access your webcam',
+                icon: 'warning'
+            });
+        });
+        Webcam.attach('#my_camera');
+    });
+
+    $('#takephoto').on('click', take_snapshot);
+
+    $('#retakephoto').on('click', function() {
+        $('#my_camera').addClass('d-block');
+        $('#my_camera').removeClass('d-none');
+
+        $('#results').addClass('d-none');
+
+        $('#takephoto').addClass('d-block');
+        $('#takephoto').removeClass('d-none');
+
+        $('#retakephoto').addClass('d-none');
+        $('#retakephoto').removeClass('d-block');
+
+        $('#uploadphoto').addClass('d-none');
+        $('#uploadphoto').removeClass('d-block');
+    });
+
+    $('#photoForm').on('submit', function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        $.ajax({
+            url: '{{teacher.user.id_no}}/upload-photo',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(data) {
+                if(data == 'success') {
+                    Webcam.reset();
+
+                    $('#my_camera').addClass('d-block');
+                    $('#my_camera').removeClass('d-none');
+
+                    $('#results').addClass('d-none');
+
+                    $('#takephoto').addClass('d-block');
+                    $('#takephoto').removeClass('d-none');
+
+                    $('#retakephoto').addClass('d-none');
+                    $('#retakephoto').removeClass('d-block');
+
+                    $('#uploadphoto').addClass('d-none');
+                    $('#uploadphoto').removeClass('d-block');
+
+                    $('#photoModal').modal('hide');
+
+                    window.location.reload();
+                    // swal({
+                    //     title: 'Success',
+                    //     text: 'Photo uploaded successfully',
+                    //     icon: 'success',
+                    //     buttons: false,
+                    //     closeOnClickOutside: false,
+                    //     closeOnEsc: false,
+                    //     timer: 2000
+                    // })
+                }
+                else {
+                    // swal({
+                    //     title: 'Error',
+                    //     text: 'Something went wrong',
+                    //     icon: 'error'
+                    // })
+                }
+            }
+        })
+    })
+})
+
+function take_snapshot()
+{
+    //take snapshot and get image data
+    Webcam.snap(function(data_uri) {
+        //display result image
+        $('#results').html('<img src="' + data_uri + '" class="d-block mx-auto rounded"/>');
+
+        var raw_image_data = data_uri.replace(/^data\:image\/\w+\;base64\,/, '');
+        $('#photoStore').val(raw_image_data);
+    });
+
+    $('#my_camera').removeClass('d-block');
+    $('#my_camera').addClass('d-none');
+
+    $('#results').removeClass('d-none');
+
+    $('#takephoto').removeClass('d-block');
+    $('#takephoto').addClass('d-none');
+
+    $('#retakephoto').removeClass('d-none');
+    $('#retakephoto').addClass('d-block');
+
+    $('#uploadphoto').removeClass('d-none');
+    $('#uploadphoto').addClass('d-block');
+}
+</script>
 
 <script>
     photo.onchange = evt => {

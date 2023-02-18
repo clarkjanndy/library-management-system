@@ -9,21 +9,25 @@ urlpatterns = [
     path('initialize', page_views.initialize, name="initialize"),
     path('login', page_views.login, name="login"),
     path('change-password', page_views.change_password, name="change_password"),
-
+    
+    
     path('dashboard', admin_views.dashboard, name="dashboard"),
     path('my-profile', admin_views.my_profile, name="my-profile"),
+  
 
     #students
     path('students', student_views.students, name="students"),
     path('students/add', student_views.add, name="add_student"),
     path('students/<str:id_no>', student_views.profile, name="student_profile"),
     path('students/<str:id_no>/edit', student_views.edit, name="edit_student"),
+    path('students/<str:id_no>/upload-photo', student_views.UpdatePhoto.as_view(), name="student_upload_photo"),
     
     #teachers
     path('teachers', teacher_views.teachers, name="teachers"),
     path('teachers/add', teacher_views.add, name="add_teachers"),
     path('teachers/<str:id_no>', teacher_views.profile, name="teacher_profile"),
     path('teachers/<str:id_no>/edit', teacher_views.edit, name="edit_teacher"),
+     path('teachers/<str:id_no>/upload-photo', teacher_views.UpdatePhoto.as_view(), name="student_upload_photo"),
     
     #books
     path('books', book_views.books, name="teachers"),

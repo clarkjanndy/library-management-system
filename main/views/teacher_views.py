@@ -6,6 +6,9 @@ from django.shortcuts import redirect
 from main.utils.upload_photo import rename_and_upload
 
 from main.models import MyUser, Teacher, BorrowedBook
+
+from rest_framework.generics import GenericAPIView
+from rest_framework.response import Response
 # Create your views here.
 def teachers(request):
     if not request.user.is_authenticated:
@@ -66,7 +69,7 @@ def add(request):
             contact_no = request.POST['contact_no'],
             is_staff = 1
         )
-        user.set_password('P@ssw0rd')
+        user.set_password('password')
         #save user instance
         user.save()
         
@@ -120,3 +123,16 @@ def edit(request, id_no):
 
         messages.success(request, 'Profile updated successfully')
     return redirect('/teachers/{id}'.format(id=teacher.user.id_no))
+
+class UpdatePhoto(GenericAPIView):
+
+    def post(self, request, id_no):
+        photo = rename_and_upload(request.data['photoStore'], id_no)
+        
+        teacher=MyUser.objects.get(id_no=id_no)
+        teacher.photo = photo
+        teacher.save()
+        
+        messages.success(request, 'Photo uploaded successfully.')
+        return Response('success')
+
