@@ -7,6 +7,7 @@ from main.models import MyUser, Book, BookCategory, BorrowedBook, Activity
 from django.db.models import Q
 
 from main.utils import dummy
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 def books(request):
@@ -138,6 +139,7 @@ def borrow_book(request):
         return redirect('/')
     
     data = {}
+    books = Book.objects.exclude(available_quan = 0).filter(is_archived=False)
     #get borrower
     if 'borrower-id' in request.GET:
         try:
@@ -150,8 +152,15 @@ def borrow_book(request):
                 return redirect('/borrow-book') 
             
             #get book to be borrowed
-            if 'book-id' in request.GET:
-                book = Book.objects.get(id=request.GET['book-id'])
+            if 'barcode' in request.GET:
+                book = None
+                try:
+                     # try something
+                    book =books.get(barcode=request.GET['barcode'])
+                    print(book)
+                except ObjectDoesNotExist:
+                    messages.error(request, 'Book does not exists.')
+                    return redirect('/borrow-book?borrower-id='+str(borrower.id_no)) 
                 
                 #add borrowed book to borrower
                 if len(BorrowedBook.objects.filter(user=borrower).exclude(status='returned')) < 5:
@@ -166,7 +175,7 @@ def borrow_book(request):
             
             #get entry to be returned
             if 'bor-id' in request.GET:
-                 to_be_returned = BorrowedBook.objects.get(id=request.GET['bor-id'], status= 'on-cart')
+                 to_be_returned = BorrowedBook.objects.get(id=request.GET['bor-id'], status= 'on-cart', user=borrower)
                  to_be_returned.book.available_quan = to_be_returned.book.available_quan + 1
                  to_be_returned.book.save()
               
@@ -180,7 +189,7 @@ def borrow_book(request):
         except:
             messages.error(request, 'Please Select a Borrower.')  
          
-    books = Book.objects.exclude(available_quan = 0).filter(is_archived=False)    
+        
     data['page']= 'borrow-book'
     data['books']= books
     
@@ -247,7 +256,7 @@ def return_book(request):
             
             #get entry to be returned
             if 'bor-id' in request.GET and 'action' in request.GET:
-                 borrowed = BorrowedBook.objects.get(id=request.GET['bor-id'])
+                 borrowed = BorrowedBook.objects.get(id=request.GET['bor-id'],user=borrower)
                  
                  print(borrowed)
                  
