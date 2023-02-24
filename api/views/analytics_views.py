@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.db.models import Count, Sum
 import json
 
-from main.models import Logs, Student, Teacher, Book, BorrowedBook
+from main.models import Log, Student, Teacher, Book, BorrowedBook
 
 from datetime import datetime
 # Create your views here.
@@ -29,7 +29,7 @@ def visit_histogram(request):
         'visits': Count('user', distinct=True),
     }
 
-    logs = Logs.objects.values('date__month', 'date__year').annotate(**metrics).order_by('date__month')
+    logs = Log.objects.values('date__month', 'date__year').annotate(**metrics).filter(action="has login").order_by( 'date__year')
    
     series = [log["visits"] for log in logs.iterator()]
     x_label = [datetime(log["date__year"], log["date__month"], 1) for log in logs.iterator()]

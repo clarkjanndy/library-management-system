@@ -99,20 +99,20 @@
 
             <div class="card mt-2">
                 <div class="card-header text-theme">
-                    Recent Logs
+                    Recent Activities
                 </div>
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
-                        {% if recent_logs %}
-                        {% for log in recent_logs %}
-                        <li class="list-group-item">{{log.user.first_name}} {{log.user.middle_name}}
-                            {{log.user.last_name}} {{log.user.ext_name}}
+                        {% if recent_activities %}
+                        {% for act in recent_activities %}
+                        <li class="list-group-item">{{act.user.first_name}} {{act.user.middle_name}}
+                            {{act.user.last_name}} {{act.user.ext_name}}
                             <span
-                                class="{% if log.action == 'has login' %}text-success{% else %}text-danger{% endif %}">{{log.action}}</span>.
+                                class="{% if act.action ==  'has login' or act.action == 'has returned books' %}text-success{% else %}text-danger{% endif %}">{{act.action}}</span>.
                         </li>
                         {% endfor %}
                         {% else %}
-                        <li class="list-group-item">No Recent Logs</li>
+                        <li class="list-group-item">No Recent Activities</li>
                         {% endif %}
                     </ul>
                 </div>
@@ -160,6 +160,13 @@
             },
             xaxis: {
                 categories: formatted_date
+            },
+            yaxis: {
+                labels: {
+                    formatter: function (value) {
+                        return value;
+                    }
+                }
             }
         };
 

@@ -22,8 +22,11 @@ class MyUser(AbstractUser):
     USERNAME_FIELD = 'id_no'
     REQUIRED_FIELDS = []
     
+    def get_full_name(self) -> str:
+        return f'{self.first_name} {self.middle_name} {self.last_name} {self.ext_name}'
+    
     def __str__(self):
-        return self.id_no
+        return f'{self.id_no} - {self.get_full_name()}'
 
 class Student(models.Model):
     user = models.OneToOneField(MyUser, on_delete = models.DO_NOTHING, null = True)
@@ -44,14 +47,14 @@ class Teacher(models.Model):
     def __str__(self):
         return self.user
 
-class Logs(models.Model):
+class Log(models.Model):
     user = models.ForeignKey(MyUser, on_delete = models.DO_NOTHING, null = False)
     date = models.DateTimeField(null=False, blank=False, default=datetime.now)
     action = models.CharField(blank = False, null = False, max_length=15)
     search_field = models.CharField(blank = False, null = False, max_length=30)
     
     def __str__(self):
-        return self.user
+        return f'{self.user}'
 
 class BookCategory(models.Model):
     name = models.CharField(blank = False, null = False, max_length=90)
@@ -87,7 +90,7 @@ class Book(models.Model):
     
     
     def __str__(self):
-        return self.barcode 
+        return f'{self.category} - {self.title} by {self.authors}'
     
     def get_on_cart(self):
         on_cart = BorrowedBook.objects.filter(book=self, status='on-cart').aggregate(count=Count('id'))        
@@ -106,10 +109,11 @@ class BorrowedBook(models.Model):
     date_returned = models.DateTimeField(null=True, blank=True)
     
     def __str__(self):
-        return self.book.title
+        return f'{self.book.title} borrowed by {self.user}'
     
     def save(self, *args, **kwargs):
-        self.expected_return_date = datetime.now() + timedelta(hours=self.book.category.limit)
+        if not self.pk:
+            self.expected_return_date = datetime.now() + timedelta(hours=self.book.category.limit)
         super(BorrowedBook, self).save(*args, **kwargs)
 
     def get_fine(self):
@@ -125,6 +129,14 @@ class BorrowedBook(models.Model):
        
         return fine
 
+class Activity(models.Model):
+    user = models.ForeignKey(MyUser, on_delete = models.DO_NOTHING, null = False)
+    date = models.DateTimeField(auto_now_add=True)
+    action = models.CharField(blank = False, null = False, max_length=30)
+    
+    def __str__(self):
+        return f'{self.user} - {self.action} on {self.date}'
+
 class Fine(models.Model):
     borrowedbook = models.OneToOneField(BorrowedBook, on_delete = models.DO_NOTHING, null = False)
     amount = models.ForeignKey(BookCategory, on_delete = models.DO_NOTHING, null = False)
@@ -132,7 +144,7 @@ class Fine(models.Model):
     date = models.DateTimeField(null=False, blank=False, default=datetime.now)
     
     def __str__(self):
-        return self.user
+        return self.amount
 
 
 

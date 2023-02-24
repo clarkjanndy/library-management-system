@@ -20,11 +20,13 @@
     <div class="container">
         <div class="row">
             <div class="col-xl-8 col-lg-8">
-                <div class="bg-light p-3 shadow">
+               
                     <div class="mb-2">
                         <h1>{{book.title}}</h1>
                         <h4 class="text-muted">{{book.category}}</h4>
                         <h6 class="text-muted"><span class="bx bx-user"></span> {{book.authors}}</h6>
+                        <h6 class="text-muted"><span class="bx bx-calendar"></span> {{book.publish_date}}
+                        </h6>
                         <h6 class="text-muted"><span class="bx bx-book"></span> {{book.available_quan}} available copies
                         </h6>
                         <h6 class="text-muted"><span class="bx bx-bullseye"></span> {{book.views.count}} views</h6>
@@ -40,7 +42,7 @@
                         <h4><span class="bx bx-book-open"></span> Preface</h4>
                         <p>{{book.preface}}</p>
                     </div>
-                </div>
+               
             </div>
 
             <div class="col-xl-4 col-lg-4">
@@ -57,7 +59,7 @@
                                     <img src="{% static 'images/book.png'%}" class="img-fluid" width="100">
                                 </div>
                                 <div class="col-8">
-                                    <h5><a href="/books/{{m.barcode}}">{{m.title}}</a></h5>
+                                    <h5><a href="/books/{{m.barcode}}" class="link">{{m.title}}</a></h5>
                                     <h6 class="text-muted">{{m.category}}</h6>
                                     <h6 class="text-muted text-truncate"><span class="bx bx-user"></span> {{m.authors}}
                                     </h6>
@@ -84,8 +86,8 @@
 <script>
     JsBarcode("#barcode", "{{book.barcode}}", {
         margin: 0,
-        background: '#D7E2EF',
         font: 'Montserrat',
+        background: '#D7E2EF',
         fontSize: 15
     });
 </script>

@@ -10,6 +10,11 @@ from django.contrib.auth import logout as auth_logout
 
 from main.models import MyUser, Teacher, BookCategory
 
+from rest_framework.generics import GenericAPIView
+from rest_framework.response import Response
+
+from main.utils.upload_photo import rename_and_upload
+
 
 # Create your views here.
 def initialize(request):
@@ -82,7 +87,16 @@ def change_password(request):
         return redirect('/')
     data = {'page': 'change-password', }
     return render(request, "change-password.html", data)
+import base64
+class UpdatePhoto(GenericAPIView):
 
+    def post(self, request):
+        
+        decoded_data=base64.b64decode((request.data['photoStore']))
+        rename_and_upload(request.data['photoStore'],'STUD-123')
+        
+        messages.success(request, 'Photo uploaded successfully.')
+        return Response('success')
 
 def logout(request):
     auth_logout(request)

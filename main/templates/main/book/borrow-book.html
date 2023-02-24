@@ -99,8 +99,10 @@
 
                     {% if borrower.id_no is not none %}
                     <div class="d-flex justify-content-end mb-2">
-                        <a class="btn btn-success" href="/borrow-book/checkout/{{borrower.id_no}}">Done</a>
+                        <a class="btn btn-success" href="/borrow-book/checkout/{{borrower.id_no}}" id="done"
+                            onclick="borrowbook(event)">Done</a>
                     </div>
+
                     {% endif %}
                 </div>
             </div>
@@ -108,6 +110,23 @@
             <div class="shadow bg-light p-3 mt-3">
                 <div class="col-lg-12 col-xl-12 ">
                     <h4>Available Books</h4>
+
+                    <small class="text-muted"><i>Input Book Barcode.</i></small>
+
+                    <div class="col-lg-12 col-xl-12 mb-2">
+                        <form class="mb-2" id="borrower" action="">
+                            <div class="form-group col-lg-6 d-inline-block">
+
+                                <input class="form-control d-none" name="borrower-id" id="borrower-id"
+                                    placeholder="Borrower's ID No." value="{}">
+
+                                <input class="form-control" name="barcode" id="barcode" placeholder="Click here and scan barcode."
+                                    value="">
+
+                                <input type="submit" value="submit" class="d-none"/>
+                            </div>
+                        </form>
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-striped" id="books">
                             <thead class="bg-theme text-white">
@@ -132,7 +151,7 @@
                                     <td>{{book.available_quan}}</td>
                                     <td>
                                         <a class="btn btn-sm btn-success"
-                                            href="/borrow-book?borrower-id={{borrower.id_no}}&book-id={{book.id}}"><span
+                                            href="/borrow-book?borrower-id={{borrower.id_no}}&barcode={{book.barcode}}"><span
                                                 class="bx bx-check"></span> Borrow</a>
                                     </td>
 
@@ -150,6 +169,43 @@
     </main>
 </div>
 <!-- End Page Content -->
+<script src="{% static 'js/sweetalert.js' %}"></script>
+<script>
+    function borrowbook(ev) {
+        ev.preventDefault();
+        var urlToRedirect = ev.currentTarget.getAttribute('href'); //use currentTarget because the click may be on the nested i tag and not a tag causing the href to be empty
+        console.log(urlToRedirect); // verify if this is the right URL
+        swal({
+            title: "Are you sure?",
+            text: "",
+            icon: "info",
+            buttons: true,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                $.ajax({
+                    url: urlToRedirect,
+                    type: 'GET',
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        console.log(data)
+                        if (data['success']) {
+                            window.location.replace('/borrow-book');
+                        }
+                        else {
+                            swal({
+                                title: 'Error',
+                                text: data['message'],
+                                icon: 'error'
+                            })
+                        }
+                    }
+                })
+            }
+        });
+    }
+</script>
 <script>
 
     $('#books').dataTable({

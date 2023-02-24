@@ -78,9 +78,9 @@
                                         <a class="btn btn-sm btn-danger"
                                             href="/return-book?borrower-id={{borrower.id_no}}&bor-id={{tbr.id}}&action=0"><span
                                                 class="bx bx-x"></span> Remove</a>
-                                        <a class="btn btn-sm btn-danger"
+                                        <!-- <a class="btn btn-sm btn-danger"
                                             href="/return-book?borrower-id={{borrower.id_no}}&bor-id={{tbr.id}}&action=0"><span
-                                                class="bx bx-x"></span> Edit</a>
+                                                class="bx bx-x"></span> Edit</a> -->
                                     </td>
 
                                 </tr>
@@ -91,7 +91,7 @@
 
                     {% if borrower.id_no is not none %}
                     <div class="d-flex justify-content-end mb-2">
-                        <a class="btn btn-success" href="/return-book/checkout/{{borrower.id_no}}">Done</a>
+                        <a class="btn btn-success" href="/return-book/checkout/{{borrower.id_no}}" onclick="returnbook(event)">Done</a>
                     </div>
                     {% endif %}
                 </div>
@@ -141,6 +141,43 @@
     </main>
 </div>
 <!-- End Page Content -->
+<script src="{% static 'js/sweetalert.js' %}"></script>
+<script>
+    function returnbook(ev) {
+        ev.preventDefault();
+        var urlToRedirect = ev.currentTarget.getAttribute('href'); //use currentTarget because the click may be on the nested i tag and not a tag causing the href to be empty
+        console.log(urlToRedirect); // verify if this is the right URL
+        swal({
+            title: "Are you sure?",
+            text: "",
+            icon: "info",
+            buttons: true,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                $.ajax({
+                    url: urlToRedirect,
+                    type: 'GET',
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        console.log(data)
+                        if (data['success']) {
+                            window.location.replace('/return-book');
+                        }
+                        else {
+                            swal({
+                                title: 'Error',
+                                text: data['message'],
+                                icon: 'error'
+                            })
+                        }
+                    }
+                })
+            }
+        });
+    }
+</script>
 <script>
 
     $('#to-be-returned').dataTable({

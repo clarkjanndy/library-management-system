@@ -3,10 +3,11 @@ from django.contrib import messages
 from django.shortcuts import render
 from django.shortcuts import redirect
 
-from main.models import MyUser, Book, BookCategory, BorrowedBook
+from main.models import MyUser, Book, BookCategory, BorrowedBook, Activity
 from django.db.models import Q
 
 from main.utils import dummy
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 def books(request):
@@ -15,18 +16,24 @@ def books(request):
     
     data = {}
     categories = BookCategory.objects.all()
-    books = Book.objects.all()
+    books = Book.objects.all().filter(is_archived=False)
     
-    if 'key' in request.GET:
-         books = Book.objects.all().filter(title__icontains=request.GET['key'])
+    if 'key' in request.GET and not request.GET['key'] == '':
+         books = books.filter(title__icontains=request.GET['key'])
          data['key'] = request.GET['key']
     
-    if 'filter' in request.GET:
-         books = Book.objects.all().filter(category__name=request.GET['filter'], title__icontains=request.GET['key'])
-         data['filter'] = request.GET['filter']
+    if 'category' in request.GET and not request.GET['category'] == '':
+         books = books.filter(category__name=request.GET['category'])
+         data['category'] = request.GET['category']
+         
+    if 'publish_year' in request.GET and not request.GET['publish_year'] == '':
+         books = books.filter(publish_date__gte = f"{request.GET['publish_year']}-01-01")
+         data['publish_year'] = request.GET['publish_year']
+         
      
     data['page'] = 'books' 
     data['categories'] = categories
+    data['years'] = [ str(year['publish_date__year']) for year in Book.objects.all().values('publish_date__year').distinct().order_by('-publish_date__year')]
     data['books'] = books 
      
     return render(request, "./main/book/books.html", data)
@@ -49,7 +56,9 @@ def add(request):
             preface = request.POST['preface'],
             category_id = request.POST['category_id'],
             condition = request.POST['condition'],
-            available_quan = request.POST['available_quan']
+            available_quan = request.POST['available_quan'],
+            is_archived = request.POST['is_archived'],
+            publish_date = request.POST['publish_date']
         )
         if  request.POST['preface'] == '':
             book.preface = dummy.DUMMY_TEXT
@@ -85,6 +94,8 @@ def edit(request, barcode):
         book.category_id = request.POST['category_id']
         book.condition = request.POST['condition']
         book.available_quan = request.POST['available_quan']
+        book.is_archived = request.POST['is_archived']
+        book.publish_date = request.POST['publish_date']
         
         book.save()
         
@@ -110,7 +121,7 @@ def view(request, barcode):
     if not book.views.filter(id_no=request.user.id_no).exists():
          book.views.add(request.user)
    
-    more = Book.objects.filter(category = book.category).exclude(barcode = book.barcode) 
+    more = Book.objects.filter(category = book.category).exclude(barcode = book.barcode)[:3]
          
     data={
         'page' : 'books',
@@ -128,6 +139,7 @@ def borrow_book(request):
         return redirect('/')
     
     data = {}
+    books = Book.objects.exclude(available_quan = 0).filter(is_archived=False)
     #get borrower
     if 'borrower-id' in request.GET:
         try:
@@ -140,8 +152,15 @@ def borrow_book(request):
                 return redirect('/borrow-book') 
             
             #get book to be borrowed
-            if 'book-id' in request.GET:
-                book = Book.objects.get(id=request.GET['book-id'])
+            if 'barcode' in request.GET:
+                book = None
+                try:
+                     # try something
+                    book =books.get(barcode=request.GET['barcode'])
+                    print(book)
+                except ObjectDoesNotExist:
+                    messages.error(request, 'Book does not exists.')
+                    return redirect('/borrow-book?borrower-id='+str(borrower.id_no)) 
                 
                 #add borrowed book to borrower
                 if len(BorrowedBook.objects.filter(user=borrower).exclude(status='returned')) < 5:
@@ -156,7 +175,7 @@ def borrow_book(request):
             
             #get entry to be returned
             if 'bor-id' in request.GET:
-                 to_be_returned = BorrowedBook.objects.get(id=request.GET['bor-id'], status= 'on-cart')
+                 to_be_returned = BorrowedBook.objects.get(id=request.GET['bor-id'], status= 'on-cart', user=borrower)
                  to_be_returned.book.available_quan = to_be_returned.book.available_quan + 1
                  to_be_returned.book.save()
               
@@ -170,12 +189,13 @@ def borrow_book(request):
         except:
             messages.error(request, 'Please Select a Borrower.')  
          
-    books = Book.objects.exclude(available_quan = 0)    
+        
     data['page']= 'borrow-book'
     data['books']= books
     
     return render(request, "./main/book/borrow-book.html", data )
 
+from django.http import JsonResponse
 def borrow_checkout(request, id_no):
     if not request.user.is_authenticated:
         return redirect('/')
@@ -184,18 +204,25 @@ def borrow_checkout(request, id_no):
         return redirect('/')
     
     borrower = MyUser.objects.get(id_no=id_no)
-    #update all pending books to borrowed
+    #update all on-cart books to borrowed
     on_cart=BorrowedBook.objects.filter(user = borrower, status = 'on-cart')
     borrowed=BorrowedBook.objects.filter(user = borrower, status = 'borrowed')
     
     if BorrowedBook.objects.filter(user = borrower, status = 'on-cart'):
         on_cart.update(status='borrowed')
+        response = {'success': True,'message': 'Books borrowed successfuly. Print Borrower Slip ?'}
+        
+        Activity.objects.create(user=borrower, action = 'has borrowed books')
         messages.success(request, 'Books borrowed successfuly. Print Borrower Slip ?', extra_tags=str(borrower.id_no))  
+        return JsonResponse(response)
     elif borrowed:
-         messages.error(request, 'This user already have borrowed books.') 
+         response = {'success': False,'message': 'This user already have borrowed books.'}
+        #  messages.error(request, 'This user already have borrowed books.') 
     else:
-        messages.error(request, 'No Book Selected.') 
-        return redirect('/borrow-book?borrower-id='+str(borrower.id_no))
+        response = {'success': False,'message': 'No Book Selected.'}
+        # messages.error(request, 'No Book Selected.') 
+        return JsonResponse(response)
+        # return redirect('/borrow-book?borrower-id='+str(borrower.id_no))
     
     return redirect('/borrow-book')
 
@@ -229,7 +256,7 @@ def return_book(request):
             
             #get entry to be returned
             if 'bor-id' in request.GET and 'action' in request.GET:
-                 borrowed = BorrowedBook.objects.get(id=request.GET['bor-id'])
+                 borrowed = BorrowedBook.objects.get(id=request.GET['bor-id'],user=borrower)
                  
                  print(borrowed)
                  
@@ -274,10 +301,14 @@ def return_checkout(request, id_no):
 
         tbr.update(date_returned=datetime.now())
         tbr.update(status='returned')
-            
+        
+        response = {'success': True,'message': 'Books borrowed successfuly. Print Borrower Slip ?'}  
+        Activity.objects.create(user=borrower, action = 'has returned books')  
         messages.success(request, 'Books successfuly returned!')  
+        return JsonResponse(response)
     else:
-        messages.error(request, 'No Book Selected.') 
-        return redirect('/return-book?borrower-id='+str(borrower.id_no))
+        response = {'success': False,'message': 'No Book Selected.'}    
+        # messages.error(request, 'No Book Selected.') 
+        return JsonResponse(response)
     
-    return redirect('/return-book')
+    # return redirect('/return-book')
