@@ -96,6 +96,10 @@
             <div class="shadow bg-light p-3">
                 <h3>Book List</h3>
 
+                <div class="d-flex justify-content-start">
+                    <a class="btn btn-theme"><span class="bx bx-printer"></span> Print Report</a>
+                </div>
+
                 {% if messages %}
                 {% for message in messages %}
                 {% include 'alert.html' %}
@@ -134,8 +138,13 @@
                                     <td>{{book.get_on_cart}}</td>
                                     <td>{{book.get_borrowed}}</td>
                                     <td>
-                                        <a class="btn btn-sm btn-success" href="students/{{student.user.id_no}}"><span
-                                                class="bx bx-file-blank"></span> Details</a>
+                                        <button class="btn btn-sm btn-success" data-bs-toggle="modal"
+                                            data-bs-target="#detail" barcode={{book.barcode}}
+                                            category='{{book.category.name}}' title='{{book.title}}'
+                                            authors='{{book.authors}}' available_quan={{book.available_quan}}
+                                            on_cart={{book.get_on_cart}} borrowed={{book.get_borrowed}}
+                                            publish_date='{{book.publish_date}}'>
+                                            <span class="bx bx-file-blank"></span> Details</button>
                                         <a class="btn btn-sm btn-theme" href="books/{{book.barcode}}/edit"><span
                                                 class="bx bx-edit"></span> Edit</a>
                                     </td>
@@ -172,8 +181,13 @@
                                     <td>{{arch.get_on_cart}}</td>
                                     <td>{{arch.get_borrowed}}</td>
                                     <td>
-                                        <a class="btn btn-sm btn-success" href="students/{{student.user.id_no}}"><span
-                                                class="bx bx-file-blank"></span> Details</a>
+                                        <button class="btn btn-sm btn-success" data-bs-toggle="modal"
+                                            data-bs-target="#detail" barcode={{arch.barcode}}
+                                            category='{{arch.category.name}}' title='{{arch.title}}'
+                                            authors='{{arch.authors}}' available_quan={{arch.available_quan}}
+                                            on_cart={{arch.get_on_cart}} borrowed={{arch.get_borrowed}}
+                                            publish_date='{{arch.publish_date}}'>
+                                            <span class="bx bx-file-blank"></span> Details</button>
                                         <a class="btn btn-sm btn-theme" href="books/{{arch.barcode}}/edit"><span
                                                 class="bx bx-edit"></span> Edit</a>
                                     </td>
@@ -210,8 +224,13 @@
                                     <td>{{res.get_on_cart}}</td>
                                     <td>{{res.get_borrowed}}</td>
                                     <td>
-                                        <a class="btn btn-sm btn-success" href="students/{{student.user.id_no}}"><span
-                                                class="bx bx-file-blank"></span> Details</a>
+                                        <button class="btn btn-sm btn-success" data-bs-toggle="modal"
+                                            data-bs-target="#detail" barcode={{res.barcode}}
+                                            category='{{res.category.name}}' title='{{res.title}}'
+                                            authors='{{res.authors}}' available_quan={{res.available_quan}}
+                                            on_cart={{res.get_on_cart}} borrowed={{res.get_borrowed}}
+                                            publish_date='{{res.publish_date}}'>
+                                            <span class="bx bx-file-blank"></span> Details</button>
                                         <a class="btn btn-sm btn-theme" href="books/{{res.barcode}}/edit"><span
                                                 class="bx bx-edit"></span> Edit</a>
                                     </td>
@@ -226,8 +245,69 @@
             </div>
         </div>
 
+        <!-- Modal Content -->
+        <div class="modal fade" id="detail" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Book Detail</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label class="col-form-label">Barcode: </label>
+                                <input class="form-control" id="barcode" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="col-form-label">Category</label>
+                                <input class="form-control" id="category" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="col-form-label">Title</label>
+                                <input class="form-control" id="title" readonly>
+                            </div>
 
+                            <div class="mb-3">
+                                <label class="col-form-label">Authors</label>
+                                <input class="form-control" id="authors" readonly>
+                            </div>
 
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        <label class="col-form-label">Available</label>
+                                        <input class="form-control" id="available_quan" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        <label class="col-form-label">On-Cart</label>
+                                        <input class="form-control" id="on_cart" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        <label class="col-form-label">Borrowed</label>
+                                        <input class="form-control" id="borrowed" readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="col-form-label">Publish Date</label>
+                                <input class="form-control" id="publish_date" readonly>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-theme" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 </div>
 <!-- End Page Content -->
@@ -274,9 +354,48 @@
         "ordering": false,
 
     });
-
-
 </script>
+
+<script>
+    const modal = document.getElementById('detail')
+    modal.addEventListener('show.bs.modal', event => {
+        // Button that triggered the modal
+        const button = event.relatedTarget
+        // Extract info from data-bs-* attributes
+
+        const barcode = button.getAttribute('barcode')
+        const category = button.getAttribute('category')
+        const title = button.getAttribute('title')
+        const authors = button.getAttribute('authors')
+        const available_quan = button.getAttribute('available_quan')
+        const on_cart = button.getAttribute('on_cart')
+        const borrowed = button.getAttribute('borrowed')
+        const publish_date = button.getAttribute('publish_date')
+        // If necessary, you could initiate an AJAX request here
+        // and then do the updating in a callback.
+        //
+        // Update the modal's content.
+
+        barcode_text = modal.querySelector('#barcode')
+        category_text = modal.querySelector('#category')
+        title_text = modal.querySelector('#title')
+        authors_text = modal.querySelector('#authors')
+        available_quan_text =  modal.querySelector('#available_quan')
+        on_cart_text = modal.querySelector('#on_cart')
+        borrowed_text =  modal.querySelector('#borrowed')
+        publish_date_text = modal.querySelector('#publish_date')
+
+        barcode_text.value = barcode
+        category_text.value = category
+        title_text.value = title
+        authors_text.value= authors
+        available_quan_text.value= available_quan
+        on_cart_text.value = on_cart
+        borrowed_text.value = borrowed
+        publish_date_text.value = publish_date
+    })
+</script>
+
 
 
 <script>
