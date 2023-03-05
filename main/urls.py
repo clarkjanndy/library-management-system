@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from django.urls import path
-from . views import page_views, admin_views, student_views, teacher_views, book_views, monitoring_views
+from . views import page_views, admin_views, report_views, student_views, teacher_views, book_views, monitoring_views, report_views
 
 urlpatterns = [
     path('', page_views.landing, name="landing"),
@@ -50,6 +50,10 @@ urlpatterns = [
     path('logs/<str:day>', monitoring_views.view_logs, name="view_logs"),       
     
     path('inventory', monitoring_views.inventory, name="inventory"),       
+    
+    #reports
+    path('reports/book-inventory', report_views.print_book_inventory, name="print_book_inventory"),   
+    
     
     path('logout', page_views.logout, name="logout"),
 ]
