@@ -117,9 +117,13 @@ def inventory(request):
     if not request.user.is_superuser:
         return redirect('/')
     
-    books = Book.objects.all()
+    books = Book.objects.filter(is_archived=False)
+    archived = Book.objects.filter(is_archived=True)
+    reserved = Book.objects.filter(category__name='Reserve Circulation')
     
     data = {'books': books,
+            'archived': archived,
+            'reserved': reserved,
             'page': 'inventory'}
     
     return render(request, "./main/monitoring/inventory.html", data)
