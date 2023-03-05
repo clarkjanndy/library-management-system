@@ -97,9 +97,9 @@
 
                 <div class="bg-white">
                     <div class="tab">
-                        <button class="tablinks" onclick="openCity(event, 'tab_0')" id="defaultOpen">Profile</button>
-                        <button class="tablinks" onclick="openCity(event, 'tab_1')">Edit Profile</button>
-                        <button class="tablinks" onclick="openCity(event, 'tab_2')">Borrowed Books</button>
+                        <button class="tablinks" onclick="openTab(event, 'tab_0')" id="defaultOpen">Profile</button>
+                        <button class="tablinks" onclick="openTab(event, 'tab_1')">Edit Profile</button>
+                        <button class="tablinks" onclick="openTab(event, 'tab_2')">Borrowed Books</button>
                     </div>
 
                     <div id="tab_0" class="tabcontent p-3">
@@ -134,7 +134,7 @@
 </script>
 
 <script>
-    function openCity(evt, tabName) {
+    function openTab(evt, tabName) {
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tabcontent");
         for (i = 0; i < tabcontent.length; i++) {
