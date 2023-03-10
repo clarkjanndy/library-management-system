@@ -119,14 +119,15 @@ class BorrowedBook(models.Model):
     def get_fine(self):
         multiplier = datetime.now() - self.expected_return_date
         fine = 0 
-
-        if self.book.category.name != 'Reserve Circulation':
-            if multiplier.days > 0:
-                fine =  math.floor(self.book.category.rate * 24) * math.floor(multiplier.days)
-        else:   
-            if (multiplier.total_seconds() / 3600) > 0:
-                fine = int(self.book.category.rate) * math.floor(multiplier.total_seconds() / 3600)
-       
+        
+        if self.status != 'returned':
+            if self.book.category.name != 'Reserve Circulation':
+                if multiplier.days > 0:
+                    fine =  math.floor(self.book.category.rate * 24) * math.floor(multiplier.days)
+            else:   
+                if (multiplier.total_seconds() / 3600) > 0:
+                    fine = int(self.book.category.rate) * math.floor(multiplier.total_seconds() / 3600)
+        
         return fine
 
 class Activity(models.Model):

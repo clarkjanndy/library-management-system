@@ -4,6 +4,8 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 
 from django.db.models import Count
+from django.db.models import Window, F
+from django.db.models.functions import RowNumber
 
 from main.models import Log, Teacher, Student, BookCategory, Activity
 # Create your views here.
@@ -22,7 +24,12 @@ def dashboard(request):
         'user__first_name',
         'user__middle_name',
         'user__last_name',
-        'user__ext_name').filter(action='has login').annotate(count=Count('user')).order_by('-count')
+        'user__ext_name').filter(action='has login').annotate(
+            count=Count('user'),
+            rank=Window(
+                expression=RowNumber(),
+                order_by='-count'
+            ))[:10]
 
     print(visitors)
     data = {
