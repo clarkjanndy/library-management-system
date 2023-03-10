@@ -1,6 +1,7 @@
 {% extends 'app.html'%}
 
 {% load static %}
+{% load extras %}
 
 {% block content%}
 {% include 'sidebar.html' %}
@@ -65,6 +66,48 @@
                         </div>
                         <div class="card-body">
                             <div id="visits"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col p-1">
+                    <div class=" card">
+                        <div class="card-header text-theme">
+                            Top Library Visitors
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+
+                                <table class="table table-striped   nowrap" id="students">
+                                    <thead class="bg-theme text-white">
+                                        <tr>
+                                            <th scope="col">Rank</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Total Visits</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if visitors %}
+                                        {% for visitor in visitors %}
+                                        <tr>
+                                            <th>{{visitor.rank|cardinal}}</th>
+                                            <td>{{visitor.user__first_name}} {{visitor.user__middle_name}}
+                                                {{visitor.user__last_name}} {{visitor.user__ext_name}}
+                                            </td>
+                                            <th>{{visitor.count}} times</th>
+                                        </tr>
+                                        {% endfor %}
+                                        {% else %}
+                                        <tr>
+                                            <td colspan="2 d-flex justify-content-center">No Records for visitors yet</td>
+                                        </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

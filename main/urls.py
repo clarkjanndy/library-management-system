@@ -30,16 +30,16 @@ urlpatterns = [
      path('teachers/<str:id_no>/upload-photo', teacher_views.UpdatePhoto.as_view(), name="student_upload_photo"),
     
     #books
-    path('books', book_views.books, name="teachers"),
+    path('book-dashboard', book_views.dashboard, name="book-dashboard"),
+    path('books', book_views.books, name="books"),
     path('books/add', book_views.add, name="add_book"),
     path('books/<str:barcode>', book_views.view, name="view_book"),
     path('books/<str:barcode>/edit', book_views.edit, name="edit_book"),
     
-    
+    #book actions
     path('borrow-book', book_views.borrow_book, name="borrow_book"),
     path('borrow-book/checkout/<str:id_no>', book_views.borrow_checkout, name="borrow_checkout"),
     path('print-slip/<str:id_no>', book_views.print_borrower_slip, name="print_borrower_slip"),
-    
     path('return-book', book_views.return_book, name="return_book"),
     path('return-book/checkout/<str:id_no>', book_views.return_checkout, name="return_checkout"),
     
@@ -57,7 +57,6 @@ urlpatterns = [
     
     path('logout', page_views.logout, name="logout"),
 ]
-
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

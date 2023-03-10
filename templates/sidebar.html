@@ -43,6 +43,14 @@
 
             <small class="mt-2 d-none d-sm-inline">Books</small>
             {% if request.user.is_superuser%}
+
+            <li class="nav-item d-flex justify-content-center p-1 {% if page == 'add-book' %}current-page{% endif %}">
+                <a href="/book-dashboard" class="nav-link px-sm-0 px-2 text-white">
+                    <i class="bx bx-book-content"></i>
+                    <span class="d-none d-sm-inline">Book Dashboard</span></a>
+                </a>
+            </li>
+
             <li class="nav-item d-flex justify-content-center p-1 {% if page == 'borrow-book' %}current-page{% endif %}">
                 <a href="/borrow-book" class="nav-link px-sm-0 px-2 text-white">
                     <i class="bx bx-book-open"></i>

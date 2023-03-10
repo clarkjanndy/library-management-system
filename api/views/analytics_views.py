@@ -26,7 +26,7 @@ def get_book_count(request):
 
 def visit_histogram(request):
     metrics = {
-        'visits': Count('user', distinct=True),
+        'visits': Count('user'),
     }
 
     logs = Log.objects.values('date__month', 'date__year').annotate(**metrics).filter(action="has login").order_by( 'date__year')
