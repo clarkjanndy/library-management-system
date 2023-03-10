@@ -1,0 +1,146 @@
+{% extends 'app.html'%}
+
+{% load static %}
+{% load extras %}
+
+{% block content%}
+{% include 'sidebar.html' %}
+
+<!-- Start Page Content -->
+<div class="col d-flex flex-column h-sm-100"">
+    <main class=" row overflow-auto p-3">
+    <h3 class="text-theme">Book Dashboard</h3>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Book Dashboard</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-7">
+            <div class="row">
+                <div class="col p-1">
+                    <div class=" card">
+                        <div class="card-header text-theme">
+                            Borrowed Books
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+
+                                <table class="table table-striped   nowrap" id="borrowed">
+                                    <thead class="bg-theme text-white">
+                                        <tr>
+                                            <th scope="col">Borrower</th>
+                                            <th scope="col">Book Title</th>
+                                            <th scope="col">Fine</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if borrowed %}
+                                        {% for bor in borrowed %}
+                                        <tr>
+                                            <td>{{bor.user.get_full_name}}</td>
+                                            <td>{{bor.book.title}}</td>
+                                            <td>&#8369; {{bor.get_fine}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                        {% else %}
+                                        <tr>
+                                            <td colspan="2">No Records for borrowed books yet</td>
+                                        </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-5 p-1">
+            <div class="card">
+                <div class="card-header text-theme">
+                    Most Borrowed Books
+                </div>
+                <div class="card-body">
+
+                    <div class="table-responsive">
+
+                        <table class="table table-striped   nowrap" id="borrowed">
+                            <thead class="bg-theme text-white">
+                                <tr>
+                                    <th scope="col">Rank</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Title</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for borow_rank in borow_rankings %}
+                                <tr>
+                                    <th>{{borow_rank.rank|cardinal}}</th>
+                                    <td>{{borow_rank.book__category__name}}</td>
+                                    <td>{{borow_rank.book__title}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-2">
+                
+                <div class="card-header text-theme">
+                    Most Viewed Books
+                </div>
+                <div class="card-body">
+
+                    <div class="table-responsive">
+
+                        <table class="table table-striped   nowrap" id="borrowed">
+                            <thead class="bg-theme text-white">
+                                <tr>
+                                    <th scope="col">Rank</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Views</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for view_rank in view_rankings %}
+                                <tr>
+                                    <th>{{ view_rank.rank|cardinal }}</td>
+                                    <td>{{view_rank.title}}</td>
+                                    <td>{{view_rank.views.count}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    </main>
+</div>
+<!-- End Page Content -->
+
+<script>
+    $('#borrowed').dataTable({
+        "ordering": false,
+        // "columns": [
+        //     { "width": "10%" },
+        //     { "width": "30%" },
+        //     null,
+        //     null,
+        //     null,
+        //     { "width": "10%" }
+        // ]
+    });
+</script>
+{%endblock content%}
