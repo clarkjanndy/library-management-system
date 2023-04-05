@@ -240,7 +240,7 @@
         var formData = new FormData(this);
         formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
         $.ajax({
-            url: '{{student.user.id_no}}/upload-photo',
+            url: '/students/{{student.user.id_no}}/upload-photo',
             type: 'POST',
             data: formData,
             contentType: false,

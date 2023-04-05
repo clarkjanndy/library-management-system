@@ -27,7 +27,7 @@ urlpatterns = [
     path('teachers/add', teacher_views.add, name="add_teachers"),
     path('teachers/<str:id_no>', teacher_views.profile, name="teacher_profile"),
     path('teachers/<str:id_no>/edit', teacher_views.edit, name="edit_teacher"),
-     path('teachers/<str:id_no>/upload-photo', teacher_views.UpdatePhoto.as_view(), name="student_upload_photo"),
+    path('teachers/<str:id_no>/upload-photo', teacher_views.UpdatePhoto.as_view(), name="student_upload_photo"),
     
     #books
     path('book-dashboard', book_views.dashboard, name="book-dashboard"),
