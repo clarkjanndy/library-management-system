@@ -87,6 +87,7 @@ class Book(models.Model):
     borrowed_count = models.IntegerField(blank=False, null=False, default=0)
     views = models.ManyToManyField(MyUser,related_name='book_views')
     publish_date = models.DateField(blank=False, null=True)
+    publisher = models.CharField(default='Little Brown', max_length=200)
     
     
     def __str__(self):
