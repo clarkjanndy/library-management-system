@@ -114,16 +114,16 @@
                     <small class="text-muted"><i>Input Book Barcode.</i></small>
 
                     <div class="col-lg-12 col-xl-12 mb-2">
-                        <form class="mb-2" id="borrower" action="">
+                        <form class="mb-2" id="barcode-form" action="">
                             <div class="form-group col-lg-6 d-inline-block">
 
                                 <input class="form-control d-none" name="borrower-id" id="borrower-id"
                                     placeholder="Borrower's ID No." value="{{borrower.id_no}}">
 
-                                <input class="form-control" name="barcode" id="barcode" placeholder="Click here and scan barcode."
-                                    value="">
+                                <input class="form-control" name="barcode" id="barcode"
+                                    placeholder="Click here and scan barcode." value="">
 
-                                <input type="submit" value="submit" class="d-none"/>
+                                <input type="submit" value="submit" class="d-none" />
                             </div>
                         </form>
                     </div>
@@ -169,6 +169,25 @@
     </main>
 </div>
 <!-- End Page Content -->
+
+<script>
+    barcode_input = document.getElementById('barcode')
+    barcode_input.focus()
+
+    let time = null;
+    barcode_input.addEventListener('keyup', async (e) => {
+        time = new Date().getTime();
+        setTimeout(async () => {
+            const currentTime = new Date().getTime();
+            const timeDiff = currentTime - time;
+            if (timeDiff >= 500) {
+                document.querySelector('#barcode-form').submit()
+            }
+        }, 500);
+    });
+</script>
+
+
 <script src="{% static 'js/sweetalert.js' %}"></script>
 <script>
     function borrowbook(ev) {

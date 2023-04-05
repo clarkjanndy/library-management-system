@@ -18,7 +18,13 @@ def log_window(request):
     #     return redirect('/')
     data = {}
     if request.method == 'POST':
-        user = MyUser.objects.get(id_no=request.POST['id_no'])
+        
+        try:
+            user = MyUser.objects.get(id_no=request.POST['id_no'])
+        except:
+             messages.error(request, 'Invalid ID number.')
+             return redirect('/log-window')
+            
         last_log = Log.objects.filter(user=user).last()
 
         action = 'has login'
