@@ -125,11 +125,20 @@ def inventory(request):
     
     books = Book.objects.filter(is_archived=False)
     archived = Book.objects.filter(is_archived=True)
+    
+    filipiniana = Book.objects.filter(category__name='Filipiniana')
     reserved = Book.objects.filter(category__name='Reserve Circulation')
+    fiction_books = Book.objects.filter(category__name='Fiction Books')
+    thesis = Book.objects.filter(category__name='Thesis')
+    general_reference = Book.objects.filter(category__name='General Reference')
     
     data = {'books': books,
             'archived': archived,
+            'filipiniana': filipiniana,
             'reserved': reserved,
+            'fiction_books':fiction_books,
+            'thesis':thesis,
+            'general_reference':general_reference,
             'page': 'inventory'}
     
     return render(request, "./main/monitoring/inventory.html", data)
