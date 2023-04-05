@@ -1,6 +1,7 @@
 {% extends 'app.html'%}
 
 {% load static %}
+{% load extras %}
 
 {% block content%}
 {% include 'sidebar.html' %}
@@ -53,7 +54,7 @@
                                 </td>
                                 <td>{{student.user.contact_no}}</td>
                                 <td>{{student.user.address}}</td>
-                                <td>{{student.course}}</td>
+                                <td>{{student.course|abbreviate}}</td>
                                 <td>
                                     <a class="btn btn-sm btn-success" href="students/{{student.user.id_no}}"><span
                                             class="bx bx-face"></span> View Profile</a>
