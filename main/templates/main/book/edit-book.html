@@ -70,6 +70,12 @@
                         </div>
 
                         <div class="col-xl-6 col-lg-6 form-group mb-3">
+                            <label>Publisher</label>
+                            <input type="text" id="publisher" name="publisher" class="form-control" placeholder="Publisher" value="{{book.publisher}}">
+                            <div class="is-invalid" "></div>
+                        </div>
+
+                        <div class="col-xl-6 col-lg-6 form-group mb-3">
                             <label>Condition</label>
                             <select id="condition" name="condition" class="form-select">
                                 <option value="">--select--</option>
@@ -144,6 +150,10 @@
             errorMessage: 'This field is required',
         },])
         .addField('#publish_date', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .addField('#publisher', [{
             rule: 'required',
             errorMessage: 'This field is required',
         },])

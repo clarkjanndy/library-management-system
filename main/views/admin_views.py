@@ -7,7 +7,7 @@ from django.db.models import Count
 from django.db.models import Window, F
 from django.db.models.functions import RowNumber
 
-from main.models import Log, Teacher, Student, BookCategory, Activity
+from main.models import Log, Teacher, Student, BookCategory, Activity, BorrowedBook
 # Create your views here.
 
 
@@ -48,6 +48,7 @@ def my_profile(request):
 
     data = {}
     data['page'] = 'my-profile'
+    data['borrowed'] = BorrowedBook.objects.filter(user= request.user, status="borrowed")
     try:
         # get teacher
         teacher = Teacher.objects.get(user=request.user)
@@ -57,7 +58,7 @@ def my_profile(request):
         student = Student.objects.get(user=request.user,)
         data['student'] = student
         return render(request, "./main/student/profile.html", data)
-
+    
     return render(request, "./main/teacher/profile.html", data)
 
     # if request.user.is_staff:

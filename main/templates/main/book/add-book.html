@@ -55,16 +55,24 @@
 
                         <div class="col-xl-6 col-lg-6 form-group mb-3">
                             <label>Authors (separate name by comma)</label>
-                            <input type="text" id="authors" name="authors" class="form-control"
-                                placeholder="Authors">
+                            <input type="text" id="authors" name="authors" class="form-control" placeholder="Authors">
                             <div class="is-invalid"></div>
                         </div>
 
                         <div class="col-xl-6 col-lg-6 form-group mb-3">
                             <label>Date Published</label>
-                            <input type="date" id="publish_date" name="publish_date" class="form-control" placeholder="dd-mm-yyyy">
+                            <input type="date" id="publish_date" name="publish_date" class="form-control"
+                                placeholder="dd-mm-yyyy">
                             <div class="is-invalid"></div>
                         </div>
+
+                        <div class="col-xl-6 col-lg-6 form-group mb-3">
+                            <label>Publisher</label>
+                            <input type="text" id="publisher" name="publisher" class="form-control"
+                                placeholder="Publisher">
+                            <div class="is-invalid"></div>
+                        </div>
+
 
                         <div class="col-xl-6 col-lg-6 form-group mb-3">
                             <label>Condition</label>
@@ -144,6 +152,10 @@
             rule: 'required',
             errorMessage: 'This field is required',
         },])
+        .addField('#publisher', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
         .addField('#condition', [{
             rule: 'required',
             errorMessage: 'This field is required',
@@ -151,10 +163,10 @@
         .addField('#available_quan', [{
             rule: 'required',
             errorMessage: 'This field is required',
-        },{
+        }, {
             rule: 'number',
             errorMessage: 'Input a valid number',
-        } ])
+        }])
         .onSuccess((event) => {
             document.getElementById("add-book").submit();
         });

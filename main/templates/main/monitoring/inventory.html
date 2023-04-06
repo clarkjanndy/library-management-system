@@ -96,7 +96,7 @@
             <div class="shadow bg-light p-3">
                 <h3>Book List</h3>
 
-                <div class="d-flex justify-content-start">
+                <div class="d-flex justify-content-start mb-3">
                     <a class="btn btn-theme" href="/reports/book-inventory" target="popup"><span class="bx bx-printer"></span> Print Report</a>
                 </div>
 
@@ -110,7 +110,11 @@
                     <button class="tablinks" onclick="openTab(event, 'tab_0')" id="defaultOpen">Non-Archived
                         Books</button>
                     <button class="tablinks" onclick="openTab(event, 'tab_1')">Archived Books</button>
-                    <button class="tablinks" onclick="openTab(event, 'tab_2')">Reserved Circulation</button>
+                    <button class="tablinks" onclick="openTab(event, 'tab_2')">Filipiniana</button>
+                    <button class="tablinks" onclick="openTab(event, 'tab_3')">Reserve Circulation</button>
+                    <button class="tablinks" onclick="openTab(event, 'tab_4')">Fiction Books</button>
+                    <button class="tablinks" onclick="openTab(event, 'tab_5')">Thesis</button>
+                    <button class="tablinks" onclick="openTab(event, 'tab_6')">General Reference</button>
                 </div>
 
                 <div id="tab_0" class="tabcontent">
@@ -143,7 +147,8 @@
                                             category='{{book.category.name}}' title='{{book.title}}'
                                             authors='{{book.authors}}' available_quan={{book.available_quan}}
                                             on_cart={{book.get_on_cart}} borrowed={{book.get_borrowed}}
-                                            publish_date='{{book.publish_date}}'>
+                                            publish_date='{{book.publish_date}}'
+                                            publisher='{{book.publisher}}'>
                                             <span class="bx bx-file-blank"></span> Details</button>
                                         <a class="btn btn-sm btn-theme" href="books/{{book.barcode}}/edit"><span
                                                 class="bx bx-edit"></span> Edit</a>
@@ -186,7 +191,8 @@
                                             category='{{arch.category.name}}' title='{{arch.title}}'
                                             authors='{{arch.authors}}' available_quan={{arch.available_quan}}
                                             on_cart={{arch.get_on_cart}} borrowed={{arch.get_borrowed}}
-                                            publish_date='{{arch.publish_date}}'>
+                                            publish_date='{{arch.publish_date}}'
+                                            publisher='{{arch.publisher}}'>
                                             <span class="bx bx-file-blank"></span> Details</button>
                                         <a class="btn btn-sm btn-theme" href="books/{{arch.barcode}}/edit"><span
                                                 class="bx bx-edit"></span> Edit</a>
@@ -200,6 +206,50 @@
                 </div>
 
                 <div id="tab_2" class="tabcontent">
+                    <div class="table-responsive">
+                        <table class="table table-striped " id="filipiniana">
+                            <thead class="bg-theme text-white">
+                                <tr>
+                                    <th scope="col">Barcode</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">On-Shelf</th>
+                                    <th scope="col">On-Cart</th>
+                                    <th scope="col">Borrowed</th>
+                                    <th scope="col">- - -</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for fil in filipiniana %}
+                                <tr>
+                                    <td scope="row">{{fil.barcode}}</td>
+                                    <td>{{fil.category.name}}
+                                    </td>
+                                    <td>{{fil.title}}</td>
+                                    <td>{{fil.available_quan}}</td>
+                                    <td>{{fil.get_on_cart}}</td>
+                                    <td>{{fil.get_borrowed}}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success" data-bs-toggle="modal"
+                                            data-bs-target="#detail" barcode={{fil.barcode}}
+                                            category='{{fil.category.name}}' title='{{fil.title}}'
+                                            authors='{{fil.authors}}' available_quan={{fil.available_quan}}
+                                            on_cart={{fil.get_on_cart}} borrowed={{fil.get_borrowed}}
+                                            publish_date='{{fil.publish_date}}'
+                                            publisher='{{fil.publisher}}'>
+                                            <span class="bx bx-file-blank"></span> Details</button>
+                                        <a class="btn btn-sm btn-theme" href="books/{{fil.barcode}}/edit"><span
+                                                class="bx bx-edit"></span> Edit</a>
+                                    </td>
+
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="tab_3" class="tabcontent">
                     <div class="table-responsive">
                         <table class="table table-striped " id="reserved">
                             <thead class="bg-theme text-white">
@@ -229,9 +279,142 @@
                                             category='{{res.category.name}}' title='{{res.title}}'
                                             authors='{{res.authors}}' available_quan={{res.available_quan}}
                                             on_cart={{res.get_on_cart}} borrowed={{res.get_borrowed}}
-                                            publish_date='{{res.publish_date}}'>
+                                            publish_date='{{res.publish_date}}'
+                                            publisher='{{res.publisher}}'>
                                             <span class="bx bx-file-blank"></span> Details</button>
                                         <a class="btn btn-sm btn-theme" href="books/{{res.barcode}}/edit"><span
+                                                class="bx bx-edit"></span> Edit</a>
+                                    </td>
+
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="tab_4" class="tabcontent">
+                    <div class="table-responsive">
+                        <table class="table table-striped " id="fiction_books">
+                            <thead class="bg-theme text-white">
+                                <tr>
+                                    <th scope="col">Barcode</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">On-Shelf</th>
+                                    <th scope="col">On-Cart</th>
+                                    <th scope="col">Borrowed</th>
+                                    <th scope="col">- - -</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for fb in fiction_books %}
+                                <tr>
+                                    <td scope="row">{{fb.barcode}}</td>
+                                    <td>{{fb.category.name}}
+                                    </td>
+                                    <td>{{fb.title}}</td>
+                                    <td>{{fb.available_quan}}</td>
+                                    <td>{{fb.get_on_cart}}</td>
+                                    <td>{{fb.get_borrowed}}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success" data-bs-toggle="modal"
+                                            data-bs-target="#detail" barcode={{fb.barcode}}
+                                            category='{{fb.category.name}}' title='{{fb.title}}'
+                                            authors='{{fb.authors}}' available_quan={{fb.available_quan}}
+                                            on_cart={{fb.get_on_cart}} borrowed={{fb.get_borrowed}}
+                                            publish_date='{{fb.publish_date}}'
+                                            publisher='{{fb.publisher}}'>
+                                            <span class="bx bx-file-blank"></span> Details</button>
+                                        <a class="btn btn-sm btn-theme" href="books/{{fb.barcode}}/edit"><span
+                                                class="bx bx-edit"></span> Edit</a>
+                                    </td>
+
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="tab_5" class="tabcontent">
+                    <div class="table-responsive">
+                        <table class="table table-striped " id="thesis">
+                            <thead class="bg-theme text-white">
+                                <tr>
+                                    <th scope="col">Barcode</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">On-Shelf</th>
+                                    <th scope="col">On-Cart</th>
+                                    <th scope="col">Borrowed</th>
+                                    <th scope="col">- - -</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for th in thesis %}
+                                <tr>
+                                    <td scope="row">{{th.barcode}}</td>
+                                    <td>{{th.category.name}}
+                                    </td>
+                                    <td>{{th.title}}</td>
+                                    <td>{{th.available_quan}}</td>
+                                    <td>{{th.get_on_cart}}</td>
+                                    <td>{{th.get_borrowed}}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success" data-bs-toggle="modal"
+                                            data-bs-target="#detail" barcode={{th.barcode}}
+                                            category='{{th.category.name}}' title='{{th.title}}'
+                                            authors='{{th.authors}}' available_quan={{th.available_quan}}
+                                            on_cart={{th.get_on_cart}} borrowed={{th.get_borrowed}}
+                                            publish_date='{{th.publish_date}}'
+                                            publisher='{{th.publisher}}'>
+                                            <span class="bx bx-file-blank"></span> Details</button>
+                                        <a class="btn btn-sm btn-theme" href="books/{{th.barcode}}/edit"><span
+                                                class="bx bx-edit"></span> Edit</a>
+                                    </td>
+
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="tab_6" class="tabcontent">
+                    <div class="table-responsive">
+                        <table class="table table-striped " id="general_references">
+                            <thead class="bg-theme text-white">
+                                <tr>
+                                    <th scope="col">Barcode</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">On-Shelf</th>
+                                    <th scope="col">On-Cart</th>
+                                    <th scope="col">Borrowed</th>
+                                    <th scope="col">- - -</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for gr in general_reference %}
+                                <tr>
+                                    <td scope="row">{{gr.barcode}}</td>
+                                    <td>{{gr.category.name}}
+                                    </td>
+                                    <td>{{gr.title}}</td>
+                                    <td>{{gr.available_quan}}</td>
+                                    <td>{{gr.get_on_cart}}</td>
+                                    <td>{{gr.get_borrowed}}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success" data-bs-toggle="modal"
+                                            data-bs-target="#detail" barcode={{gr.barcode}}
+                                            category='{{gr.category.name}}' title='{{gr.title}}'
+                                            authors='{{gr.authors}}' available_quan={{gr.available_quan}}
+                                            on_cart={{gr.get_on_cart}} borrowed={{gr.get_borrowed}}
+                                            publish_date='{{gr.publish_date}}'
+                                            publisher='{{gr.publisher}}'>
+                                            <span class="bx bx-file-blank"></span> Details</button>
+                                        <a class="btn btn-sm btn-theme" href="books/{{gr.barcode}}/edit"><span
                                                 class="bx bx-edit"></span> Edit</a>
                                     </td>
 
@@ -300,6 +483,11 @@
                                 <label class="col-form-label">Publish Date</label>
                                 <input class="form-control" id="publish_date" readonly>
                             </div>
+
+                            <div class="mb-3">
+                                <label class="col-form-label">Publisher</label>
+                                <input class="form-control" id="publisher" readonly>
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -350,7 +538,27 @@
 
     });
 
+    $('#filipiniana').dataTable({
+        "ordering": false,
+
+    });
+
     $('#reserved').dataTable({
+        "ordering": false,
+
+    });
+
+    $('#fiction_books').dataTable({
+        "ordering": false,
+
+    });
+
+    $('#thesis').dataTable({
+        "ordering": false,
+
+    });
+
+    $('#general_references').dataTable({
         "ordering": false,
 
     });
@@ -371,6 +579,7 @@
         const on_cart = button.getAttribute('on_cart')
         const borrowed = button.getAttribute('borrowed')
         const publish_date = button.getAttribute('publish_date')
+        const publisher = button.getAttribute('publisher')
         // If necessary, you could initiate an AJAX request here
         // and then do the updating in a callback.
         //
@@ -384,6 +593,7 @@
         on_cart_text = modal.querySelector('#on_cart')
         borrowed_text =  modal.querySelector('#borrowed')
         publish_date_text = modal.querySelector('#publish_date')
+        publisher_text = modal.querySelector('#publisher')
 
         barcode_text.value = barcode
         category_text.value = category
@@ -393,6 +603,7 @@
         on_cart_text.value = on_cart
         borrowed_text.value = borrowed
         publish_date_text.value = publish_date
+        publisher_text.value = publisher
     })
 </script>
 

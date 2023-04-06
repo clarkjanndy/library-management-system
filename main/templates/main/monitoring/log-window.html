@@ -25,6 +25,12 @@
                         <p id="today">March 9, 200</p>
                     </center>
 
+                    {% if messages %}
+                    {% for message in messages %}
+                    {% include 'alert.html' %}
+                    {% endfor %}
+                    {% endif %}
+
                     {% csrf_token %}
                     <div class="form-group">
                         <label>ID No.</label>
@@ -52,8 +58,10 @@
             </div>
         </div>
     </div>
+<!-- 
 
     <script>
+
         const validation = new window.JustValidate('#form', {
             errorFieldCssClass: 'is-invalid',
         });
@@ -62,23 +70,23 @@
             .addField('#id_no', [{
                 rule: 'required',
                 errorMessage: 'This field is required',
-            },{
-            validator: () => {
-                var func = async function validate() {
-                    const response = await fetch('/api/v1/validate-id-no?id_no=' + document.getElementById('id_no').value);
-                    const data = await response.json(); // Extracting data as a JSON Object from the response
+            }, {
+                validator: () => {
+                    var func = async function validate() {
+                        const response = await fetch('/api/v1/validate-id-no?id_no=' + document.getElementById('id_no').value);
+                        const data = await response.json(); // Extracting data as a JSON Object from the response
 
-                    return !data['valid']
-                }
-                return func;
-            },
-            errorMessage: 'The user with that ID. does not exist',
-        }])
+                        return !data['valid']
+                    }
+                    return func;
+                },
+                errorMessage: 'The user with that ID. does not exist',
+            }])
             .onSuccess((event) => {
                 document.getElementById("form").submit();
             });
 
-    </script>
+    </script> -->
 
     <script>
         window.onload = displayClock();
@@ -100,6 +108,21 @@
             const box = document.getElementById('user');
             box.style.display = 'none';
         }, 5000);
+
+        id_no_input = document.querySelector('#id_no')
+        id_no_input.focus()
+
+        let time = null;
+        id_no_input.addEventListener('keydown', (e) => {
+            time = new Date().getTime();
+            setTimeout(async () => {
+                const currentTime = new Date().getTime();
+                const timeDiff = currentTime - time;
+                if (timeDiff >= 1000) {
+                    document.getElementById("form").submit();
+                }
+            }, 1000);
+        });
 
     </script>
 
