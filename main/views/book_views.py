@@ -205,7 +205,7 @@ def borrow_book(request):
                     return redirect('/borrow-book?borrower-id='+str(borrower.id_no))
 
                 # add borrowed book to borrower
-                if len(BorrowedBook.objects.filter(user=borrower).exclude(status='returned')) < 5:
+                if len(BorrowedBook.objects.filter(user=borrower).exclude(status='returned')) < 3:
                     BorrowedBook(user=borrower, book=book,
                                  status='on-cart').save()
                     # update book quantity

@@ -121,7 +121,7 @@ class BorrowedBook(models.Model):
         multiplier = datetime.now() - self.expected_return_date
         fine = 0 
         
-        if self.status != 'returned':
+        if self.status in ['to-be-returned', 'borrowed']:
             if self.book.category.name != 'Reserve Circulation':
                 if multiplier.days > 0:
                     fine =  math.floor(self.book.category.rate * 24) * math.floor(multiplier.days)
