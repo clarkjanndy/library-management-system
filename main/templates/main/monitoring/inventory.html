@@ -439,54 +439,54 @@
                     <div class="modal-body">
                         <form>
                             <div class="mb-3">
-                                <label class="col-form-label">Barcode: </label>
-                                <input class="form-control" id="barcode" readonly>
+                                <label class="col-form-label">Barcode: </label><br>
+                                <span id="barcode"></span>
                             </div>
                             <div class="mb-3">
-                                <label class="col-form-label">Category</label>
-                                <input class="form-control" id="category" readonly>
+                                <label class="col-form-label">Category</label><br>
+                                <span id="category"></span>
                             </div>
                             <div class="mb-3">
-                                <label class="col-form-label">Title</label>
-                                <input class="form-control" id="title" readonly>
+                                <label class="col-form-label">Title</label><br>
+                                <span id="title"></span>
                             </div>
 
                             <div class="mb-3">
-                                <label class="col-form-label">Authors</label>
-                                <input class="form-control" id="authors" readonly>
+                                <label class="col-form-label">Authors</label><br>
+                                <span id="authors"></span>
                             </div>
 
                             <div class="row">
                                 <div class="col-lg-4">
                                     <div class="mb-3">
-                                        <label class="col-form-label">Available</label>
-                                        <input class="form-control" id="available_quan" readonly>
+                                        <label class="col-form-label">Available</label><br>
+                                        <span id="available_quan"></span>
                                     </div>
                                 </div>
 
                                 <div class="col-lg-4">
                                     <div class="mb-3">
-                                        <label class="col-form-label">On-Cart</label>
-                                        <input class="form-control" id="on_cart" readonly>
+                                        <label class="col-form-label">On-Cart</label><br>
+                                        <span id="on_cart"></span>
                                     </div>
                                 </div>
 
                                 <div class="col-lg-4">
                                     <div class="mb-3">
-                                        <label class="col-form-label">Borrowed</label>
-                                        <input class="form-control" id="borrowed" readonly>
+                                        <label class="col-form-label">Borrowed</label><br>
+                                        <span id="borrowed"></span>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="mb-3">
-                                <label class="col-form-label">Publish Date</label>
-                                <input class="form-control" id="publish_date" readonly>
+                                <label class="col-form-label">Publish Date</label><br>
+                                <span id="publish_date"></span>
                             </div>
 
                             <div class="mb-3">
-                                <label class="col-form-label">Publisher</label>
-                                <input class="form-control" id="publisher" readonly>
+                                <label class="col-form-label">Publisher</label><br>
+                                <span id="publisher"></span>
                             </div>
                         </form>
                     </div>
@@ -595,15 +595,15 @@
         publish_date_text = modal.querySelector('#publish_date')
         publisher_text = modal.querySelector('#publisher')
 
-        barcode_text.value = barcode
-        category_text.value = category
-        title_text.value = title
-        authors_text.value= authors
-        available_quan_text.value= available_quan
-        on_cart_text.value = on_cart
-        borrowed_text.value = borrowed
-        publish_date_text.value = publish_date
-        publisher_text.value = publisher
+        barcode_text.innerHTML = `<b>${barcode}</b>`
+        category_text.innerHTML = `<b>${category}</b>`
+        title_text.innerHTML = `<b>${title}</b>`
+        authors_text.innerHTML= `<b>${authors}</b>`
+        available_quan_text.innerHTML= `<b>${available_quan}</b>`
+        on_cart_text.innerHTML = `<b>${on_cart}</b>`
+        borrowed_text.innerHTML = `<b>${borrowed}</b>`
+        publish_date_text.innerHTML = `<b>${publish_date}</b>`
+        publisher_text.innerHTML = `<b>${publisher}</b>`
     })
 </script>
 
