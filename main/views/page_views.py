@@ -54,10 +54,12 @@ def login(request):
     message = ''
     id_no = ''
     password = ''
+    agree=''
 
     if request.method == 'POST':
         id_no = request.POST['id_no']
         password = request.POST['password']
+        agree = request.POST['agree']
 
         user = authenticate(id_no=id_no, password=password)
         if user is not None:
@@ -70,8 +72,8 @@ def login(request):
 
         else:
             messages.error(request, "Invalid Credentials.")
-
-    return render(request, 'login.html', {'id_no': id_no, 'password': password})
+    print(agree)
+    return render(request, 'login.html', {'id_no': id_no, 'password': password, 'agree': agree})
 
 
 def change_password(request):
