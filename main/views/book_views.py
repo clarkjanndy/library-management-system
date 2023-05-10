@@ -68,7 +68,8 @@ def dashboard(request):
     
     data = {"borrowed": borrowed,
             "borow_rankings": borow_rankings,
-            "view_rankings": view_rankings}
+            "view_rankings": view_rankings,
+            "page": 'book-dashboard',}
 
     return render(request, "./main/book/book-dashboard.html", data)
 

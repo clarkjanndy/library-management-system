@@ -62,15 +62,15 @@ class BookCategory(models.Model):
     rate = models.DecimalField(blank = False, null=False, decimal_places=2, max_digits=32)
     
     def __str__(self):
-        return self.name
+        return f'{self.name}'
     
     def get_limit_str(self):
-        if self.name == 'Reserve Circulation':
+        if self.limit < 24:
             return str(self.limit) + ' hours'
         return str(int(self.limit/24)) + ' days'
     
     def get_rate_str(self):
-        if self.name == 'Reserve Circulation':
+        if self.limit < 24:
             return str(int(self.rate)) + ' / hour'
         return str(int(self.rate*24)) + ' / day'
     

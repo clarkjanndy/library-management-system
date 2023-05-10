@@ -30,8 +30,7 @@ def dashboard(request):
                 expression=RowNumber(),
                 order_by='-count'
             ))[:10]
-
-    print(visitors)
+        
     data = {
         'page': 'dashboard',
         'recent_activities': recent_activities,

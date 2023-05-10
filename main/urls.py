@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from django.urls import path
-from . views import page_views, admin_views, report_views, student_views, teacher_views, book_views, monitoring_views, report_views
+from . views import page_views, admin_views, report_views, student_views, teacher_views, book_views, monitoring_views, report_views, category_views
 
 urlpatterns = [
     path('', page_views.landing, name="landing"),
@@ -29,12 +29,17 @@ urlpatterns = [
     path('teachers/<str:id_no>/edit', teacher_views.edit, name="edit_teacher"),
     path('teachers/<str:id_no>/upload-photo', teacher_views.UpdatePhoto.as_view(), name="student_upload_photo"),
     
+    #categories
+    path('book-categories', category_views.categories, name="book_categories"),
+    path('book-categories/<int:id>/edit', category_views.edit, name="edit_categories"),
+    
     #books
     path('book-dashboard', book_views.dashboard, name="book-dashboard"),
     path('books', book_views.books, name="books"),
     path('books/add', book_views.add, name="add_book"),
     path('books/<str:barcode>', book_views.view, name="view_book"),
-    path('books/<str:barcode>/edit', book_views.edit, name="edit_book"),
+    path('books/<str:barcode>/edit', book_views.edit, name="edit_book"),   
+    
     
     #book actions
     path('borrow-book', book_views.borrow_book, name="borrow_book"),

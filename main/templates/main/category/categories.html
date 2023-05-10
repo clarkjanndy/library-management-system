@@ -1,0 +1,75 @@
+{% extends 'app.html'%}
+
+{% load static %}
+{% load extras %}
+
+{% block content%}
+{% include 'sidebar.html' %}
+
+<!-- Start Page Content -->
+<div class="col-12 col-sm-9 col-md-9 col-lg-10 col-xl-10 d-flex flex-column vh-100">
+    <main class=" row overflow-auto p-3">
+        <h3 class="text-theme">Book Categories</h3>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">Book Categories</li>
+            </ol>
+        </nav>
+
+        <div class="row">
+
+            {% if messages %}
+            {% for message in messages %}
+            {% include 'alert.html' %}
+            {% endfor %}
+            {% endif %}
+
+            <div class="shadow bg-light p-3">
+
+                <div class="table-responsive">
+
+                 
+
+                    <table class="table table-striped   nowrap" id="categories">
+                        <thead class="bg-theme text-white">
+                            <tr>
+                                <th scope="col">Name </th>
+                                <th scope="col">Limit </th>
+                                <th scope="col">Rate</th>
+                                <th scope="col">No. of Books</th>
+                                <th scope="col">- - -</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cat in categories %}
+                            <tr>
+                                <td>{{cat.name}}</td>
+                                <td>{{cat.get_limit_str}}</td>
+                                <td>{{cat.get_rate_str}}</td>
+                                <td>{{cat.book_count}}</td>
+                                <td>
+                                    <a class="btn btn-sm btn-success" href="book-categories/{{cat.id}}/edit"><span
+                                            class="bx bx-file"></span> Edit</a>
+                                </td>
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+</div>
+<!-- End Page Content -->
+
+<script>
+    $('#categories').dataTable({
+        "ordering": false,
+    });
+</script>
+
+{%endblock content%}
