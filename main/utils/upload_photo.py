@@ -1,17 +1,19 @@
 import os
 import base64
+
+from django.conf import settings
 def rename_and_upload(photo, name):
     """"
     A function that will handle profile photo upload
     """
     
     if type(photo) == str:
-        destination = open('media/temp.webp', 'wb+')
+        destination = open(f'{settings.MEDIA_ROOT}/temp.webp', 'wb+')
         destination.write(base64.b64decode(photo))
         destination.close()
     else:
         #read the temporary uploaded file    
-        with open('media/temp.webp', 'wb+') as destination:
+        with open(f'{settings.MEDIA_ROOT}/temp.webp', 'wb+') as destination:
             for chunk in photo.chunks():
                     destination.write(chunk)
                 
