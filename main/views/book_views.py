@@ -355,20 +355,22 @@ def return_checkout(request, id_no):
     tbr = BorrowedBook.objects.filter(user=borrower, status='to-be-returned')
 
     if tbr:
+        #insert an entry on Fine table    
+        total_fine = sum([ele.get_fine() for ele in tbr])
+        if total_fine > 0:
+            fine = Fine.objects.create(
+                collected_from = borrower,
+                amount = total_fine, 
+            )
+                        
         # update each entry of the book
         for entry in tbr:
             entry.book.available_quan = entry.book.available_quan + 1
             entry.book.save()
             
-        #insert an entry on Fine table    
-        total_fine = sum([ele.get_fine() for ele in tbr])
-    
-        if total_fine > 0:
-            Fine.objects.create(
-                collected_from = borrower,
-                amount = total_fine,    
-                borrowed_book = [ele.id for ele in tbr]  
-            )
+            #insert the borrowed book on
+            fine.borrowed_book.add(entry)
+        
         
         tbr.update(date_returned=datetime.now())
         tbr.update(status='returned')
@@ -399,7 +401,7 @@ def view_fine(request, id):
         return redirect('/books')
     
     fine = Fine.objects.get(id=id)
-    borrowed = BorrowedBook.objects.filter(id__in=list(fine.borrowed_book))
+    borrowed = fine.borrowed_book.all()
     
     data = {
         "fine": fine,

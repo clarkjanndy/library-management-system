@@ -145,7 +145,7 @@ class Activity(models.Model):
 class Fine(models.Model):
     collected_from = models.ForeignKey(MyUser, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=15, decimal_places=2)
-    borrowed_book = models.JSONField(default=list)
+    borrowed_book = models.ManyToManyField(BorrowedBook)
     date_collected = models.DateTimeField(auto_now_add=True)
    
     
