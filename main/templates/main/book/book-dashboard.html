@@ -76,7 +76,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% if fines %}
                                         {% for fine in fines %}
                                         <tr>
                                             <td>{{fine.collected_from.get_full_name}}</td>
@@ -88,11 +87,6 @@
                                             </td>
                                         </tr>
                                         {% endfor %}
-                                        {% else %}
-                                        <tr>
-                                            <td colspan="3">No Records for borrowed books yet</td>
-                                        </tr>
-                                        {% endif %}
                                     </tbody>
                                 </table>
                             </div>
