@@ -58,6 +58,49 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col p-1">
+                    <div class=" card">
+                        <div class="card-header text-theme">
+                            Fines Collected
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+
+                                <table class="table table-striped   nowrap" id="fines">
+                                    <thead class="bg-theme text-white">
+                                        <tr>
+                                            <th scope="col">Borrower</th>
+                                            <th scope="col">Amount</th>
+                                            <th scope="col">---</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if fines %}
+                                        {% for fine in fines %}
+                                        <tr>
+                                            <td>{{fine.collected_from.get_full_name}}</td>
+                                            <td>&#8369; {{fine.amount}}</td>
+                                            <td>
+                                                <a class="btn btn-sm btn-theme">
+                                                    <span class="bx bx-file"></span> View
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        {% else %}
+                                        <tr>
+                                            <td colspan="2">No Records for borrowed books yet</td>
+                                        </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div class="col-lg-5 p-1">
@@ -132,6 +175,18 @@
 
 <script>
     $('#borrowed').dataTable({
+        "ordering": false,
+        // "columns": [
+        //     { "width": "10%" },
+        //     { "width": "30%" },
+        //     null,
+        //     null,
+        //     null,
+        //     { "width": "10%" }
+        // ]
+    });
+
+    $('#fines').dataTable({
         "ordering": false,
         // "columns": [
         //     { "width": "10%" },

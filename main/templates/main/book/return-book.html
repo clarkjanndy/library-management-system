@@ -52,6 +52,11 @@
                                     {{borrower.last_name}}
                                     {{borrower.ext_name}}</b></div>
                         </div>
+
+                        <div class="row mb-2">
+                            <div class="col-lg-2 text-theme">Fines: </div>
+                            <div class="col-lg-9"><b>{% if fines %}&#8369; {{fines}}{% endif %}</b></div>
+                        </div>
                     </div>
 
                     <div class="table-responsive mb-2">

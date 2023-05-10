@@ -1,9 +1,8 @@
-from django.db.models.functions import TruncDay, TruncMonth, TruncYear
 from django.http import JsonResponse
 from django.db.models import Count, Sum
 import json
 
-from main.models import Log, Student, Teacher, Book, BorrowedBook
+from main.models import Log, Student, Teacher, Book, BorrowedBook, Fine
 
 from datetime import datetime
 # Create your views here.
@@ -22,6 +21,10 @@ def get_teacher_count(request):
 def get_book_count(request):
     books = Book.objects.all().aggregate(count=Count('id'))
     return JsonResponse(books)
+
+def get_fines_sum(request):
+    students = Fine.objects.all().aggregate(sum=Sum('amount'))
+    return JsonResponse(students)
 
 
 def visit_histogram(request):

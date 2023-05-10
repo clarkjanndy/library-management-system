@@ -140,13 +140,14 @@ class Activity(models.Model):
         return f'{self.user} - {self.action} on {self.date}'
 
 class Fine(models.Model):
-    borrowedbook = models.OneToOneField(BorrowedBook, on_delete = models.DO_NOTHING, null = False)
-    amount = models.ForeignKey(BookCategory, on_delete = models.DO_NOTHING, null = False)
-    status = models.CharField(blank = False, null = True, max_length=300)
-    date = models.DateTimeField(null=False, blank=False, default=datetime.now)
+    collected_from = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=15, decimal_places=2)
+    borrowed_book = models.JSONField(default=list)
+    date_collected = models.DateTimeField(auto_now_add=True)
+   
     
     def __str__(self):
-        return self.amount
+        return f'{self.collected_from}'
 
 
 
