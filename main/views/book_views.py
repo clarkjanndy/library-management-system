@@ -72,7 +72,7 @@ def dashboard(request):
             "borow_rankings": borow_rankings,
             "view_rankings": view_rankings,
             "fines": fines,
-            "page": 'book-dashboard',}
+            "page": 'book-dashboard'}
 
     return render(request, "./main/book/book-dashboard.html", data)
 
@@ -367,7 +367,7 @@ def return_checkout(request, id_no):
             Fine.objects.create(
                 collected_from = borrower,
                 amount = total_fine,    
-                borrowed_book = [ele.book.id for ele in tbr]  
+                borrowed_book = [ele.id for ele in tbr]  
             )
         
         tbr.update(date_returned=datetime.now())
@@ -387,3 +387,24 @@ def return_checkout(request, id_no):
         return JsonResponse(response)
 
     # return redirect('/return-book')
+    
+    
+    
+# view fines collected
+def view_fine(request, id):
+    if not request.user.is_authenticated:
+        return redirect('/')
+
+    if not request.user.is_superuser:
+        return redirect('/books')
+    
+    fine = Fine.objects.get(id=id)
+    borrowed = BorrowedBook.objects.filter(id__in=list(fine.borrowed_book))
+    
+    data = {
+        "fine": fine,
+        "borrowed": borrowed,
+        "page": 'book-dashboard',
+    }
+    
+    return render(request, "./main/category/view-fine.html", data)

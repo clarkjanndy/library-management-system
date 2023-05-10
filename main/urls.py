@@ -33,13 +33,15 @@ urlpatterns = [
     path('book-categories', category_views.categories, name="book_categories"),
     path('book-categories/<int:id>/edit', category_views.edit, name="edit_categories"),
     
+    # fine
+    path('fine-info/<int:id>', book_views.view_fine, name="view_fine"),
+    
     #books
     path('book-dashboard', book_views.dashboard, name="book-dashboard"),
     path('books', book_views.books, name="books"),
     path('books/add', book_views.add, name="add_book"),
     path('books/<str:barcode>', book_views.view, name="view_book"),
     path('books/<str:barcode>/edit', book_views.edit, name="edit_book"),   
-    
     
     #book actions
     path('borrow-book', book_views.borrow_book, name="borrow_book"),

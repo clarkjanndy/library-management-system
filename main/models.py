@@ -108,6 +108,7 @@ class BorrowedBook(models.Model):
     date_borrowed = models.DateTimeField(null=False, blank=False, default=datetime.now)
     expected_return_date = models.DateTimeField(null=False, blank=False)
     date_returned = models.DateTimeField(null=True, blank=True)
+    final_fine = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
     
     def __str__(self):
         return f'{self.book.title} borrowed by {self.user}'
@@ -115,6 +116,8 @@ class BorrowedBook(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.expected_return_date = datetime.now() + timedelta(hours=self.book.category.limit)
+            
+        self.final_fine = self.get_fine()
         super(BorrowedBook, self).save(*args, **kwargs)
 
     def get_fine(self):
