@@ -19,9 +19,9 @@
 
 
     <div class="row">
-        <div class="col-lg-7">
+        <div class="col-12">
             <div class="row">
-                <div class="col-lg-4 p-1">
+                <div class="col-lg-3 p-1">
                     <div class="border-primary bg-white text-theme p-3 shadow">
                         <div>
                             <h4>Students</h4>
@@ -33,7 +33,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4 p-1">
+                <div class="col-lg-3 p-1">
                     <div class="border-primary bg-white text-theme p-3 shadow">
                         <div>
                             <h4>Teachers</h4>
@@ -45,7 +45,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4 p-1">
+                <div class="col-lg-3 p-1">
                     <div class="border-primary bg-white text-theme p-3 shadow">
                         <div>
                             <h4>Books</h4>
@@ -56,8 +56,21 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
+                <div class="col-lg-3 p-1">
+                    <div class="border-primary bg-white text-theme p-3 shadow">
+                        <div>
+                            <h4>Fines Collected</h4>
+                            <h3>
+                                <span class="bx bx-dollar"></span>
+                                <span id="fines">0</span>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7">
             <div class="row">
                 <div class="col p-1">
                     <div class="card">
@@ -102,7 +115,8 @@
                                         {% endfor %}
                                         {% else %}
                                         <tr>
-                                            <td colspan="2 d-flex justify-content-center">No Records for visitors yet</td>
+                                            <td colspan="2 d-flex justify-content-center">No Records for visitors yet
+                                            </td>
                                         </tr>
                                         {% endif %}
                                     </tbody>
@@ -245,6 +259,14 @@
         document.getElementById('books').innerText = data['count']
     }
     get_book_count()
+
+    async function get_fines_sum() {
+        const response = await fetch('/api/v1/get-fines-sum');
+        const data = await response.json(); // Extracting data as a JSON Object from the response
+
+        document.getElementById('fines').innerText = data['sum']
+    }
+    get_fines_sum()
 </script>
 
 {%endblock content%}

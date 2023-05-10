@@ -52,6 +52,11 @@
                                     {{borrower.last_name}}
                                     {{borrower.ext_name}}</b></div>
                         </div>
+
+                        <div class="row mb-2">
+                            <div class="col-lg-2 text-theme">Fines: </div>
+                            <div class="col-lg-9"><b>{% if fines %}&#8369; {{fines}}{% endif %}</b></div>
+                        </div>
                     </div>
 
                     <div class="table-responsive mb-2">
@@ -91,7 +96,7 @@
 
                     {% if borrower.id_no is not none %}
                     <div class="d-flex justify-content-end mb-2">
-                        <a class="btn btn-success" href="/return-book/checkout/{{borrower.id_no}}" onclick="returnbook(event)">Done</a>
+                        <a class="btn btn-success" href="/return-book/checkout/{{borrower.id_no}}" onclick="returnbook(event)">Save</a>
                     </div>
                     {% endif %}
                 </div>

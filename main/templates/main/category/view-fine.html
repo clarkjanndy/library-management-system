@@ -1,0 +1,90 @@
+{% extends 'app.html'%}
+
+{% load static %}
+
+{% block content%}
+{% include 'sidebar.html' %}
+
+<!-- Start Page Content -->
+<div class="col d-flex flex-column h-sm-100"">
+    <main class=" row overflow-auto p-3">
+    <h3 class="text-theme">View Fine</h3>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/book-dashboard" class="text-theme">Book Dashboard</a></li>
+            <li class="breadcrumb-item">View Fine</li>
+        </ol>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header bg-theme text-white">
+                Fine Details
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="mb-2">
+                            <div>Collected From:</div>
+                            <div><b>{{fine.collected_from.get_full_name}}</b></div>
+                        </div>
+
+                        <div class="mb-2">
+                            <div>Amount Collected:</div>
+                            <div><b>&#8369; {{fine.amount}}</b></div>
+                        </div>
+
+                        <div class="mb-2">
+                            <div>Date Collected:</div>
+                            <div><b>{{fine.date_collected}}</b></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="mb-2">Book Borrowed: </div>
+                        <div class="table-responsive">
+
+                            <table class="table table-striped   nowrap" id="fines">
+                                <thead class="bg-theme text-white">
+                                    <tr>
+                                        <th scope="col">Book Title</th>
+                                        <th scope="col">Date Borrowed</th>
+                                        <th scope="col">Date Returned</th>
+                                        <th scope="col">Fine</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if borrowed %}
+                                    {% for bor in borrowed %}
+                                    <tr>
+                                        <td>{{bor.book.title}}</td>
+                                        <td>{{bor.date_borrowed}}</td>
+                                        <td>{{bor.date_returned}}</td>
+                                        <td>{{bor.final_fine}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="4">No Records for borrowed books yet</td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+    </main>
+</div>
+<!-- End Page Content -->
+
+
+{%endblock content%}

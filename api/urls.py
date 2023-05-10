@@ -13,6 +13,7 @@ urlpatterns = [
     path('get-student-count', analytics_views.get_student_count, name="get_student_count"),
     path('get-teacher-count', analytics_views.get_teacher_count, name="get_teacher_count"),
     path('get-book-count', analytics_views.get_book_count, name="get_book_count"),
+    path('get-fines-sum', analytics_views.get_fines_sum, name="get_fines_sum"),
     
     path('inventory', analytics_views.inventory, name="inventory"),
     

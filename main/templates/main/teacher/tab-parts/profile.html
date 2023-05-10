@@ -1,3 +1,4 @@
+{% load extras %}
 <div class="row mb-2">
     <div class="col-xl-3 col-lg-3 col-md-5 text-theme">
         Full Name
@@ -13,7 +14,7 @@
         ID No.
     </div>
     <div class="col-xl-9 col-lg-9 col-md-7 text-muted">
-        {{teacher.user.id_no}}
+        {{teacher.user.id_no|default}}
     </div>
 </div>
 
@@ -40,7 +41,7 @@
         Address
     </div>
     <div class="col-xl-9 col-lg-9 col-md-7 text-muted">
-        {{teacher.user.address}}
+        {{teacher.user.address|default}}
     </div>
 </div>
 
@@ -49,7 +50,7 @@
         Contact No.
     </div>
     <div class="col-xl-9 col-lg-9 col-md-7 text-muted">
-        {{teacher.user.contact_no}}
+        {{teacher.user.contact_no|default}}
     </div>
 </div>
 
@@ -58,7 +59,7 @@
         Designation
     </div>
     <div class="col-xl-9 col-lg-9 col-md-7 text-muted">
-        {{teacher.designation}}
+        {{teacher.designation|default}}
     </div>
 </div>
 
@@ -67,7 +68,7 @@
         Year of Exp.
     </div>
     <div class="col-xl-9 col-lg-9 col-md-7 text-muted">
-        {{teacher.year_of_exp}}
+        {{teacher.year_of_exp|default}}
     </div>
 </div>
 
@@ -76,6 +77,6 @@
         Advisory
     </div>
     <div class="col-xl-9 col-lg-9 col-md-7 text-muted">
-        {{teacher.advisory}}
+        {{teacher.advisory|default}}
     </div>
 </div>

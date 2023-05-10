@@ -28,3 +28,12 @@ def abbreviate(value):
         return 'BEEd'
     else:
         return 'TBA'
+    
+@register.filter()
+def default(value):
+    if value == None or value == '':
+        return '- - -'
+    else:
+        return value
+   
+    

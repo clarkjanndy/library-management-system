@@ -30,8 +30,7 @@ def dashboard(request):
                 expression=RowNumber(),
                 order_by='-count'
             ))[:10]
-
-    print(visitors)
+        
     data = {
         'page': 'dashboard',
         'recent_activities': recent_activities,
@@ -45,10 +44,16 @@ def dashboard(request):
 def my_profile(request):
     if not request.user.is_authenticated:
         return redirect('/')
-
-    data = {}
-    data['page'] = 'my-profile'
-    data['borrowed'] = BorrowedBook.objects.filter(user= request.user, status="borrowed")
+    
+    borrowed = BorrowedBook.objects.filter(user= request.user, status="borrowed")
+    fine_count = len([ele for ele in borrowed if ele.get_fine() > 0])
+    
+    data = {
+        "page": 'my-profile',
+        "borrowed": borrowed,
+        "fine_count": fine_count
+    }
+    
     try:
         # get teacher
         teacher = Teacher.objects.get(user=request.user)

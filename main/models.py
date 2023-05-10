@@ -62,15 +62,15 @@ class BookCategory(models.Model):
     rate = models.DecimalField(blank = False, null=False, decimal_places=2, max_digits=32)
     
     def __str__(self):
-        return self.name
+        return f'{self.name}'
     
     def get_limit_str(self):
-        if self.name == 'Reserve Circulation':
+        if self.limit < 24:
             return str(self.limit) + ' hours'
         return str(int(self.limit/24)) + ' days'
     
     def get_rate_str(self):
-        if self.name == 'Reserve Circulation':
+        if self.limit < 24:
             return str(int(self.rate)) + ' / hour'
         return str(int(self.rate*24)) + ' / day'
     
@@ -108,6 +108,7 @@ class BorrowedBook(models.Model):
     date_borrowed = models.DateTimeField(null=False, blank=False, default=datetime.now)
     expected_return_date = models.DateTimeField(null=False, blank=False)
     date_returned = models.DateTimeField(null=True, blank=True)
+    final_fine = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
     
     def __str__(self):
         return f'{self.book.title} borrowed by {self.user}'
@@ -115,13 +116,15 @@ class BorrowedBook(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.expected_return_date = datetime.now() + timedelta(hours=self.book.category.limit)
+            
+        self.final_fine = self.get_fine()
         super(BorrowedBook, self).save(*args, **kwargs)
 
     def get_fine(self):
         multiplier = datetime.now() - self.expected_return_date
         fine = 0 
         
-        if self.status != 'returned':
+        if self.status in ['to-be-returned', 'borrowed']:
             if self.book.category.name != 'Reserve Circulation':
                 if multiplier.days > 0:
                     fine =  math.floor(self.book.category.rate * 24) * math.floor(multiplier.days)
@@ -140,13 +143,14 @@ class Activity(models.Model):
         return f'{self.user} - {self.action} on {self.date}'
 
 class Fine(models.Model):
-    borrowedbook = models.OneToOneField(BorrowedBook, on_delete = models.DO_NOTHING, null = False)
-    amount = models.ForeignKey(BookCategory, on_delete = models.DO_NOTHING, null = False)
-    status = models.CharField(blank = False, null = True, max_length=300)
-    date = models.DateTimeField(null=False, blank=False, default=datetime.now)
+    collected_from = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=15, decimal_places=2)
+    borrowed_book = models.ManyToManyField(BorrowedBook)
+    date_collected = models.DateTimeField(auto_now_add=True)
+   
     
     def __str__(self):
-        return self.amount
+        return f'{self.collected_from}'
 
 
 

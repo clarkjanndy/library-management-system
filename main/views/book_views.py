@@ -5,13 +5,13 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.db.models import Window
 from django.db.models.functions import RowNumber
-from django.db.models import Count
+from django.db.models import Count, Sum
 
 from django.core.exceptions import ObjectDoesNotExist
 
 from main.utils import dummy
 
-from main.models import MyUser, Book, BookCategory, BorrowedBook, Activity
+from main.models import MyUser, Book, BookCategory, BorrowedBook, Activity, Fine
 # Create your views here.
 
 
@@ -66,9 +66,13 @@ def dashboard(request):
             order_by='-count'
         ))[:10]
     
+    fines = Fine.objects.all().order_by('-date_collected')
+    
     data = {"borrowed": borrowed,
             "borow_rankings": borow_rankings,
-            "view_rankings": view_rankings}
+            "view_rankings": view_rankings,
+            "fines": fines,
+            "page": 'book-dashboard'}
 
     return render(request, "./main/book/book-dashboard.html", data)
 
@@ -205,7 +209,7 @@ def borrow_book(request):
                     return redirect('/borrow-book?borrower-id='+str(borrower.id_no))
 
                 # add borrowed book to borrower
-                if len(BorrowedBook.objects.filter(user=borrower).exclude(status='returned')) < 5:
+                if len(BorrowedBook.objects.filter(user=borrower).exclude(status='returned')) < 3:
                     BorrowedBook(user=borrower, book=book,
                                  status='on-cart').save()
                     # update book quantity
@@ -323,10 +327,14 @@ def return_book(request):
                 user=borrower, status='borrowed').order_by('-date_borrowed')
             tbrs = BorrowedBook.objects.filter(
                 user=borrower, status='to-be-returned').order_by('-date_borrowed')
+            
+            # get the total fines
+            total_fines = sum([ele.get_fine() for ele in tbrs])
 
             data['borrower'] = borrower
             data['borrowed'] = borrowed  # borrowed books
             data['tbrs'] = tbrs  # to-be-return books
+            data['fines'] = total_fines
         except:
             messages.error(request, 'Please Select a Borrower.')
 
@@ -346,18 +354,33 @@ def return_checkout(request, id_no):
     # update all pending books to borrowed
     tbr = BorrowedBook.objects.filter(user=borrower, status='to-be-returned')
 
-    if tbr:
+    if tbr:                       
         # update each entry of the book
         for entry in tbr:
             entry.book.available_quan = entry.book.available_quan + 1
             entry.book.save()
-
+        
+        #insert an entry on Fine table    
+        total_fine = sum([ele.get_fine() for ele in tbr])
+        if total_fine > 0:
+            fine = Fine.objects.create(
+                collected_from = borrower,
+                amount = total_fine, 
+            )
+                
+        #insert the borrowed book on
+        fine.borrowed_book.set(tbr)
+        
+        
         tbr.update(date_returned=datetime.now())
         tbr.update(status='returned')
 
         response = {'success': True,
                     'message': 'Books borrowed successfuly. Print Borrower Slip ?'}
+        
+        # insert an entry to activity table
         Activity.objects.create(user=borrower, action='has returned books')
+        
         messages.success(request, 'Books successfuly returned!')
         return JsonResponse(response)
     else:
@@ -366,3 +389,24 @@ def return_checkout(request, id_no):
         return JsonResponse(response)
 
     # return redirect('/return-book')
+    
+    
+    
+# view fines collected
+def view_fine(request, id):
+    if not request.user.is_authenticated:
+        return redirect('/')
+
+    if not request.user.is_superuser:
+        return redirect('/books')
+    
+    fine = Fine.objects.get(id=id)
+    borrowed = fine.borrowed_book.all()
+    
+    data = {
+        "fine": fine,
+        "borrowed": borrowed,
+        "page": 'book-dashboard',
+    }
+    
+    return render(request, "./main/category/view-fine.html", data)
