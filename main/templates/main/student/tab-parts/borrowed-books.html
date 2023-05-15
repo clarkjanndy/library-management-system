@@ -1,7 +1,9 @@
 <div class="table-responsive mb-2">
-    <!-- <div class="d-flex justify-content-end mb-3">
-        <a class="btn btn-theme" href="/print-slip/{{student.user.id_no}}" target="_blank">Borrower's Slip</a>
-    </div> -->
+    {% if request.user.is_superuser %}
+        <div class="d-flex justify-content-end mb-3">
+            <a class="btn btn-theme" href="/print-slip/{{student.user.id_no}}" target="_blank">Borrower's Slip</a>
+        </div>
+    {% endif %}
     <table class="table table-striped" id="borrowed">
         <thead class="bg-theme text-white">
             <tr>

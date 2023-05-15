@@ -62,7 +62,7 @@ urlpatterns = [
     path('reports/book-inventory', report_views.print_book_inventory, name="print_book_inventory"),   
     
     
-    path('logout', page_views.logout, name="logout"),
+    path('logout/', page_views.logout, name="logout"),
 ]
 
 if settings.DEBUG:
