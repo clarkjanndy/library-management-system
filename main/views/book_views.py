@@ -360,7 +360,7 @@ def return_checkout(request, id_no):
             entry.book.available_quan = entry.book.available_quan + 1
             entry.book.save()
         
-        #insert an entry on Fine table    
+        #insert an entry on Fine table   
         total_fine = sum([ele.get_fine() for ele in tbr])
         if total_fine > 0:
             fine = Fine.objects.create(
@@ -368,10 +368,9 @@ def return_checkout(request, id_no):
                 amount = total_fine, 
             )
                 
-        #insert the borrowed book on
-        fine.borrowed_book.set(tbr)
-        
-        
+            #insert the borrowed book on
+            fine.borrowed_book.set(tbr)
+                
         tbr.update(date_returned=datetime.now())
         tbr.update(status='returned')
 
@@ -382,13 +381,12 @@ def return_checkout(request, id_no):
         Activity.objects.create(user=borrower, action='has returned books')
         
         messages.success(request, 'Books successfuly returned!')
-        return JsonResponse(response)
     else:
         response = {'success': False, 'message': 'No Book Selected.'}
-        # messages.error(request, 'No Book Selected.')
-        return JsonResponse(response)
+        messages.error(request, 'No Book Selected.')
+        # return JsonResponse(response)
 
-    # return redirect('/return-book')
+    return redirect('/return-book')
     
     
     
