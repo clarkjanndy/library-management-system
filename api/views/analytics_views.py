@@ -7,7 +7,6 @@ from main.models import Log, Student, Teacher, Book, BorrowedBook, Fine
 from datetime import datetime
 # Create your views here.
 
-
 def get_student_count(request):
     students = Student.objects.all().aggregate(count=Count('id'))
     return JsonResponse(students)
@@ -52,4 +51,10 @@ def inventory(request):
         pass
     
     return JsonResponse(data, safe=True)
-       
+
+def notif_count(request):
+    
+    borrowed = BorrowedBook.objects.filter(user= request.user, status="borrowed")
+    count = len([ele for ele in borrowed if ele.get_fine() > 0])
+    
+    return JsonResponse({'count': count}, safe=True)

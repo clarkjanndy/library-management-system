@@ -9,6 +9,7 @@ urlpatterns = [
     path('validate-barcode', validation_views.validate_barcode, name="validate_barcode"),
     path('validate-password', validation_views.validate_password, name="validate_password"),
     
+    
     #analytics
     path('get-student-count', analytics_views.get_student_count, name="get_student_count"),
     path('get-teacher-count', analytics_views.get_teacher_count, name="get_teacher_count"),
@@ -18,4 +19,7 @@ urlpatterns = [
     path('inventory', analytics_views.inventory, name="inventory"),
     
     path('visit-histogram', analytics_views.visit_histogram, name="visit_histogram"),
+    
+    #others
+    path('notif-count', analytics_views.notif_count, name="notif_count"),
 ]
