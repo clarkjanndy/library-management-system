@@ -153,11 +153,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="edit-privacy-policy">
-                <textarea class="form-control" cols="12" rows="12" name="privacy-policy"></textarea>        
+                <form method="POST" action="edit-privacy-policy" id="edit-privacy-policy">
+                <textarea class="form-control" cols="12" rows="12" name="privacy-policy" id="privacy-policy"></textarea>        
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-theme" data-bs-dismiss="modal">Save</button>
+                <button type="submit" class="btn btn-theme">Save</button>
             </form>       
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
             </div>
@@ -180,4 +180,53 @@
             // Handle any errors that occurred during the fetch request
             console.log('An error occurred:', error);
         });  
+
+     fetch(`/api/v1/privacy-policy`)
+        .then(response => response.json())
+        .then(data => {
+           document.querySelector('#privacy-policy').innerText = data['privacy-policy']
+        })
+        .catch(error => {
+            // Handle any errors that occurred during the fetch request
+            console.log('An error occurred:', error);
+        });  
+
+    const validation = new window.JustValidate('#edit-privacy-policy', {
+        errorFieldCssClass: 'is-invalid',
+    });
+    validation
+        .addField('#privacy-policy', [{
+            rule: 'required',
+            errorMessage: 'This field is required',
+        },])
+        .onSuccess((event) => {
+            const formData = new FormData(document.querySelector('#edit-privacy-policy'));
+            const postData = {};
+            for (const [key, value] of formData.entries()) {
+                postData[key] = value;
+            }
+            console.log(postData)
+            
+            fetch('/api/v1/privacy-policy/edit', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',
+                },
+                body: JSON.stringify(postData)
+            })
+            .then(response => {
+                if (response.ok) {
+                // Redirect the user to another page
+                window.location.href = '/dashboard';
+                } else {
+                // Handle the error response
+                throw new Error('Error: ' + response.status);
+                }
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error('Error:', error);
+            });
+        });
 </script>

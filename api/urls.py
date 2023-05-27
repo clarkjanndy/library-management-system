@@ -22,4 +22,6 @@ urlpatterns = [
     
     #others
     path('notif-count', analytics_views.notif_count, name="notif_count"),
+    path('privacy-policy', action_views.privacy_policy, name="privacy_policy"),
+    path('privacy-policy/edit', action_views.edit_privacy_policy, name="edit_privacy_policy")
 ]

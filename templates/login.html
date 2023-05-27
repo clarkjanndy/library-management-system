@@ -88,6 +88,16 @@
                 document.getElementById("form").submit();
             });
 
+        fetch(`/api/v1/privacy-policy`)
+            .then(response => response.json())
+            .then(data => {
+            document.querySelector('#privacy-policy').innerText = data['privacy-policy']
+            })
+            .catch(error => {
+                // Handle any errors that occurred during the fetch request
+                console.log('An error occurred:', error);
+            });  
+
     </script>
 
     <div class="modal fade" id="privacy_policy" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -96,8 +106,7 @@
                 <div class="modal-header">
                     <h1 class="modal-title fs-5 text-theme" id="exampleModalLabel">Privacy Policy</h1>
                 </div>
-                <div class="modal-body">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                <div class="modal-body" id="privacy-policy">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-theme" data-bs-dismiss="modal">Close</button>

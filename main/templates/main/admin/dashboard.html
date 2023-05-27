@@ -17,6 +17,12 @@
         </ol>
     </nav>
 
+    
+    {% if messages %}
+    {% for message in messages %}
+    {% include 'alert.html' %}
+    {% endfor %}
+    {% endif %}
 
     <div class="row">
         <div class="col-12">
