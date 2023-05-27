@@ -35,6 +35,27 @@ def categories(request):
     }
     return render(request, "./main/category/categories.html", data)
 
+def add(request):
+    if not request.user.is_authenticated:
+        return redirect('/')
+
+    if not request.user.is_superuser:
+        return redirect('/books')
+    
+    if request.method == 'POST':
+        BookCategory.objects.create(name = request.POST['name'],
+                                   limit = request.POST['limit'],
+                                   rate = request.POST['rate'] )
+
+        messages.success(request, 'Category added successfully')
+        return redirect('/book-categories')
+
+    data = {
+        'page': 'book-categories',
+    }
+
+    return render(request, "./main/category/add-category.html", data)
+
 
 def edit(request, id):
     if not request.user.is_authenticated:
@@ -42,7 +63,7 @@ def edit(request, id):
 
     if not request.user.is_superuser:
         return redirect('/books')
-
+    
     category = BookCategory.objects.get(id=id)
     if request.method == 'POST':
         category.name = request.POST['name']

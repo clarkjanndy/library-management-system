@@ -31,6 +31,7 @@ urlpatterns = [
     
     #categories
     path('book-categories', category_views.categories, name="book_categories"),
+    path('book-categories/add', category_views.add, name="book_categories"),
     path('book-categories/<int:id>/edit', category_views.edit, name="edit_categories"),
     
     # fine
