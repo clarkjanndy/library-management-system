@@ -82,7 +82,11 @@
             <li class="nav-item d-flex justify-content-center p-1 {% if page == 'books' %}current-page{% endif %}">
                 <a href="/books" class="nav-link px-sm-0 px-2 text-white">
                     <i class="bx bx-book-alt"></i>
-                    <span class="ms-1 d-none d-sm-inline">Book List</span></a>
+                    <span class="ms-1 d-none d-sm-inline">Book List</span>
+                    <span id="book_lesser_10_count">
+                        
+                    </span>
+                </a>
                 </a>
             </li>
             {% if request.user.is_superuser%}
@@ -172,6 +176,20 @@
         .then(data => {
             if (data['count'] > 0){
                 field = document.querySelector('#fine_count')
+                field.className = 'badge rounded-pill bg-danger';
+                field.innerText = data['count']
+            }
+        })
+        .catch(error => {
+            // Handle any errors that occurred during the fetch request
+            console.log('An error occurred:', error);
+        });
+
+     fetch(`/api/v1/get-book-count?query=10`)
+        .then(response => response.json())
+        .then(data => {
+            if (data['count'] > 0){
+                field = document.querySelector('#book_lesser_10_count')
                 field.className = 'badge rounded-pill bg-danger';
                 field.innerText = data['count']
             }

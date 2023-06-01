@@ -114,7 +114,7 @@
                                     {% endif %}
                                 </p>
 
-                                <div>
+                                <div class="{% if book.available_quan <= 10 %}text-danger{% endif %}">
                                     <span class="bx bx-book"></span> {{book.available_quan}} available copies
                                 </div>
                                 <div>

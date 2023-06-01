@@ -18,7 +18,12 @@ def get_teacher_count(request):
 
 
 def get_book_count(request):
-    books = Book.objects.all().aggregate(count=Count('id'))
+    books = Book.objects.all()
+    
+    if 'query' in request.GET:
+        books = books.filter(available_quan__lte = request.GET['query'])
+    
+    books=books.aggregate(count=Count('id'))    
     return JsonResponse(books)
 
 def get_fines_sum(request):
@@ -58,3 +63,4 @@ def notif_count(request):
     count = len([ele for ele in borrowed if ele.get_fine() > 0])
     
     return JsonResponse({'count': count}, safe=True)
+
